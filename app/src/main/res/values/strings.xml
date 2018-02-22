@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">STOP</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_wear">Wear</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
