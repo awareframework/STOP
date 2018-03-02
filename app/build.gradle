@@ -25,7 +25,9 @@ repositories {
 
 dependencies {
     api "com.github.valeriikan:com.aware.plugin.myo:master-SNAPSHOT"
+    api "com.github.denzilferreira:aware-client:development-SNAPSHOT"
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'
     implementation 'com.android.support:support-v4:27.0.2'
+    compile 'com.google.code.gson:gson:2.8.2'
 }

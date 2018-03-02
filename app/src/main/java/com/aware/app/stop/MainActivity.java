@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private WearFragment wearFragment;
     private ProfileFragment profileFragment;
 
+    public static final String MYO_TAG = "MYO_TAG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         startService(aware);
         Aware.startPlugin(this, "com.aware.plugin.myo");
 
-        ContextCard card = new ContextCard();
+        //ContextCard card = new ContextCard();
         //setContentView(card.getContextCard(getApplicationContext()));
 
-        View view = card.getContextCard(getApplicationContext());
+        //View view = card.getContextCard(getApplicationContext());
 
         mMainFrame = findViewById(R.id.main_frame);
         mMainNav = findViewById(R.id.main_nav);
