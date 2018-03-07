@@ -50,20 +50,20 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (permissions_ok) {
-            Log.d(MainActivity.MYO_TAG, "1 - permissions ok");
+            Log.d(MainActivity.MYO_TAG, "Permissions ok");
 
             Intent aware = new Intent(getApplicationContext(), Aware.class);
             startService(aware);
 
             if (Aware.isStudy(this)) {
-                Log.d(MainActivity.MYO_TAG, "2 - study ok");
+                Log.d(MainActivity.MYO_TAG, "Study ok");
 
                 Intent main = new Intent(this, MainActivity.class);
                 startActivity(main);
                 finish();
 
             } else {
-                Log.d(MainActivity.MYO_TAG, "3 - study not ok, joining");
+                Log.d(MainActivity.MYO_TAG, "Study not ok, joining...");
 
                 Aware.joinStudy(this, "https://api.awareframework.com/index.php/webservice/index/1686/hcWtQhedXSaT");
                 IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
@@ -71,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         } else {
-            Log.d(MainActivity.MYO_TAG, "4 - permissions not ok, requesting them");
+            Log.d(MainActivity.MYO_TAG, "Permissions not ok, requesting them...");
 
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
@@ -86,14 +86,11 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(Aware.ACTION_JOINED_STUDY)) {
-                Log.d(MainActivity.MYO_TAG, "5 - study not ok, joined");
+                Log.d(MainActivity.MYO_TAG, "Study ok, joined");
 
                 Account aware_account = Aware.getAWAREAccount(getApplicationContext());
                 String authority = Provider.getAuthority(getApplicationContext());
                 long frequency = Long.parseLong(Aware.getSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_WEBSERVICE)) * 60;
-
-                Log.d(MainActivity.MYO_TAG, "SyncAdapter Registered:" + authority + "\n Frequency:" + frequency);
-
                 ContentResolver.setIsSyncable(aware_account, authority, 1);
                 ContentResolver.setSyncAutomatically(aware_account, authority, true);
                 SyncRequest request = new SyncRequest.Builder()

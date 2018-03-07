@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.aware.app.stop.MainActivity;
 import com.aware.syncadapters.AwareSyncAdapter;
 
 public class Game_Sync extends Service {
@@ -18,9 +16,6 @@ public class Game_Sync extends Service {
     public void onCreate() {
         super.onCreate();
         synchronized (sSyncAdapterLock) {
-
-            Log.d(MainActivity.MYO_TAG, "SyncAdapter::Authority > " + Provider.getAuthority(getApplicationContext()));
-            Log.d(MainActivity.MYO_TAG, "SyncAdapter::Table > " + Provider.Game_Data.CONTENT_URI);
 
             if (sSyncAdapter == null) {
                 sSyncAdapter = new AwareSyncAdapter(getApplicationContext(), true, true);
@@ -37,6 +32,6 @@ public class Game_Sync extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return sSyncAdapter.getSyncAdapterBinder();
     }
 }
