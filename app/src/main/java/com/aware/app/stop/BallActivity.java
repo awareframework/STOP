@@ -12,7 +12,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,14 +22,12 @@ import android.widget.TextView;
 
 import com.aware.Accelerometer;
 import com.aware.Aware;
+import com.aware.Aware_Preferences;
 import com.aware.Gyroscope;
 import com.aware.LinearAccelerometer;
 import com.aware.Rotation;
+import com.aware.app.stop.database.Provider;
 import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class BallActivity extends AppCompatActivity implements SensorEventListener2 {
 
@@ -303,25 +300,14 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         String rotation = "\"rotation\":" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
         String result = acccel + linaccel + gyro + rotation;
 
-        Log.d(MainActivity.MYO_TAG, String.valueOf(result.length()));
+        ContentValues values = new ContentValues();
+        values.put(Provider.Game_Data.TIMESTAMP, System.currentTimeMillis());
+        values.put(Provider.Game_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+        values.put(Provider.Game_Data.DATA, result);
 
-        // Recording result to local .txt file
-        File root = new File(Environment.getExternalStorageDirectory().toString());
-        Long tsLong = System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();
-        File gpxfile = new File(root, "samples" + ts +".txt");
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(gpxfile);
-            writer.append(result);
-            writer.flush();
-            writer.close();
-            Log.d(MainActivity.MYO_TAG, "logging done");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(MainActivity.MYO_TAG, "logging not done");
-            Log.d(MainActivity.MYO_TAG, e.getMessage());
-        }
+        getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
+
+        Log.d(MainActivity.MYO_TAG, "JSON length " + String.valueOf(result.length()));
 
     }
 }

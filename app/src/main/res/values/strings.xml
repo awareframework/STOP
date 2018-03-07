@@ -3,6 +3,7 @@
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_wear">Wear</string>
     <string name="nav_profile">Profile</string>
+    <string name="provider_game_label">STOP Ball game</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
