@@ -7,10 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener2;
-import android.hardware.SensorManager;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -34,20 +30,35 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class BallActivity extends AppCompatActivity implements SensorEventListener2 {
+public class BallActivity extends AppCompatActivity{
 
-    private float ballXpos, ballXaccel, ballXvel = 0.0f;
-    private float ballYpos, ballYaccel, ballYvel = 0.0f;
-    private float ballXmax, ballYmax;
+    // ball game variables
+    private float ballXpos, ballXmax, ballXaccel, ballXvel = 0.0f;
+    private float ballYpos, ballYmax, ballYaccel, ballYvel = 0.0f;
     private float bigCircleXpos, bigCircleYpos;
     private float smallCircleXpos, smallCircleYpos;
     private Bitmap ball;
     private Bitmap circleBig;
     private Bitmap circleSmall;
-    private SensorManager sensorManager;
 
+    // UI elements
     private FrameLayout container;
     private TextView timer;
+
+    // Strings for storing sampling data in JSON format
+    private String gameData;
+    private String accelSamples = "";
+    private String linaccelSamples = "";
+    private String gyroSamples = "";
+    private String rotationSamples = "";
+
+    boolean sampling = false;
+
+    // Ball game settings
+    private static final int BALL_SIZE = 100;
+    private static final int SMALL_CIRCLE_SIZE = 300;
+    private static final int BIG_CIRCLE_SIZE = 500;
+    private static final float SENSITIVITY = 3.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +69,6 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         BallView ballView = new BallView(this);
         container = findViewById(R.id.container);
         container.addView(ballView);
-
         timer = findViewById(R.id.timer);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -67,6 +77,79 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         Aware.startLinearAccelerometer(getApplicationContext());
         Aware.startGyroscope(getApplicationContext());
         Aware.startRotation(getApplicationContext());
+
+        // setting up sensors
+        Accelerometer.setSensorObserver(new Accelerometer.AWARESensorObserver() {
+            @Override
+            public void onAccelerometerChanged(ContentValues data) {
+                ballXaccel = data.getAsFloat("double_values_0");
+                ballYaccel = -data.getAsFloat("double_values_1");
+                updateBall(data.getAsLong("timestamp"));
+
+                Sample accelSample = new Sample(data.getAsLong("timestamp"),
+                                                data.getAsString("device_id"),
+                                                data.getAsDouble("double_values_0"),
+                                                data.getAsDouble("double_values_1"),
+                                                data.getAsDouble("double_values_2"),
+                                                data.getAsInteger("accuracy"),
+                                                data.getAsString("label"));
+
+                if (sampling) {
+                    accelSamples += new Gson().toJson(accelSample) + ",";
+                }
+            }
+        });
+
+        LinearAccelerometer.setSensorObserver(new LinearAccelerometer.AWARESensorObserver() {
+            @Override
+            public void onLinearAccelChanged(ContentValues data) {
+                Sample linaccelSample = new Sample(data.getAsLong("timestamp"),
+                                                   data.getAsString("device_id"),
+                                                   data.getAsDouble("double_values_0"),
+                                                   data.getAsDouble("double_values_1"),
+                                                   data.getAsDouble("double_values_2"),
+                                                   data.getAsInteger("accuracy"),
+                                                   data.getAsString("label"));
+
+                if (sampling) {
+                    linaccelSamples += new Gson().toJson(linaccelSample) + ",";
+                }
+            }
+        });
+
+        Gyroscope.setSensorObserver(new Gyroscope.AWARESensorObserver() {
+            @Override
+            public void onGyroscopeChanged(ContentValues data) {
+                Sample gyroSample = new Sample(data.getAsLong("timestamp"),
+                                               data.getAsString("device_id"),
+                                               data.getAsDouble("double_values_0"),
+                                               data.getAsDouble("double_values_1"),
+                                               data.getAsDouble("double_values_2"),
+                                               data.getAsInteger("accuracy"),
+                                               data.getAsString("label"));
+
+                if (sampling) {
+                    gyroSamples += new Gson().toJson(gyroSample) + ",";
+                }
+            }
+        });
+
+        Rotation.setSensorObserver(new Rotation.AWARESensorObserver() {
+            @Override
+            public void onRotationChanged(ContentValues data) {
+                Sample rotationSample = new Sample(data.getAsLong("timestamp"),
+                                                   data.getAsString("device_id"),
+                                                   data.getAsDouble("double_values_0"),
+                                                   data.getAsDouble("double_values_1"),
+                                                   data.getAsDouble("double_values_2"),
+                                                   data.getAsInteger("accuracy"),
+                                                   data.getAsString("label"));
+
+                if (sampling) {
+                    rotationSamples += new Gson().toJson(rotationSample) + ",";
+                }
+            }
+        });
 
         // timer initialization
         new CountDownTimer(15000, 1000) {
@@ -79,7 +162,7 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
 
                 if ((millisUntilFinished >= 9999) && (millisUntilFinished < 10999)) {
                     timer.setText("Start!");
-                    startSensors();
+                    sampling = true;
                 }
 
                 if ((millisUntilFinished >= 0) && (millisUntilFinished < 9999)) {
@@ -90,6 +173,7 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
 
             public void onFinish() {
                 timer.setText("Done!");
+                sampling = false;
                 stopSensors();
                 finish();
             }
@@ -99,68 +183,44 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         Point size = new Point();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(size);
-        ballXmax = (float) size.x - 100;
-        ballYmax = (float) size.y - 100 - 235; // need to fix Y
+        ballXmax = (float) size.x - BALL_SIZE;
+        ballYmax = (float) size.y - BALL_SIZE - 235; // 235 is a toolbar?
+
+        gameData = "{\"gamedata\":[{\"ball_radius\":" + BALL_SIZE + ",";
+        gameData += "\"sensitivity\":" + SENSITIVITY + ",";
+        gameData += "\"device_x_res\":" + size.x + ",";
+        gameData += "\"device_y_res\":" + size.y + "," + "\"samples\":[";
 
         // put ball to the center
         ballXpos = ballXmax /2;
         ballYpos = ballYmax /2;
 
         // put circles to the center
-        smallCircleXpos = ballXpos - 100;
-        smallCircleYpos = ballYpos - 100;
-        bigCircleXpos = ballXpos - 200;
-        bigCircleYpos = ballYpos - 200;
-
-        // intitializing sensor manager
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // registering sensor manager
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-    }
-
-    @Override
-    protected void onStop() {
-        // unregistering sensor manager
-        sensorManager.unregisterListener(this);
-        super.onStop();
-    }
-
-    @Override
-    public void onFlushCompleted(Sensor sensor) {
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // changing ball acceleration and position according to accelerometer data
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            ballXaccel = event.values[0];
-            ballYaccel = -event.values[1];
-            updateBall();
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        smallCircleXpos = ballXpos - BALL_SIZE;
+        smallCircleYpos = ballYpos - BALL_SIZE;
+        bigCircleXpos = ballXpos - BALL_SIZE - 100;
+        bigCircleYpos = ballYpos - BALL_SIZE - 100;
     }
 
     // updating ball's X and Y positioning
-    private void updateBall() {
-        float frameTime = 3.000f;
-        ballXvel = (ballXaccel * frameTime);
-        ballYvel = (ballYaccel * frameTime);
+    private void updateBall(long timestamp) {
+        ballXvel = (ballXaccel * SENSITIVITY);
+        ballYvel = (ballYaccel * SENSITIVITY);
 
-        float xS = (ballXvel / 2) * frameTime;
-        float yS = (ballYvel / 2) * frameTime;
+        float xS = (ballXvel / 2) * SENSITIVITY;
+        float yS = (ballYvel / 2) * SENSITIVITY;
 
         ballXpos -= xS;
         ballYpos -= yS;
+
+        float changeX = ballXpos - ballXmax/2;
+        float changey = ballYpos - ballYmax/2;
+
+        if (sampling) {
+            gameData += "{\"timestamp\":" + timestamp + ",";
+            gameData += "\"ball_x\":" + changeX + ",";
+            gameData += "\"ball_y\":" + changey + "},";
+        }
 
         //off screen movements
         if (ballXpos > ballXmax) {
@@ -176,115 +236,32 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-
+    // custom view for BallGame
     private class BallView extends View {
 
         public BallView(Context context) {
             super(context);
-
             // ball bitmap initializing
             Bitmap ballSrc = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
-            final int dstWidth = 100;
-            final int dstHeight = 100;
-            ball = Bitmap.createScaledBitmap(ballSrc, dstWidth, dstHeight, true);
+            ball = Bitmap.createScaledBitmap(ballSrc, BALL_SIZE, BALL_SIZE, true);
 
             // circles bitmap initializing
             Bitmap smallSrc = BitmapFactory.decodeResource(getResources(), R.drawable.circle_small);
-            final int smallWidth = 300;
-            final int smallHeight = 300;
-            circleSmall = Bitmap.createScaledBitmap(smallSrc, smallWidth, smallHeight, true);
-
+            circleSmall = Bitmap.createScaledBitmap(smallSrc, SMALL_CIRCLE_SIZE, SMALL_CIRCLE_SIZE, true);
             Bitmap bigSrc = BitmapFactory.decodeResource(getResources(), R.drawable.circle_big);
-            final int bigWidth = 500;
-            final int bigHeight = 500;
-            circleBig = Bitmap.createScaledBitmap(bigSrc, bigWidth, bigHeight, true);
+            circleBig = Bitmap.createScaledBitmap(bigSrc, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE, true);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
-            // drawing (and redrawing) the ball
-            canvas.drawBitmap(ball, ballXpos, ballYpos, null);
-            invalidate();
-
             // drawing circles
             canvas.drawBitmap(circleSmall, smallCircleXpos, smallCircleYpos, null);
             canvas.drawBitmap(circleBig, bigCircleXpos, bigCircleYpos, null);
+
+            // drawing (and redrawing) the ball
+            canvas.drawBitmap(ball, ballXpos, ballYpos, null);
+            invalidate();
         }
-    }
-
-    // Strings for storing sampling data in JSON format
-    private String accelSamples;
-    private String linaccelSamples;
-    private String gyroSamples;
-    private String rotationSamples;
-
-    // Start data sampling
-    private void startSensors() {
-
-        accelSamples = "[";
-        linaccelSamples = "[";
-        gyroSamples = "[";
-        rotationSamples = "[";
-
-        Accelerometer.setSensorObserver(new Accelerometer.AWARESensorObserver() {
-            @Override
-            public void onAccelerometerChanged(ContentValues data) {
-                Sample accelSample = new Sample();
-                accelSample.setTimestamp(data.getAsLong("timestamp"));
-                accelSample.setDevice_id(data.getAsString("device_id"));
-                accelSample.setAccuracy(data.getAsInteger("accuracy"));
-                accelSample.setLabel(data.getAsString("label"));
-                accelSample.setDouble_values_0(data.getAsDouble("double_values_0"));
-                accelSample.setDouble_values_1(data.getAsDouble("double_values_1"));
-                accelSample.setDouble_values_2(data.getAsDouble("double_values_2"));
-                accelSamples = accelSamples + new Gson().toJson(accelSample) + ",";
-            }
-        });
-
-        LinearAccelerometer.setSensorObserver(new LinearAccelerometer.AWARESensorObserver() {
-            @Override
-            public void onLinearAccelChanged(ContentValues data) {
-                Sample linaccelSample = new Sample();
-                linaccelSample.setTimestamp(data.getAsLong("timestamp"));
-                linaccelSample.setDevice_id(data.getAsString("device_id"));
-                linaccelSample.setAccuracy(data.getAsInteger("accuracy"));
-                linaccelSample.setLabel(data.getAsString("label"));
-                linaccelSample.setDouble_values_0(data.getAsDouble("double_values_0"));
-                linaccelSample.setDouble_values_1(data.getAsDouble("double_values_1"));
-                linaccelSample.setDouble_values_2(data.getAsDouble("double_values_2"));
-                linaccelSamples = linaccelSamples + new Gson().toJson(linaccelSample) + ",";
-            }
-        });
-
-        Gyroscope.setSensorObserver(new Gyroscope.AWARESensorObserver() {
-            @Override
-            public void onGyroscopeChanged(ContentValues data) {
-                Sample gyroSample = new Sample();
-                gyroSample.setTimestamp(data.getAsLong("timestamp"));
-                gyroSample.setDevice_id(data.getAsString("device_id"));
-                gyroSample.setAccuracy(data.getAsInteger("accuracy"));
-                gyroSample.setLabel(data.getAsString("label"));
-                gyroSample.setDouble_values_0(data.getAsDouble("double_values_0"));
-                gyroSample.setDouble_values_1(data.getAsDouble("double_values_1"));
-                gyroSample.setDouble_values_2(data.getAsDouble("double_values_2"));
-                gyroSamples = gyroSamples + new Gson().toJson(gyroSample) + ",";
-            }
-        });
-
-        Rotation.setSensorObserver(new Rotation.AWARESensorObserver() {
-            @Override
-            public void onRotationChanged(ContentValues data) {
-                Sample rotationSample = new Sample();
-                rotationSample.setTimestamp(data.getAsLong("timestamp"));
-                rotationSample.setDevice_id(data.getAsString("device_id"));
-                rotationSample.setAccuracy(data.getAsInteger("accuracy"));
-                rotationSample.setLabel(data.getAsString("label"));
-                rotationSample.setDouble_values_0(data.getAsDouble("double_values_0"));
-                rotationSample.setDouble_values_1(data.getAsDouble("double_values_1"));
-                rotationSample.setDouble_values_2(data.getAsDouble("double_values_2"));
-                rotationSamples = rotationSamples + new Gson().toJson(rotationSample) + ",";
-            }
-        });
     }
 
     // Stop data sampling
@@ -297,11 +274,12 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         Aware.stopRotation(getApplicationContext());
 
         // Adjusting data to final JSON format
-        String acccel = "{\"accelerometer\":" + accelSamples.substring(0, accelSamples.length()-1) + "],";
-        String linaccel = "\"linearaccelerometer\":" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
-        String gyro = "\"gyroscope\":" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
-        String rotation = "\"rotation\":" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
-        String result = acccel + linaccel + gyro + rotation;
+        String gamedata = gameData.substring(0, gameData.length()-1) + "]}],";
+        String acccel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
+        String linaccel = "\"linearaccelerometer\":[" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
+        String gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
+        String rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
+        String result = gamedata + acccel + linaccel + gyro + rotation;
 
         // Inserting data to database
         ContentValues values = new ContentValues();
@@ -323,10 +301,10 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
             writer.append(result);
             writer.flush();
             writer.close();
-            Log.d(MainActivity.MYO_TAG, "logging done");
+            Log.d(MainActivity.MYO_TAG, "Logging done");
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(MainActivity.MYO_TAG, "logging not done");
+            Log.d(MainActivity.MYO_TAG, "Logging not done");
             Log.d(MainActivity.MYO_TAG, e.getMessage());
         }
     }
