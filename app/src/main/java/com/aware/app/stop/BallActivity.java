@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,10 @@ import com.aware.LinearAccelerometer;
 import com.aware.Rotation;
 import com.aware.app.stop.database.Provider;
 import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class BallActivity extends AppCompatActivity implements SensorEventListener2 {
 
@@ -57,21 +62,27 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         timer = findViewById(R.id.timer);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // starting sensors
+        Aware.startAccelerometer(getApplicationContext());
+        Aware.startLinearAccelerometer(getApplicationContext());
+        Aware.startGyroscope(getApplicationContext());
+        Aware.startRotation(getApplicationContext());
+
         // timer initialization
         new CountDownTimer(15000, 1000) {
             public void onTick(long millisUntilFinished) {
-                //here you can have your logic to set text to edittext
-                if ((millisUntilFinished >= 11500) && (millisUntilFinished <= 14500)) {
+                // updating UI according to timeframes and handling sensors
+                if ((millisUntilFinished >= 10999) && (millisUntilFinished <= 13999)) {
                     String counter = String.valueOf((millisUntilFinished - 10000)/1000) + "...";
                     timer.setText(counter);
                 }
 
-                if ((millisUntilFinished >= 10500) && (millisUntilFinished < 11500)) {
+                if ((millisUntilFinished >= 9999) && (millisUntilFinished < 10999)) {
                     timer.setText("Start!");
                     startSensors();
                 }
 
-                if ((millisUntilFinished >= 0) && (millisUntilFinished < 10500)) {
+                if ((millisUntilFinished >= 0) && (millisUntilFinished < 9999)) {
                     String counter = String.valueOf(((millisUntilFinished/1000) - 10)*(-1));
                     timer.setText(counter);
                 }
@@ -89,7 +100,7 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(size);
         ballXmax = (float) size.x - 100;
-        ballYmax = (float) size.y - 335; // need to fix Y
+        ballYmax = (float) size.y - 100 - 235; // need to fix Y
 
         // put ball to the center
         ballXpos = ballXmax /2;
@@ -215,11 +226,9 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         gyroSamples = "[";
         rotationSamples = "[";
 
-        Aware.startAccelerometer(this);
         Accelerometer.setSensorObserver(new Accelerometer.AWARESensorObserver() {
             @Override
             public void onAccelerometerChanged(ContentValues data) {
-                // 500 - 550 measurements per 10 seconds
                 Sample accelSample = new Sample();
                 accelSample.setTimestamp(data.getAsLong("timestamp"));
                 accelSample.setDevice_id(data.getAsString("device_id"));
@@ -232,11 +241,9 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        Aware.startLinearAccelerometer(this);
         LinearAccelerometer.setSensorObserver(new LinearAccelerometer.AWARESensorObserver() {
             @Override
             public void onLinearAccelChanged(ContentValues data) {
-                // ~55 measurements per 10 seconds
                 Sample linaccelSample = new Sample();
                 linaccelSample.setTimestamp(data.getAsLong("timestamp"));
                 linaccelSample.setDevice_id(data.getAsString("device_id"));
@@ -249,11 +256,9 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        Aware.startGyroscope(this);
         Gyroscope.setSensorObserver(new Gyroscope.AWARESensorObserver() {
             @Override
             public void onGyroscopeChanged(ContentValues data) {
-                // ~50 measurements per 10 seconds
                 Sample gyroSample = new Sample();
                 gyroSample.setTimestamp(data.getAsLong("timestamp"));
                 gyroSample.setDevice_id(data.getAsString("device_id"));
@@ -266,11 +271,9 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        Aware.startRotation(this);
         Rotation.setSensorObserver(new Rotation.AWARESensorObserver() {
             @Override
             public void onRotationChanged(ContentValues data) {
-                // ~50 measurements per 10 seconds
                 Sample rotationSample = new Sample();
                 rotationSample.setTimestamp(data.getAsLong("timestamp"));
                 rotationSample.setDevice_id(data.getAsString("device_id"));
@@ -288,10 +291,10 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
     private void stopSensors() {
 
         // Stopping sensors
-        Aware.stopAccelerometer(this);
-        Aware.stopLinearAccelerometer(this);
-        Aware.stopGyroscope(this);
-        Aware.stopRotation(this);
+        Aware.stopAccelerometer(getApplicationContext());
+        Aware.stopLinearAccelerometer(getApplicationContext());
+        Aware.stopGyroscope(getApplicationContext());
+        Aware.stopRotation(getApplicationContext());
 
         // Adjusting data to final JSON format
         String acccel = "{\"accelerometer\":" + accelSamples.substring(0, accelSamples.length()-1) + "],";
@@ -300,14 +303,31 @@ public class BallActivity extends AppCompatActivity implements SensorEventListen
         String rotation = "\"rotation\":" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
         String result = acccel + linaccel + gyro + rotation;
 
+        // Inserting data to database
         ContentValues values = new ContentValues();
         values.put(Provider.Game_Data.TIMESTAMP, System.currentTimeMillis());
         values.put(Provider.Game_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
         values.put(Provider.Game_Data.DATA, result);
-
         getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
 
         Log.d(MainActivity.MYO_TAG, "JSON length " + String.valueOf(result.length()));
 
+        // Recording result to local .txt file                 // for testing only
+        File root = new File(Environment.getExternalStorageDirectory().toString());
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
+        File gpxfile = new File(root, "samples" + ts +".txt");
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(gpxfile);
+            writer.append(result);
+            writer.flush();
+            writer.close();
+            Log.d(MainActivity.MYO_TAG, "logging done");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(MainActivity.MYO_TAG, "logging not done");
+            Log.d(MainActivity.MYO_TAG, e.getMessage());
+        }
     }
 }
