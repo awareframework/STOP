@@ -2,13 +2,14 @@ package com.aware.app.stop;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.CountDownTimer;
-import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,10 +26,6 @@ import com.aware.LinearAccelerometer;
 import com.aware.Rotation;
 import com.aware.app.stop.database.Provider;
 import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class BallActivity extends AppCompatActivity{
 
@@ -54,16 +51,25 @@ public class BallActivity extends AppCompatActivity{
 
     boolean sampling = false;
 
-    // Ball game settings
-    private static final int BALL_SIZE = 100;
-    private static final int SMALL_CIRCLE_SIZE = 300;
-    private static final int BIG_CIRCLE_SIZE = 500;
-    private static final float SENSITIVITY = 3.0f;
+    // Ball game settings variables
+    private int ballSize;
+    private int smallCircleSize;
+    private int bigCircleSize;
+    private float sensitivity; // 3.0 is default
+    private int gameTime; // in milliseconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ball);
+
+        // reading settings values from SettingsActivity
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
+        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), "300"));
+        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), "500"));
+        sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), "3.0"));
+        gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), "10"))*1000;
 
         // adding custom BallView to the activity
         BallView ballView = new BallView(this);
@@ -152,21 +158,21 @@ public class BallActivity extends AppCompatActivity{
         });
 
         // timer initialization
-        new CountDownTimer(15000, 1000) {
+        new CountDownTimer(gameTime + 5000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // updating UI according to timeframes and handling sensors
-                if ((millisUntilFinished >= 10999) && (millisUntilFinished <= 13999)) {
-                    String counter = String.valueOf((millisUntilFinished - 10000)/1000) + "...";
+                if ((millisUntilFinished >= gameTime + 999) && (millisUntilFinished <= gameTime + 3999)) {
+                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime /1000)) + "...";
                     timer.setText(counter);
                 }
 
-                if ((millisUntilFinished >= 9999) && (millisUntilFinished < 10999)) {
+                if ((millisUntilFinished >= gameTime - 1) && (millisUntilFinished < gameTime + 999)) {
                     timer.setText("Start!");
                     sampling = true;
                 }
 
-                if ((millisUntilFinished >= 0) && (millisUntilFinished < 9999)) {
-                    String counter = String.valueOf(((millisUntilFinished/1000) - 10)*(-1));
+                if ((millisUntilFinished >= 0) && (millisUntilFinished < gameTime - 1)) {
+                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime /1000)*(-1));
                     timer.setText(counter);
                 }
             }
@@ -183,11 +189,11 @@ public class BallActivity extends AppCompatActivity{
         Point size = new Point();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(size);
-        ballXmax = (float) size.x - BALL_SIZE;
-        ballYmax = (float) size.y - BALL_SIZE - 235; // 235 is a toolbar?
+        ballXmax = (float) size.x - ballSize;
+        ballYmax = (float) size.y - ballSize - 235; // 235 is a toolbar?
 
-        gameData = "{\"gamedata\":[{\"ball_radius\":" + BALL_SIZE + ",";
-        gameData += "\"sensitivity\":" + SENSITIVITY + ",";
+        gameData = "{\"gamedata\":[{\"ball_radius\":" + ballSize + ",";
+        gameData += "\"sensitivity\":" + sensitivity + ",";
         gameData += "\"device_x_res\":" + size.x + ",";
         gameData += "\"device_y_res\":" + size.y + "," + "\"samples\":[";
 
@@ -196,19 +202,21 @@ public class BallActivity extends AppCompatActivity{
         ballYpos = ballYmax /2;
 
         // put circles to the center
-        smallCircleXpos = ballXpos - BALL_SIZE;
-        smallCircleYpos = ballYpos - BALL_SIZE;
-        bigCircleXpos = ballXpos - BALL_SIZE - 100;
-        bigCircleYpos = ballYpos - BALL_SIZE - 100;
+        //smallCircleXpos = ballXpos - ballSize;
+        smallCircleXpos = (size.x - smallCircleSize)/2;
+        //smallCircleYpos = ballYpos - ballSize;
+        smallCircleYpos = (size.y - smallCircleSize - 235)/2;
+        bigCircleXpos = (size.x - bigCircleSize)/2;
+        bigCircleYpos = (size.y - bigCircleSize - 235)/2;
     }
 
     // updating ball's X and Y positioning
     private void updateBall(long timestamp) {
-        ballXvel = (ballXaccel * SENSITIVITY);
-        ballYvel = (ballYaccel * SENSITIVITY);
+        ballXvel = (ballXaccel * sensitivity);
+        ballYvel = (ballYaccel * sensitivity);
 
-        float xS = (ballXvel / 2) * SENSITIVITY;
-        float yS = (ballYvel / 2) * SENSITIVITY;
+        float xS = (ballXvel / 2) * sensitivity;
+        float yS = (ballYvel / 2) * sensitivity;
 
         ballXpos -= xS;
         ballYpos -= yS;
@@ -243,13 +251,13 @@ public class BallActivity extends AppCompatActivity{
             super(context);
             // ball bitmap initializing
             Bitmap ballSrc = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
-            ball = Bitmap.createScaledBitmap(ballSrc, BALL_SIZE, BALL_SIZE, true);
+            ball = Bitmap.createScaledBitmap(ballSrc, ballSize, ballSize, true);
 
             // circles bitmap initializing
             Bitmap smallSrc = BitmapFactory.decodeResource(getResources(), R.drawable.circle_small);
-            circleSmall = Bitmap.createScaledBitmap(smallSrc, SMALL_CIRCLE_SIZE, SMALL_CIRCLE_SIZE, true);
+            circleSmall = Bitmap.createScaledBitmap(smallSrc, smallCircleSize, smallCircleSize, true);
             Bitmap bigSrc = BitmapFactory.decodeResource(getResources(), R.drawable.circle_big);
-            circleBig = Bitmap.createScaledBitmap(bigSrc, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE, true);
+            circleBig = Bitmap.createScaledBitmap(bigSrc, bigCircleSize, bigCircleSize, true);
         }
 
         @Override
@@ -272,6 +280,7 @@ public class BallActivity extends AppCompatActivity{
         Aware.stopLinearAccelerometer(getApplicationContext());
         Aware.stopGyroscope(getApplicationContext());
         Aware.stopRotation(getApplicationContext());
+        Log.d(MainActivity.MYO_TAG, "turned off");
 
         // Adjusting data to final JSON format
         String gamedata = gameData.substring(0, gameData.length()-1) + "]}],";
@@ -290,7 +299,9 @@ public class BallActivity extends AppCompatActivity{
 
         Log.d(MainActivity.MYO_TAG, "JSON length " + String.valueOf(result.length()));
 
-        // Recording result to local .txt file                 // for testing only
+        // Recording result to local .txt file
+        // for testing only
+        /*
         File root = new File(Environment.getExternalStorageDirectory().toString());
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
@@ -307,5 +318,6 @@ public class BallActivity extends AppCompatActivity{
             Log.d(MainActivity.MYO_TAG, "Logging not done");
             Log.d(MainActivity.MYO_TAG, e.getMessage());
         }
+        */
     }
 }

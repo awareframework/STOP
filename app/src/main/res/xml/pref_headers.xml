@@ -1,0 +1,10 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.aware.app.stop.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_ball_game"
+        android:title="@string/pref_header_ball_game" />
+
+</preference-headers>

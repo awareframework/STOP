@@ -1,0 +1,58 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:id="@+id/ballSize"
+        android:capitalize="words"
+        android:defaultValue="@string/key_ball_size_value"
+        android:inputType="number"
+        android:key="@string/key_ball_size"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/key_ball_size_title" />
+
+    <EditTextPreference
+        android:id="@+id/smallCircleSize"
+        android:capitalize="words"
+        android:defaultValue="@string/key_small_circle_size_value"
+        android:inputType="number"
+        android:key="@string/key_small_circle_size"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/key_small_circle_size_title" />
+
+    <EditTextPreference
+        android:id="@+id/bigCircleSize"
+        android:capitalize="words"
+        android:defaultValue="@string/key_big_circle_size_value"
+        android:inputType="number"
+        android:key="@string/key_big_circle_size"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/key_big_circle_size_title" />
+
+    <EditTextPreference
+        android:id="@+id/sensitivity"
+        android:capitalize="words"
+        android:defaultValue="@string/key_sensitivity_value"
+        android:inputType="numberDecimal"
+        android:key="@string/key_sensitivity"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/key_sensitivity_title" />
+
+    <EditTextPreference
+        android:id="@+id/gameTime"
+        android:capitalize="words"
+        android:defaultValue="@string/key_game_time_value"
+        android:inputType="number"
+        android:key="@string/key_game_time"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/key_game_time_title" />
+
+</PreferenceScreen>
