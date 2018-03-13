@@ -79,7 +79,7 @@ public class Provider extends ContentProvider {
             Game_Data._ID + " integer primary key autoincrement," +
                     Game_Data.TIMESTAMP + " real default 0," +
                     Game_Data.DEVICE_ID + " text default ''," +
-                    Game_Data.DATA + " text default ''";
+                    Game_Data.DATA + " longtext default ''";
 
     /**
      * Medication table
