@@ -180,7 +180,7 @@ public class BallActivity extends AppCompatActivity{
             public void onFinish() {
                 timer.setText("Done!");
                 sampling = false;
-                stopSensors();
+                //stopSensors();
                 finish();
             }
         }.start();
@@ -208,6 +208,13 @@ public class BallActivity extends AppCompatActivity{
         smallCircleYpos = (size.y - smallCircleSize - 235)/2;
         bigCircleXpos = (size.x - bigCircleSize)/2;
         bigCircleYpos = (size.y - bigCircleSize - 235)/2;
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopSensors();
     }
 
     // updating ball's X and Y positioning

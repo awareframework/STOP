@@ -13,10 +13,10 @@ import android.widget.Button;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DashboardFragment extends Fragment {
+public class GameFragment extends Fragment {
 
 
-    public DashboardFragment() {
+    public GameFragment() {
         // Required empty public constructor
     }
 

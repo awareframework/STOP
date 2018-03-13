@@ -2,7 +2,10 @@
 
     <string name="app_name">STOP</string>
     <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_medication">Medication</string>
+    <string name="nav_game">Game</string>
     <string name="nav_wear">Wear</string>
+    <string name="nav_myo">Myo</string>
     <string name="nav_profile">Profile</string>
     <string name="provider_game_label">STOP Ball game</string>
     <string name="main_settings">Settings</string>

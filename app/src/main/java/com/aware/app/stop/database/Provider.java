@@ -39,17 +39,20 @@ public class Provider extends ContentProvider {
 
     //Database table names
     public static final String DB_TBL_GAME = "table_game";
+    public static final String DB_TBL_MEDICATION = "medication";
 
     //ContentProvider query indexes
     private static final int TABLE_GAME_DIR = 1;
     private static final int TABLE_GAME_ITEM = 2;
+    private static final int TABLE_MEDICATION_DIR = 3;
+    private static final int TABLE_MEDICATION_ITEM = 4;
 
     /**
      * Database tables:
      * - ball game data
      */
     public static final String[] DATABASE_TABLES = {
-            DB_TBL_GAME
+            DB_TBL_GAME, DB_TBL_MEDICATION
     };
 
     //These are columns that we need to sync data, don't change this!
@@ -57,7 +60,7 @@ public class Provider extends ContentProvider {
         String _ID = "_id";
         String TIMESTAMP = "timestamp";
         String DEVICE_ID = "device_id";
-        String DATA = "data";
+        //String DATA = "data";
     }
 
     /**
@@ -65,8 +68,10 @@ public class Provider extends ContentProvider {
      */
     public static final class Game_Data implements AWAREColumns {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_GAME);
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.table_game"; //vnd.com.aware.app.stop.provider.table_game
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.table_game";
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.table_game";
+
+        public static final String DATA = "data";
     }
 
     //Game table fields
@@ -76,12 +81,27 @@ public class Provider extends ContentProvider {
                     Game_Data.DEVICE_ID + " text default ''," +
                     Game_Data.DATA + " text default ''";
 
+    /**
+     * Medication table
+     */
+    public static final class Medication_Data implements AWAREColumns {
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_MEDICATION);
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.medication";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.medication";
+    }
+
+    //Medication table fields
+    private static final String DB_TBL_MEDICATION_FIELDS =
+            Medication_Data._ID + " integer primary key autoincrement," +
+                    Medication_Data.TIMESTAMP + " real default 0," +
+                    Medication_Data.DEVICE_ID + " text default ''";
+
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
      */
     public static final String[] TABLES_FIELDS = {
-            DB_TBL_GAME_FIELDS
+            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS
     };
 
     //Helper variables for ContentProvider - DO NOT CHANGE
@@ -98,6 +118,7 @@ public class Provider extends ContentProvider {
 
     //For each table, create a hashmap needed for database queries
     private HashMap<String, String> tableGameHash;
+    private HashMap<String, String> tableMedicationHash;
 
     /**
      * Returns the provider authority that is dynamic
@@ -119,12 +140,22 @@ public class Provider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[0], TABLE_GAME_DIR);
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[0] + "/#", TABLE_GAME_ITEM);
 
+        //Game table indexes DIR and ITEM
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[1], TABLE_MEDICATION_DIR);
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[1] + "/#", TABLE_MEDICATION_ITEM);
+
         //Game table HasMap
         tableGameHash = new HashMap<>();
         tableGameHash.put(Game_Data._ID, Game_Data._ID);
         tableGameHash.put(Game_Data.TIMESTAMP, Game_Data.TIMESTAMP);
         tableGameHash.put(Game_Data.DEVICE_ID, Game_Data.DEVICE_ID);
         tableGameHash.put(Game_Data.DATA, Game_Data.DATA);
+
+        //Medication table HasMap
+        tableMedicationHash = new HashMap<>();
+        tableMedicationHash.put(Medication_Data._ID, Medication_Data._ID);
+        tableMedicationHash.put(Medication_Data.TIMESTAMP, Medication_Data.TIMESTAMP);
+        tableMedicationHash.put(Medication_Data.DEVICE_ID, Medication_Data.DEVICE_ID);
 
         return true;
     }
@@ -140,6 +171,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_GAME_DIR:
                 count = database.delete(DATABASE_TABLES[0], selection, selectionArgs);
+                break;
+
+            case TABLE_MEDICATION_DIR:
+                count = database.delete(DATABASE_TABLES[1], selection, selectionArgs);
                 break;
 
             default:
@@ -177,6 +212,19 @@ public class Provider extends ContentProvider {
                 }
                 database.endTransaction();
                 throw new SQLException("Failed to insert row into " + uri);
+
+            case TABLE_MEDICATION_DIR:
+                long medication_id = database.insert(DATABASE_TABLES[1], Medication_Data.DEVICE_ID, values);
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                if (medication_id > 0) {
+                    Uri dataUri = ContentUris.withAppendedId(Game_Data.CONTENT_URI, medication_id);
+                    getContext().getContentResolver().notifyChange(dataUri, null, false);
+                    return dataUri;
+                }
+                database.endTransaction();
+                throw new SQLException("Failed to insert row into " + uri);
+
             default:
                 database.endTransaction();
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -195,6 +243,11 @@ public class Provider extends ContentProvider {
             case TABLE_GAME_DIR:
                 qb.setTables(DATABASE_TABLES[0]);
                 qb.setProjectionMap(tableGameHash); //the hashmap of the table
+                break;
+
+            case TABLE_MEDICATION_DIR:
+                qb.setTables(DATABASE_TABLES[1]);
+                qb.setProjectionMap(tableMedicationHash); //the hashmap of the table
                 break;
 
             default:
@@ -224,6 +277,11 @@ public class Provider extends ContentProvider {
             case TABLE_GAME_ITEM:
                 return Game_Data.CONTENT_ITEM_TYPE;
 
+            case TABLE_MEDICATION_DIR:
+                return Medication_Data.CONTENT_TYPE;
+            case TABLE_MEDICATION_ITEM:
+                return Medication_Data.CONTENT_ITEM_TYPE;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -241,6 +299,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_GAME_DIR:
                 count = database.update(DATABASE_TABLES[0], values, selection, selectionArgs);
+                break;
+
+            case TABLE_MEDICATION_DIR:
+                count = database.update(DATABASE_TABLES[1], values, selection, selectionArgs);
                 break;
 
             default:

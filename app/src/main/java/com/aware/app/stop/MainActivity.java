@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
-    private DashboardFragment dashboardFragment;
+    private GameFragment gameFragment;
     private WearFragment wearFragment;
-    private ProfileFragment profileFragment;
+    private MedicationFragment medicationFragment;
 
     public static final String MYO_TAG = "MYO_TAG";
 
@@ -36,27 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
         mMainFrame = findViewById(R.id.main_frame);
         mMainNav = findViewById(R.id.main_nav);
-        mMainNav.setSelectedItemId(R.id.nav_wear);
+        mMainNav.setSelectedItemId(R.id.nav_medication);
 
-        dashboardFragment = new DashboardFragment();
+        medicationFragment = new MedicationFragment();
+        gameFragment = new GameFragment();
         wearFragment = new WearFragment();
-        profileFragment = new ProfileFragment();
 
-        setFragment(wearFragment);
+        setFragment(medicationFragment);
 
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
-                    case R.id.nav_dashboard:
-                        setFragment(dashboardFragment);
+                    case R.id.nav_game:
+                        setFragment(gameFragment);
                         return true;
                     case R.id.nav_wear:
                         setFragment(wearFragment);
                         return true;
-                    case R.id.nav_profile:
-                        setFragment(profileFragment);
+                    case R.id.nav_medication:
+                        setFragment(medicationFragment);
                         return true;
                     default:
                         return false;
