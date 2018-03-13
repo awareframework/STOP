@@ -7,7 +7,7 @@
     <string name="nav_wear">Wear</string>
     <string name="nav_myo">Myo</string>
     <string name="nav_profile">Profile</string>
-    <string name="provider_game_label">STOP Ball game</string>
+    <string name="provider_game_label">STOP App data</string>
     <string name="main_settings">Settings</string>
 
     <!-- Strings related to Settings -->

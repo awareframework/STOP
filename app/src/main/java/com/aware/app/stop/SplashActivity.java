@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1714/uZhvVMgc7vzx";
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
             } else {
                 Log.d(MainActivity.MYO_TAG, "Study not ok, joining...");
 
-                Aware.joinStudy(this, "https://api.awareframework.com/index.php/webservice/index/1686/hcWtQhedXSaT");
+                Aware.joinStudy(this, STUDY_URL);
                 IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
                 registerReceiver(joinObserver, joinFilter);
             }

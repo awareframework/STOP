@@ -39,7 +39,7 @@ android {
         resValue "string", "provider_traffic", android.defaultConfig.applicationId + ".provider.traffic"
         resValue "string", "provider_wifi", android.defaultConfig.applicationId + ".provider.wifi"
 
-        resValue "string", "provider_game", android.defaultConfig.applicationId + ".database.provider.game"
+        resValue "string", "provider_stop_project", android.defaultConfig.applicationId + ".database.provider.stop_project"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

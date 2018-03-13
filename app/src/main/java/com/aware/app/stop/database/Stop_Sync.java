@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.aware.syncadapters.AwareSyncAdapter;
 
-public class Game_Sync extends Service {
+public class Stop_Sync extends Service {
     private AwareSyncAdapter sSyncAdapter = null;
     private static final Object sSyncAdapterLock = new Object();
 

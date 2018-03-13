@@ -25,7 +25,7 @@ public class Provider extends ContentProvider {
     /**
      * Authority of this content provider
      */
-    public static String AUTHORITY = "com.aware.app.stop.database.provider.game";
+    public static String AUTHORITY = "com.aware.app.stop.database.provider.stop_project";
 
     /**
      * ContentProvider database version. Increment every time you modify the database structure
@@ -35,10 +35,10 @@ public class Provider extends ContentProvider {
     /**
      * Database stored in external folder: /AWARE/plugin_myo.db
      */
-    public static final String DATABASE_NAME = "stop_game.db";
+    public static final String DATABASE_NAME = "stop.db";
 
     //Database table names
-    public static final String DB_TBL_GAME = "table_game";
+    public static final String DB_TBL_GAME = "ball_game";
     public static final String DB_TBL_MEDICATION = "medication";
 
     //ContentProvider query indexes
@@ -68,8 +68,8 @@ public class Provider extends ContentProvider {
      */
     public static final class Game_Data implements AWAREColumns {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_GAME);
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.table_game";
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.table_game";
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.ball_game";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.ball_game";
 
         public static final String DATA = "data";
     }
@@ -125,14 +125,14 @@ public class Provider extends ContentProvider {
      * @return
      */
     public static String getAuthority(Context context) {
-        AUTHORITY = context.getPackageName() + ".database.provider.game";
+        AUTHORITY = context.getPackageName() + ".database.provider.stop_project";
         return AUTHORITY;
     }
 
     @Override
     public boolean onCreate() {
         //This is a hack to allow providers to be reusable in any application/plugin by making the authority dynamic using the package name of the parent app
-        AUTHORITY = getContext().getPackageName() + ".database.provider.game";
+        AUTHORITY = getContext().getPackageName() + ".database.provider.stop_project";
 
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 

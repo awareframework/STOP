@@ -48,7 +48,7 @@
 
         <provider
             android:name=".database.Provider"
-            android:authorities="${applicationId}.database.provider.game"
+            android:authorities="${applicationId}.database.provider.stop_project"
             android:exported="true"
             android:label="@string/provider_game_label"
             android:readPermission="com.aware.READ_CONTEXT_DATA"
@@ -56,7 +56,7 @@
             android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
 
         <service
-            android:name=".database.Game_Sync"
+            android:name=".database.Stop_Sync"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
@@ -64,7 +64,7 @@
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_game" />
+                android:resource="@xml/sync_stop" />
         </service>
     </application>
 
