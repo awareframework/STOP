@@ -63,7 +63,7 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
             }
 
         } catch (Exception e) {
-            Log.d(MainActivity.MYO_TAG, String.valueOf(e));
+            Log.d(MainActivity.MYO_TAG, "Async:Parser error: " + String.valueOf(e));
         }
 
         return timestamp;
