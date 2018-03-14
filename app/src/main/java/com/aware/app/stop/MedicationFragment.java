@@ -19,10 +19,12 @@ import android.widget.ImageButton;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 
 public class MedicationFragment extends Fragment{
@@ -119,7 +121,17 @@ public class MedicationFragment extends Fragment{
         if (requestCode == RC_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                Log.d(MainActivity.MYO_TAG, results.toString());
+                Log.d(MainActivity.MYO_TAG, results.get(0));
+
+                TimestampParser tp = new TimestampParser();
+                try {
+                    Log.d(MainActivity.MYO_TAG, "Started");
+                    long test = tp.execute(results.get(0)).get();
+                    Log.d(MainActivity.MYO_TAG, "Result: " + String.valueOf(test));
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                    Log.d(MainActivity.MYO_TAG, e.getMessage());
+                }
                 //voice_recog.setText(results.get(0));
             }
         }
@@ -133,5 +145,4 @@ public class MedicationFragment extends Fragment{
         listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, "I'm listening...");
         startActivityForResult(listenToUser, RC_SPEECH_INPUT);
     }
-
 }
