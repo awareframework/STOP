@@ -284,9 +284,17 @@ public class BallActivity extends AppCompatActivity{
 
         // Stopping sensors
         Aware.stopAccelerometer(getApplicationContext());
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
+
         Aware.stopLinearAccelerometer(getApplicationContext());
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
+
         Aware.stopGyroscope(getApplicationContext());
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
+
         Aware.stopRotation(getApplicationContext());
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
+
         Log.d(MainActivity.MYO_TAG, "turned off");
 
         // Adjusting data to final JSON format
