@@ -295,8 +295,6 @@ public class BallActivity extends AppCompatActivity{
         Aware.stopRotation(getApplicationContext());
         Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
 
-        Log.d(MainActivity.MYO_TAG, "turned off");
-
         // Adjusting data to final JSON format
         String gamedata = gameData.substring(0, gameData.length()-1) + "]}],";
         String acccel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
