@@ -85,14 +85,6 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        // reading settings values from SettingsActivity
-        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
-        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), "300"));
-        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), "500"));
-        sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), "3.0"));
-        gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), "10"))*1000;
-
         // Initializing views
         timer = view.findViewById(R.id.timer);
         containerLayout = view.findViewById(R.id.container);
@@ -180,6 +172,20 @@ public class GameFragment extends Fragment {
             }
         };
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // reading settings values from SettingsActivity
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
+        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), "300"));
+        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), "500"));
+        sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), "3.0"));
+        gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), "10"))*1000;
 
         // detection of the display size
         Point size = new Point();
@@ -202,8 +208,6 @@ public class GameFragment extends Fragment {
         smallCircleYpos = (size.y - smallCircleSize - 235 - 175)/2;
         bigCircleXpos = (size.x - bigCircleSize)/2;
         bigCircleYpos = (size.y - bigCircleSize - 235 -175)/2;
-
-        return view;
     }
 
     // Inflate BallView and start data sampling
