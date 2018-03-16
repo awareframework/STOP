@@ -28,7 +28,6 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:label">
         <activity android:name=".MainActivity" />
-        <activity android:name=".BallActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
