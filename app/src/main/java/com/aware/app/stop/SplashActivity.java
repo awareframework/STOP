@@ -2,7 +2,6 @@ package com.aware.app.stop;
 
 import android.Manifest;
 import android.accounts.Account;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.aware.Applications;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
@@ -37,7 +35,8 @@ public class SplashActivity extends AppCompatActivity {
         REQUIRED_PERMISSIONS.add(Manifest.permission.GET_ACCOUNTS);
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_SYNC_SETTINGS);
         REQUIRED_PERMISSIONS.add(Manifest.permission.READ_SYNC_SETTINGS);
-        REQUIRED_PERMISSIONS.add(Manifest.permission.READ_SYNC_STATS);
+        //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_WIFI_STATE);
+        //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_NETWORK_STATE);
 
         boolean permissions_ok = true;
         for (String p : REQUIRED_PERMISSIONS) {
@@ -48,20 +47,20 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (permissions_ok) {
-            Log.d(MainActivity.MYO_TAG, "Permissions ok");
+            Log.d(MainActivity.STOP_TAG, "Permissions ok");
 
             Intent aware = new Intent(getApplicationContext(), Aware.class);
             startService(aware);
 
             if (Aware.isStudy(this)) {
-                Log.d(MainActivity.MYO_TAG, "Study ok");
+                Log.d(MainActivity.STOP_TAG, "Study ok");
 
                 Intent main = new Intent(this, MainActivity.class);
                 startActivity(main);
                 finish();
 
             } else {
-                Log.d(MainActivity.MYO_TAG, "Study not ok, joining...");
+                Log.d(MainActivity.STOP_TAG, "Study not ok, joining...");
 
                 Aware.joinStudy(this, STUDY_URL);
                 IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
@@ -69,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         } else {
-            Log.d(MainActivity.MYO_TAG, "Permissions not ok, requesting them...");
+            Log.d(MainActivity.STOP_TAG, "Permissions not ok, requesting them...");
 
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
@@ -84,7 +83,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(Aware.ACTION_JOINED_STUDY)) {
-                Log.d(MainActivity.MYO_TAG, "Study ok, joined");
+                Log.d(MainActivity.STOP_TAG, "Study ok, joined");
 
                 Account aware_account = Aware.getAWAREAccount(getApplicationContext());
                 String authority = Provider.getAuthority(getApplicationContext());

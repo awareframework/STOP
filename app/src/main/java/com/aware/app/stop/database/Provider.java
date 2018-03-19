@@ -33,7 +33,7 @@ public class Provider extends ContentProvider {
     public static final int DATABASE_VERSION = 1;
 
     /**
-     * Database stored in external folder: /AWARE/plugin_myo.db
+     * Database stored in external folder: /AWARE/stop.db
      */
     public static final String DATABASE_NAME = "stop.db";
 

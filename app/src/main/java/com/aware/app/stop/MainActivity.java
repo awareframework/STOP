@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static NotificationManager manager;
 
 
-    public static final String MYO_TAG = "MYO_TAG";
+    public static final String STOP_TAG = "STOP_TAG";
     public static final String ACTION_STOP_FINGERPRINT = "ACTION_STOP_FINGERPRINT";
 
     @Override
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
         Aware.isBatteryOptimizationIgnored(getApplicationContext(), "com.aware.app.stop");
-        Aware.startPlugin(getApplicationContext(), "com.aware.plugin.myo");
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
 
         // Get an instance of the NotificationManager service
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_FINGERPRINT)) {
-                Log.d(MainActivity.MYO_TAG, "Broadcast received");
+                Log.d(MainActivity.STOP_TAG, "Broadcast received");
                 Aware.debug(context, "STOP-notification triggered: " + intent.getStringExtra("trigger-time"));
                 notifyShow(context,intent.getStringExtra("trigger-time") + ": play a game and record medication");
             }

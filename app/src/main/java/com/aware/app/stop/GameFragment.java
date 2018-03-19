@@ -85,7 +85,7 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        Log.d(MainActivity.MYO_TAG, "onCreateView");
+        Log.d(MainActivity.STOP_TAG, "onCreateView");
 
         // Initializing views
         timer = view.findViewById(R.id.timer);
@@ -181,7 +181,7 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Log.d(MainActivity.MYO_TAG, "onResume");
+        Log.d(MainActivity.STOP_TAG, "onResume");
 
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
@@ -268,19 +268,19 @@ public class GameFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(MainActivity.MYO_TAG, "onPause");
+        Log.d(MainActivity.STOP_TAG, "onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(MainActivity.MYO_TAG, "onStop");
+        Log.d(MainActivity.STOP_TAG, "onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(MainActivity.MYO_TAG, "onDestroy");
+        Log.d(MainActivity.STOP_TAG, "onDestroy");
 
         Aware.stopAccelerometer(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
@@ -294,7 +294,7 @@ public class GameFragment extends Fragment {
         Aware.stopRotation(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
 
-        Log.d(MainActivity.MYO_TAG, "onDestroy done");
+        Log.d(MainActivity.STOP_TAG, "onDestroy done");
     }
 
     // Stop data sampling
@@ -338,7 +338,7 @@ public class GameFragment extends Fragment {
         values.put(Provider.Game_Data.DATA, result);
         getActivity().getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
 
-        Log.d(MainActivity.MYO_TAG, "JSON length " + String.valueOf(result.length()));
+        Log.d(MainActivity.STOP_TAG, "JSON length " + String.valueOf(result.length()));
 
         // Recording result to local .txt file
         // for testing only
@@ -352,11 +352,11 @@ public class GameFragment extends Fragment {
             writer.append(result);
             writer.flush();
             writer.close();
-            Log.d(MainActivity.MYO_TAG, "Logging done");
+            Log.d(MainActivity.STOP_TAG, "Logging done");
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(MainActivity.MYO_TAG, "Logging not done");
-            Log.d(MainActivity.MYO_TAG, e.getMessage());
+            Log.d(MainActivity.STOP_TAG, "Logging not done");
+            Log.d(MainActivity.STOP_TAG, e.getMessage());
         }
     }
 

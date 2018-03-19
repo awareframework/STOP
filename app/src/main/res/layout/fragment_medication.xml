@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.aware.app.stop.MedicationFragment">
+
+    <ListView
+        android:id="@+id/medicationList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/whenTaken"
+        android:layout_below="@id/listHeading"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/listHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="List of medication records" />
+
+    <TextView
+        android:id="@+id/noRecords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/listHeading"
+        android:layout_marginTop="90dp"
+        android:text="No records have been made yet"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/whenTaken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/micBtn"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="When have you taken medication last time?" />
+
+    <Button
+        android:id="@+id/specifyBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/micBtn"
+        android:layout_marginEnd="20dp"
+        android:text="Specify time"/>
+
+    <ImageButton
+        android:id="@+id/micBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_mic"/>
+
+    <Button
+        android:id="@+id/nowBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toEndOf="@+id/micBtn"
+        android:layout_marginStart="20dp"
+        android:text="Now"/>
+
+</RelativeLayout>

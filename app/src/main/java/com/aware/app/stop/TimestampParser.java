@@ -56,14 +56,14 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
                 Date date = df.parse(value);
-                timestamp = date.getTime()/1000;
+                timestamp = date.getTime();
 
             } finally {
                 urlConnection.disconnect();
             }
 
         } catch (Exception e) {
-            Log.d(MainActivity.MYO_TAG, "Async:Parser error: " + String.valueOf(e));
+            Log.d(MainActivity.STOP_TAG, "Async:Parser error: " + String.valueOf(e));
         }
 
         return timestamp;
