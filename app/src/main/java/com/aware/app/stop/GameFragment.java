@@ -85,6 +85,8 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
+        Log.d(MainActivity.MYO_TAG, "onCreateView");
+
         // Initializing views
         timer = view.findViewById(R.id.timer);
         containerLayout = view.findViewById(R.id.container);
@@ -179,6 +181,8 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        Log.d(MainActivity.MYO_TAG, "onResume");
+
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
         ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
@@ -254,9 +258,43 @@ public class GameFragment extends Fragment {
 
             public void onFinish() {
                 sampling = false;
-                stopGame();
+                if (getContext() != null) {
+                    stopGame();
+                }
             }
         }.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(MainActivity.MYO_TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(MainActivity.MYO_TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(MainActivity.MYO_TAG, "onDestroy");
+
+        Aware.stopAccelerometer(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
+
+        Aware.stopLinearAccelerometer(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
+
+        Aware.stopGyroscope(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
+
+        Aware.stopRotation(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
+
+        Log.d(MainActivity.MYO_TAG, "onDestroy done");
     }
 
     // Stop data sampling

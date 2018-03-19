@@ -10,6 +10,12 @@
     <string name="provider_game_label">STOP App data</string>
     <string name="main_settings">Settings</string>
 
+    <!-- Strings related AWARE notifications -->
+    <string name="foreground_notification_title">STOP</string>
+    <string name="foreground_notification_text">Medication tracking is active</string>
+    <string name="aware_activate_battery_optimize_ignore_title">STOP</string>
+    <string name="aware_activate_battery_optimize_ignore">Tap and add to the ignore battery optimizations\' list.</string>
+
     <!-- Strings related to Settings -->
     <!-- Ball game settings -->
     <string name="title_activity_settings">Settings</string>

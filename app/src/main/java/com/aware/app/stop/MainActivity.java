@@ -51,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
 
+        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
+        Aware.isBatteryOptimizationIgnored(getApplicationContext(), "com.aware.app.stop");
         Aware.startPlugin(getApplicationContext(), "com.aware.plugin.myo");
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
 
@@ -81,13 +82,7 @@ public class MainActivity extends AppCompatActivity {
                         setFragment(gameFragment);
                         return true;
                     case R.id.nav_wear:
-                        //setFragment(wearFragment);
-
-                        Intent myoConnected = new Intent(MainActivity.ACTION_STOP_FINGERPRINT);
-                        myoConnected.putExtra("trigger-time", "Test");
-                        sendBroadcast(myoConnected);
-
-
+                        setFragment(wearFragment);
                         return true;
                     case R.id.nav_medication:
                         setFragment(medicationFragment);
@@ -136,21 +131,6 @@ public class MainActivity extends AppCompatActivity {
     private void scheduleNotification() {
 
         try {
-
-            Scheduler.Schedule test = Scheduler.getSchedule(this, "test");
-            if (test == null) {
-                Calendar calendar = Calendar.getInstance();
-
-                test = new Scheduler.Schedule("test");
-                test.addHour(calendar.get(Calendar.HOUR_OF_DAY))
-                        .addMinute(calendar.get(Calendar.MINUTE) + 1)
-                        .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
-                        .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra("trigger-time", "Test");
-
-                Scheduler.saveSchedule(getApplicationContext(), test);
-                Aware.startScheduler(getApplicationContext());
-            }
 
             Scheduler.Schedule morning = Scheduler.getSchedule(this, "morning");
             if (morning == null) {
