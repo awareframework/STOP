@@ -3,17 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_medication"
-        android:icon="@drawable/ic_medication"
-        android:title="@string/nav_medication" />
-
-    <item
         android:id="@+id/nav_game"
         android:icon="@drawable/ic_game"
         android:title="@string/nav_game" />
+
     <item
-        android:id="@+id/nav_wear"
-        android:icon="@drawable/ic_wear"
-        android:title="@string/nav_myo" />
+        android:id="@+id/nav_medication"
+        android:icon="@drawable/ic_medication"
+        android:title="@string/nav_medication" />
 
 </menu>

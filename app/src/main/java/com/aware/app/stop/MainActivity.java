@@ -6,16 +6,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,20 +21,15 @@ import android.widget.FrameLayout;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
-import com.aware.plugin.myo.Plugin;
-import com.aware.utils.Aware_TTS;
 import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
     private GameFragment gameFragment;
-    private WearFragment wearFragment;
     private MedicationFragment medicationFragment;
 
     private static NotificationManager manager;
@@ -65,11 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
         mMainFrame = findViewById(R.id.main_frame);
         mMainNav = findViewById(R.id.main_nav);
-        mMainNav.setSelectedItemId(R.id.nav_game);
+        //mMainNav.setSelectedItemId(R.id.nav_game);
 
         medicationFragment = new MedicationFragment();
         gameFragment = new GameFragment();
-        wearFragment = new WearFragment();
 
         setFragment(gameFragment);
 
@@ -80,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_game:
                         setFragment(gameFragment);
-                        return true;
-                    case R.id.nav_wear:
-                        setFragment(wearFragment);
                         return true;
                     case R.id.nav_medication:
                         setFragment(medicationFragment);
