@@ -85,7 +85,7 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        Log.d(MainActivity.STOP_TAG, "onCreateView");
+        //Log.d(MainActivity.STOP_TAG, "onCreateView");
 
         // Initializing views
         timer = view.findViewById(R.id.timer);
@@ -181,7 +181,7 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Log.d(MainActivity.STOP_TAG, "onResume");
+        //Log.d(MainActivity.STOP_TAG, "onResume");
 
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
@@ -268,19 +268,19 @@ public class GameFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(MainActivity.STOP_TAG, "onPause");
+        //Log.d(MainActivity.STOP_TAG, "onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(MainActivity.STOP_TAG, "onStop");
+        //Log.d(MainActivity.STOP_TAG, "onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(MainActivity.STOP_TAG, "onDestroy");
+        //Log.d(MainActivity.STOP_TAG, "onDestroy");
 
         Aware.stopAccelerometer(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
@@ -294,7 +294,7 @@ public class GameFragment extends Fragment {
         Aware.stopRotation(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
 
-        Log.d(MainActivity.STOP_TAG, "onDestroy done");
+        //Log.d(MainActivity.STOP_TAG, "onDestroy done");
     }
 
     // Stop data sampling

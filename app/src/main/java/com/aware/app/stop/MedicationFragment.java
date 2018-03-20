@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.DatePicker;
@@ -72,6 +73,14 @@ public class MedicationFragment extends Fragment{
         medicationList = view.findViewById(R.id.medicationList);
         noRecords = view.findViewById(R.id.noRecords);
         updateList();
+        medicationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                modifyRecord(id);
+
+            }
+        });
 
         // Now button immidiately records timestamp to db
         nowBtn = view.findViewById(R.id.nowBtn);
@@ -303,11 +312,13 @@ public class MedicationFragment extends Fragment{
                                         }
                                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
                                     dateEdit.setTitle("Check date");
+                                    dateEdit.setCancelable(false);
                                     dateEdit.show();
 
                                 }
                             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                             timeEdit.setTitle("Check time");
+                            timeEdit.setCancelable(false);
                             timeEdit.show();
                         }
                     })
@@ -318,7 +329,6 @@ public class MedicationFragment extends Fragment{
         } else {
             Toast.makeText(getActivity(), "Cannot recognize date, please try again", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     // Update ListView with the new cursor query
@@ -341,6 +351,99 @@ public class MedicationFragment extends Fragment{
                 noRecords.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    // Modifying timestamp on item click
+    private void modifyRecord(final long id) {
+
+        // query to db to retrieve timestamp for selected id
+        String[] columns = new String[]{Provider.Medication_Data._ID, Provider.Medication_Data.TIMESTAMP};
+        String selection = Provider.Medication_Data._ID + " = " + id;
+        Cursor modify = getContext().getContentResolver().query(Provider.Medication_Data.CONTENT_URI, columns, selection , null, null);
+        modify.moveToFirst();
+
+        final long time = modify.getLong(modify.getColumnIndexOrThrow("timestamp"));
+        final Date date = new Date(time);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Log.d(MainActivity.STOP_TAG, "onClicked: " + String.valueOf(time));
+
+        // transforming timestamp to readable date format to show in dialog
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd.MM.yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+        String formattedDate = sdf.format(date);
+
+        // AlertDialog to modify/delete the date
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(getActivity());
+        }
+        builder.setTitle("Modify medication record")
+                .setMessage(formattedDate)
+                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Modify timestamp
+                        TimePickerDialog timeEdit = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, final int hourPicked, final int minutePicked) {
+
+                                DatePickerDialog dateEdit = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int yearPicked, int monthPicked, int dayPicked) {
+
+                                        calendar.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
+
+                                        // Date is fixed, write it to db
+                                        ContentValues update_values = new ContentValues();
+                                        update_values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
+                                        getActivity().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
+                                        Toast.makeText(getActivity(), "Medication edited", Toast.LENGTH_SHORT).show();
+                                        Log.d(MainActivity.STOP_TAG, "Edited: " + String.valueOf(calendar.getTimeInMillis()));
+
+                                        updateList();
+
+                                    }
+                                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+                                dateEdit.setTitle("Edit date");
+                                dateEdit.show();
+
+                            }
+                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                        timeEdit.setTitle("Edit time");
+                        timeEdit.show();
+                    }
+
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        dialog.dismiss();
+                        Log.d(MainActivity.STOP_TAG, "Cancelled: " + time);
+                    }
+
+                })
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Remove timestamp from db
+                        getActivity().getContentResolver().delete(Provider.Medication_Data.CONTENT_URI, Provider.Medication_Data._ID + "=" + id, null);
+
+                        Toast.makeText(getActivity(), "Medication deleted", Toast.LENGTH_SHORT).show();
+                        Log.d(MainActivity.STOP_TAG, "Deleted: " + String.valueOf(time));
+
+                        updateList();
+
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+        modify.close();
     }
 
     @Override
