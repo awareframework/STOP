@@ -176,7 +176,7 @@ public class MedicationFragment extends Fragment{
                 Log.d(MainActivity.STOP_TAG, "Voice: " + results.get(0));
 
                 // parsing timestamp from users response
-                TimestampParser tp = new TimestampParser();
+                TimestampParser tp = new TimestampParser(getActivity());
                 try {
                     Log.d(MainActivity.STOP_TAG, "Parse started");
                     verifyTime(tp.execute(results.get(0)).get());

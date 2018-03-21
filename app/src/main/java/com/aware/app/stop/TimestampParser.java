@@ -1,5 +1,7 @@
 package com.aware.app.stop;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,8 +21,16 @@ import java.util.TimeZone;
 // Class to convert voice recognized string to timestamp GMT+0 format
 public class TimestampParser extends AsyncTask<String, String, Long> {
 
+    private ProgressDialog dialog;
+
     // Wit.ai client access token
     private final static String ACCESS_TOKEN = "TJCEIBT7526M4F2TXIMK3U5GQJBCTISX";
+
+    // Parser constructor
+    TimestampParser(Context context) {
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Please wait...");
+    }
 
     protected Long doInBackground(String... text) {
 
@@ -28,7 +38,8 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
 
         try {
             // opening http connection to send string to wit.ai
-            String getUrl = String.format("%s%s", "https://api.wit.ai/message?q=", URLEncoder.encode(text[0], "utf-8"));
+            String timezone = "&context={\"timezone\":\"" + TimeZone.getDefault().getID() + "\"}";
+            String getUrl = String.format("%s%s", "https://api.wit.ai/message?q=", URLEncoder.encode(text[0], "utf-8")) + timezone;
             URL url = new URL(getUrl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.addRequestProperty("Authorization", String.format("Bearer %s", ACCESS_TOKEN));
@@ -56,7 +67,7 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
                 value = value.substring(0, 10) + " " + value.substring(11);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
+                df.setTimeZone(TimeZone.getDefault());
                 Date date = df.parse(value);
                 timestamp = date.getTime();
 
@@ -71,7 +82,14 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
         return timestamp;
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        dialog.show();
+    }
+
     protected void onPostExecute(Long result) {
+        dialog.dismiss();
     }
 
 }
