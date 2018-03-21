@@ -14,8 +14,9 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
-// Class to convert voice recognized string to timestamp format
+// Class to convert voice recognized string to timestamp GMT+0 format
 public class TimestampParser extends AsyncTask<String, String, Long> {
 
     // Wit.ai client access token
@@ -55,6 +56,7 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
                 value = value.substring(0, 10) + " " + value.substring(11);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                df.setTimeZone(TimeZone.getTimeZone("GMT"));
                 Date date = df.parse(value);
                 timestamp = date.getTime();
 

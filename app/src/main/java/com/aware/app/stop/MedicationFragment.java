@@ -211,7 +211,7 @@ public class MedicationFragment extends Fragment{
 
             // transforming timestamp to readable date format to show in dialog
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd.MM.yyyy");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+            sdf.setTimeZone(TimeZone.getDefault());
             String formattedDate = sdf.format(date);
 
             // AlertDialog to verify the date
@@ -335,7 +335,7 @@ public class MedicationFragment extends Fragment{
 
         // transforming timestamp to readable date format to show in dialog
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd.MM.yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+        sdf.setTimeZone(TimeZone.getDefault());
         String formattedDate = sdf.format(date);
 
         // AlertDialog to modify/delete the date
@@ -437,7 +437,7 @@ public class MedicationFragment extends Fragment{
 
             // transforming timestamp to readable date format to show in dialog
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm,  dd MMMM yyyy");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+            sdf.setTimeZone(TimeZone.getDefault());
             String formattedDate = sdf.format(date);
 
             tvTimestamp.setText(formattedDate);
