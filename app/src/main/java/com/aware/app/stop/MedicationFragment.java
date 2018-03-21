@@ -13,8 +13,6 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,16 +36,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class MedicationFragment extends Fragment{
-
-    // Text-to-speech components
-    private TextToSpeech tts;
-    private HashMap<String, String> params;
 
     // UI components
     private Button nowBtn, specifyBtn;
@@ -75,9 +68,7 @@ public class MedicationFragment extends Fragment{
         medicationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 modifyRecord(id);
-
             }
         });
 
@@ -92,7 +83,6 @@ public class MedicationFragment extends Fragment{
                 values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getActivity().getApplicationContext(), Aware_Preferences.DEVICE_ID));
                 getActivity().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
                 Toast.makeText(getActivity(), "Medication recorded", Toast.LENGTH_SHORT).show();
-
                 Log.d(MainActivity.STOP_TAG, "Now timestamp inserted");
 
                 updateList();
@@ -107,10 +97,7 @@ public class MedicationFragment extends Fragment{
 
                 ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (cm.getActiveNetworkInfo() != null) {
-                    nowBtn.setEnabled(false);
-                    micBtn.setEnabled(false);
-                    specifyBtn.setEnabled(false);
-                    tts.speak("When have you taken medication last time?", TextToSpeech.QUEUE_FLUSH, params);
+                    listenVoice();
 
                 } else {
                     Toast.makeText(getActivity(), "Internet connection is disabled. Please enable it or use \"Specify time\" option ",
@@ -161,39 +148,6 @@ public class MedicationFragment extends Fragment{
             }
         });
 
-        // Text-to-speech initializing
-        params = new HashMap<String, String>();
-        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "0");
-        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(Locale.UK);
-                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onStart(String utteranceId) {
-
-                        }
-
-                        @Override
-                        public void onDone(String utteranceId) {
-                            listenVoice();
-                        }
-
-                        @Override
-                        public void onError(String utteranceId) {
-
-                        }
-                    });
-
-                } else {
-                    Intent install = new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                    startActivity(install);
-                }
-            }
-        });
-
         return view;
     }
 
@@ -204,12 +158,17 @@ public class MedicationFragment extends Fragment{
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        nowBtn.setEnabled(true);
-        micBtn.setEnabled(true);
-        specifyBtn.setEnabled(true);
 
         if (requestCode == RC_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
@@ -235,7 +194,7 @@ public class MedicationFragment extends Fragment{
         listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK);
         listenToUser.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, "I'm listening...");
+        listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, "When have you taken medication last time?");
         startActivityForResult(listenToUser, RC_SPEECH_INPUT);
     }
 
@@ -327,7 +286,7 @@ public class MedicationFragment extends Fragment{
                             timeEdit.show();
                         }
                     })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(R.drawable.ic_medication_light)
                     .setCancelable(false)
                     .show();
 
@@ -445,19 +404,10 @@ public class MedicationFragment extends Fragment{
 
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.ic_medication_light)
                 .show();
 
         modify.close();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (cursor != null) {
-            cursor.close();
-        }
     }
 
     // Custom cursor adapter
