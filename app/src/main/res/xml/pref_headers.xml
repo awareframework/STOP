@@ -3,8 +3,14 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.aware.app.stop.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_ball_game"
+        android:fragment="com.aware.app.stop.SettingsActivity$BallGamePreferenceFragment"
+        android:icon="@drawable/ic_game"
         android:title="@string/pref_header_ball_game" />
+
+    <header
+        android:fragment="com.aware.app.stop.SettingsActivity$MedicationPreferenceFragment"
+        android:icon="@drawable/ic_medication"
+        android:title="@string/pref_header_medication" />
+
 
 </preference-headers>

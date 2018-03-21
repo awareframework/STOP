@@ -16,6 +16,7 @@
     <!-- Ball game settings -->
     <string name="title_activity_settings">Settings</string>
     <string name="pref_header_ball_game">Ball game</string>
+    <string name="pref_header_medication">Medication</string>
 
     <string name="key_ball_size_title">Ball size</string>
     <string name="key_ball_size">key_ball_size</string>
@@ -36,5 +37,8 @@
     <string name="key_game_time_title">Game time</string>
     <string name="key_game_time">key_game_time</string>
     <string name="key_game_time_value">10</string>
+
+    <string name="key_medication_title">Clear medication list</string>
+    <string name="key_medication">key_medication</string>
 
 </resources>

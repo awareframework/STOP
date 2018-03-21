@@ -72,7 +72,6 @@ public class MedicationFragment extends Fragment{
 
         medicationList = view.findViewById(R.id.medicationList);
         noRecords = view.findViewById(R.id.noRecords);
-        updateList();
         medicationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -196,6 +195,12 @@ public class MedicationFragment extends Fragment{
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
     }
 
     @Override
