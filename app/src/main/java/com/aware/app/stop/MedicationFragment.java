@@ -80,9 +80,9 @@ public class MedicationFragment extends Fragment{
                 // Inserting data to database
                 ContentValues values = new ContentValues();
                 values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
-                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getActivity().getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                getActivity().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                Toast.makeText(getActivity(), "Medication recorded", Toast.LENGTH_SHORT).show();
+                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
                 Log.d(MainActivity.STOP_TAG, "Now timestamp inserted");
 
                 updateList();
@@ -95,12 +95,12 @@ public class MedicationFragment extends Fragment{
             @Override
             public void onClick(View v) {
 
-                ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (cm.getActiveNetworkInfo() != null) {
                     listenVoice();
 
                 } else {
-                    Toast.makeText(getActivity(), "Internet connection is disabled. Please enable it or use \"Specify time\" option ",
+                    Toast.makeText(getContext(), "Internet connection is disabled. Please enable it or use \"Specify time\" option ",
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -113,11 +113,11 @@ public class MedicationFragment extends Fragment{
             public void onClick(View v) {
 
                 // Specifying date manually
-                TimePickerDialog timeSpecify = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timeSpecify = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, final int hourPicked, final int minutePicked) {
 
-                        DatePickerDialog dateSpecify = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        DatePickerDialog dateSpecify = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int yearPicked, int monthPicked, int dayPicked) {
 
@@ -127,9 +127,9 @@ public class MedicationFragment extends Fragment{
                                 // Date is specified, write it to db
                                 ContentValues values = new ContentValues();
                                 values.put(Provider.Medication_Data.TIMESTAMP, specified.getTimeInMillis());
-                                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getActivity().getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                                getActivity().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                                Toast.makeText(getActivity(), "Medication recorded", Toast.LENGTH_SHORT).show();
+                                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                                getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                                Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
                                 Log.d(MainActivity.STOP_TAG, "Specified: " + String.valueOf(specified.getTimeInMillis()));
 
                                 updateList();
@@ -176,7 +176,7 @@ public class MedicationFragment extends Fragment{
                 Log.d(MainActivity.STOP_TAG, "Voice: " + results.get(0));
 
                 // parsing timestamp from users response
-                TimestampParser tp = new TimestampParser(getActivity());
+                TimestampParser tp = new TimestampParser(getContext());
                 try {
                     Log.d(MainActivity.STOP_TAG, "Parse started");
                     verifyTime(tp.execute(results.get(0)).get());
@@ -217,9 +217,9 @@ public class MedicationFragment extends Fragment{
             // AlertDialog to verify the date
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
             } else {
-                builder = new AlertDialog.Builder(getActivity());
+                builder = new AlertDialog.Builder(getContext());
             }
             builder.setTitle("Check medication time")
                     .setMessage(formattedDate)
@@ -229,10 +229,10 @@ public class MedicationFragment extends Fragment{
                             // Date is OK, write it to db
                             ContentValues values = new ContentValues();
                             values.put(Provider.Medication_Data.TIMESTAMP, time);
-                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getActivity().getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                            getActivity().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                            getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
 
-                            Toast.makeText(getActivity(), "Medication recorded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
                             Log.d(MainActivity.STOP_TAG, "Confirmed: " + time);
 
                             updateList();
@@ -253,11 +253,11 @@ public class MedicationFragment extends Fragment{
                         public void onClick(DialogInterface dialog, int which) {
 
                             // Date is wrong, editing it manually
-                            TimePickerDialog timeEdit = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                            TimePickerDialog timeEdit = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker view, final int hourPicked, final int minutePicked) {
 
-                                    DatePickerDialog dateEdit = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                                    DatePickerDialog dateEdit = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                                         @Override
                                         public void onDateSet(DatePicker view, int yearPicked, int monthPicked, int dayPicked) {
 
@@ -266,9 +266,9 @@ public class MedicationFragment extends Fragment{
                                             // Date is fixed, write it to db
                                             ContentValues values = new ContentValues();
                                             values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
-                                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getActivity().getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                                            getActivity().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                                            Toast.makeText(getActivity(), "Medication recorded", Toast.LENGTH_SHORT).show();
+                                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                                            getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                                            Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
                                             Log.d(MainActivity.STOP_TAG, "Updated: " + String.valueOf(calendar.getTimeInMillis()));
 
                                             updateList();
@@ -286,12 +286,12 @@ public class MedicationFragment extends Fragment{
                             timeEdit.show();
                         }
                     })
-                    .setIcon(R.drawable.ic_medication_light)
+                    .setIcon(R.drawable.ic_action_aware_studies_light)
                     .setCancelable(false)
                     .show();
 
         } else {
-            Toast.makeText(getActivity(), "Cannot recognize date, please try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Cannot recognize date, please try again", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -341,9 +341,9 @@ public class MedicationFragment extends Fragment{
         // AlertDialog to modify/delete the date
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
         } else {
-            builder = new AlertDialog.Builder(getActivity());
+            builder = new AlertDialog.Builder(getContext());
         }
         builder.setTitle("Modify medication record")
                 .setMessage(formattedDate)
@@ -351,11 +351,11 @@ public class MedicationFragment extends Fragment{
                     public void onClick(DialogInterface dialog, int which) {
 
                         // Modify timestamp
-                        TimePickerDialog timeEdit = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                        TimePickerDialog timeEdit = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, final int hourPicked, final int minutePicked) {
 
-                                DatePickerDialog dateEdit = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                                DatePickerDialog dateEdit = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker view, int yearPicked, int monthPicked, int dayPicked) {
 
@@ -364,8 +364,8 @@ public class MedicationFragment extends Fragment{
                                         // Date is fixed, write it to db
                                         ContentValues update_values = new ContentValues();
                                         update_values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
-                                        getActivity().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
-                                        Toast.makeText(getActivity(), "Medication edited", Toast.LENGTH_SHORT).show();
+                                        getContext().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
+                                        Toast.makeText(getContext(), "Medication edited", Toast.LENGTH_SHORT).show();
                                         Log.d(MainActivity.STOP_TAG, "Edited: " + String.valueOf(calendar.getTimeInMillis()));
 
                                         updateList();
@@ -395,16 +395,16 @@ public class MedicationFragment extends Fragment{
                     public void onClick(DialogInterface dialog, int which) {
 
                         // Remove timestamp from db
-                        getActivity().getContentResolver().delete(Provider.Medication_Data.CONTENT_URI, Provider.Medication_Data._ID + "=" + id, null);
+                        getContext().getContentResolver().delete(Provider.Medication_Data.CONTENT_URI, Provider.Medication_Data._ID + "=" + id, null);
 
-                        Toast.makeText(getActivity(), "Medication deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Medication deleted", Toast.LENGTH_SHORT).show();
                         Log.d(MainActivity.STOP_TAG, "Deleted: " + String.valueOf(time));
 
                         updateList();
 
                     }
                 })
-                .setIcon(R.drawable.ic_medication_light)
+                .setIcon(R.drawable.ic_action_aware_studies_light)
                 .show();
 
         modify.close();

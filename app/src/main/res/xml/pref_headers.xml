@@ -9,7 +9,7 @@
 
     <header
         android:fragment="com.aware.app.stop.SettingsActivity$MedicationPreferenceFragment"
-        android:icon="@drawable/ic_medication"
+        android:icon="@drawable/ic_action_aware_studies"
         android:title="@string/pref_header_medication" />
 
 

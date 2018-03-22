@@ -37,7 +37,7 @@
         android:id="@+id/sensitivity"
         android:capitalize="words"
         android:defaultValue="@string/key_sensitivity_value"
-        android:inputType="numberDecimal"
+        android:inputType="number"
         android:key="@string/key_sensitivity"
         android:maxLines="1"
         android:selectAllOnFocus="true"

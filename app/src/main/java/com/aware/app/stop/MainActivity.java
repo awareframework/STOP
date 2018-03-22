@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
         Aware.isBatteryOptimizationIgnored(getApplicationContext(), "com.aware.app.stop");
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
 
         // Get an instance of the NotificationManager service
         manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         // Build Notification
         long vibrate[] = {0, 1000};
         Notification.Builder builder = new Notification.Builder(c)
-                .setSmallIcon(R.drawable.ic_medication)
+                .setSmallIcon(R.drawable.ic_action_aware_studies)
                 .setOngoing(true)
                 .setVibrate(vibrate)
                 .setContentTitle("STOP")
@@ -214,12 +215,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(MainActivity.STOP_TAG, "Broadcast received");
 
                 Random r = new Random();
-                float sensivity = 1.0f + r.nextFloat()*(5.0f - 1.0f);
-                sensivity = Float.parseFloat(String.format("%.1f", sensivity));
+                int sensitivity = r.nextInt(6 - 1) + 1;
 
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
                 SharedPreferences.Editor editor = sPref.edit();
-                editor.putString("key_sensitivity", String.valueOf(sensivity));
+                editor.putString("key_sensitivity", String.valueOf(sensitivity));
                 editor.commit();
 
                 Aware.debug(context, "STOP-notification triggered: " + intent.getStringExtra("trigger-time"));

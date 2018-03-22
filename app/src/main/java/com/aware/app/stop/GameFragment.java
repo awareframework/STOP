@@ -183,7 +183,7 @@ public class GameFragment extends Fragment {
         super.onResume();
 
         // reading settings values from SettingsActivity
-        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
         smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), "300"));
         bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), "500"));
@@ -247,20 +247,20 @@ public class GameFragment extends Fragment {
         if (countDownTimer != null) countDownTimer.cancel();
 
         Accelerometer.setSensorObserver(null);
-        Aware.stopAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
+        Aware.stopAccelerometer(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
 
         LinearAccelerometer.setSensorObserver(null);
-        Aware.stopLinearAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
+        Aware.stopLinearAccelerometer(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
 
         Gyroscope.setSensorObserver(null);
-        Aware.stopGyroscope(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
+        Aware.stopGyroscope(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
 
         Rotation.setSensorObserver(null);
-        Aware.stopRotation(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
+        Aware.stopRotation(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_ROTATION, false);
 
     }
 
@@ -276,10 +276,10 @@ public class GameFragment extends Fragment {
         containerLayout.addView(ballView);
 
         // starting sensors
-        Aware.startAccelerometer(getContext().getApplicationContext());
-        Aware.startLinearAccelerometer(getContext().getApplicationContext());
-        Aware.startGyroscope(getContext().getApplicationContext());
-        Aware.startRotation(getContext().getApplicationContext());
+        Aware.startAccelerometer(getContext());
+        Aware.startLinearAccelerometer(getContext());
+        Aware.startGyroscope(getContext());
+        Aware.startRotation(getContext());
 
         Accelerometer.setSensorObserver(observerAccelerometer);
         LinearAccelerometer.setSensorObserver(observerLinearAccelerometer);
@@ -318,20 +318,20 @@ public class GameFragment extends Fragment {
 
         // Stopping sensors
         Accelerometer.setSensorObserver(null);
-        Aware.stopAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
+        Aware.stopAccelerometer(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
 
         LinearAccelerometer.setSensorObserver(null);
-        Aware.stopLinearAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
+        Aware.stopLinearAccelerometer(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
 
         Gyroscope.setSensorObserver(null);
-        Aware.stopGyroscope(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
+        Aware.stopGyroscope(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
 
         Rotation.setSensorObserver(null);
-        Aware.stopRotation(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
+        Aware.stopRotation(getContext());
+        Aware.setSetting(getContext(), Aware_Preferences.STATUS_ROTATION, false);
 
         // Adjusting data to final JSON format
         String gamedata = gameData.substring(0, gameData.length()-1) + "]}],";
@@ -344,9 +344,9 @@ public class GameFragment extends Fragment {
         // Inserting data to database
         ContentValues values = new ContentValues();
         values.put(Provider.Game_Data.TIMESTAMP, System.currentTimeMillis());
-        values.put(Provider.Game_Data.DEVICE_ID, Aware.getSetting(getContext().getApplicationContext(), Aware_Preferences.DEVICE_ID));
+        values.put(Provider.Game_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
         values.put(Provider.Game_Data.DATA, result);
-        getActivity().getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
+        getContext().getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
 
         Log.d(MainActivity.STOP_TAG, "JSON length " + String.valueOf(result.length()));
 

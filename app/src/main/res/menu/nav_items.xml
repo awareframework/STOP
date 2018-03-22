@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/nav_medication"
-        android:icon="@drawable/ic_medication"
+        android:icon="@drawable/ic_action_aware_studies"
         android:title="@string/nav_medication" />
 
 </menu>
