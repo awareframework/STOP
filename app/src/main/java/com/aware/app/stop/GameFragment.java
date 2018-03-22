@@ -3,7 +3,6 @@ package com.aware.app.stop;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -49,11 +48,15 @@ public class GameFragment extends Fragment {
     private Gyroscope.AWARESensorObserver observerGyroscope;
     private Rotation.AWARESensorObserver observerRotation;
 
+    // Timer component
+    private CountDownTimer countDownTimer;
+
     // ball game variables
     private float ballXpos, ballXmax, ballXaccel, ballXvel = 0.0f;
     private float ballYpos, ballYmax, ballYaccel, ballYvel = 0.0f;
     private float bigCircleXpos, bigCircleYpos;
     private float smallCircleXpos, smallCircleYpos;
+    private int deviceXres, deviceYres;
     private Bitmap ball;
     private Bitmap circleBig;
     private Bitmap circleSmall;
@@ -67,11 +70,12 @@ public class GameFragment extends Fragment {
 
     // Strings for storing sampling data in JSON format
     private String gameData;
-    private String accelSamples = "";
-    private String linaccelSamples = "";
-    private String gyroSamples = "";
-    private String rotationSamples = "";
+    private String accelSamples;
+    private String linaccelSamples;
+    private String gyroSamples;
+    private String rotationSamples;
 
+    // sampling flag
     boolean sampling = false;
 
 
@@ -85,13 +89,10 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        //Log.d(MainActivity.STOP_TAG, "onCreateView");
-
         // Initializing views
         timer = view.findViewById(R.id.timer);
         containerLayout = view.findViewById(R.id.container);
         playBtn = view.findViewById(R.id.playBtn);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,15 +110,15 @@ public class GameFragment extends Fragment {
                 ballYaccel = -data.getAsFloat("double_values_1");
                 updateBall(data.getAsLong("timestamp"));
 
-                Sample accelSample = new Sample(data.getAsLong("timestamp"),
-                        data.getAsString("device_id"),
-                        data.getAsDouble("double_values_0"),
-                        data.getAsDouble("double_values_1"),
-                        data.getAsDouble("double_values_2"),
-                        data.getAsInteger("accuracy"),
-                        data.getAsString("label"));
-
                 if (sampling) {
+                    Sample accelSample = new Sample(data.getAsLong("timestamp"),
+                            data.getAsString("device_id"),
+                            data.getAsDouble("double_values_0"),
+                            data.getAsDouble("double_values_1"),
+                            data.getAsDouble("double_values_2"),
+                            data.getAsInteger("accuracy"),
+                            data.getAsString("label"));
+
                     accelSamples += new Gson().toJson(accelSample) + ",";
                 }
             }
@@ -126,15 +127,15 @@ public class GameFragment extends Fragment {
         observerLinearAccelerometer = new LinearAccelerometer.AWARESensorObserver() {
             @Override
             public void onLinearAccelChanged(ContentValues data) {
-                Sample linaccelSample = new Sample(data.getAsLong("timestamp"),
-                        data.getAsString("device_id"),
-                        data.getAsDouble("double_values_0"),
-                        data.getAsDouble("double_values_1"),
-                        data.getAsDouble("double_values_2"),
-                        data.getAsInteger("accuracy"),
-                        data.getAsString("label"));
-
                 if (sampling) {
+                    Sample linaccelSample = new Sample(data.getAsLong("timestamp"),
+                            data.getAsString("device_id"),
+                            data.getAsDouble("double_values_0"),
+                            data.getAsDouble("double_values_1"),
+                            data.getAsDouble("double_values_2"),
+                            data.getAsInteger("accuracy"),
+                            data.getAsString("label"));
+
                     linaccelSamples += new Gson().toJson(linaccelSample) + ",";
                 }
             }
@@ -143,15 +144,15 @@ public class GameFragment extends Fragment {
         observerGyroscope = new Gyroscope.AWARESensorObserver() {
             @Override
             public void onGyroscopeChanged(ContentValues data) {
-                Sample gyroSample = new Sample(data.getAsLong("timestamp"),
-                        data.getAsString("device_id"),
-                        data.getAsDouble("double_values_0"),
-                        data.getAsDouble("double_values_1"),
-                        data.getAsDouble("double_values_2"),
-                        data.getAsInteger("accuracy"),
-                        data.getAsString("label"));
-
                 if (sampling) {
+                    Sample gyroSample = new Sample(data.getAsLong("timestamp"),
+                            data.getAsString("device_id"),
+                            data.getAsDouble("double_values_0"),
+                            data.getAsDouble("double_values_1"),
+                            data.getAsDouble("double_values_2"),
+                            data.getAsInteger("accuracy"),
+                            data.getAsString("label"));
+
                     gyroSamples += new Gson().toJson(gyroSample) + ",";
                 }
             }
@@ -160,15 +161,15 @@ public class GameFragment extends Fragment {
         observerRotation = new Rotation.AWARESensorObserver() {
             @Override
             public void onRotationChanged(ContentValues data) {
-                Sample rotationSample = new Sample(data.getAsLong("timestamp"),
-                        data.getAsString("device_id"),
-                        data.getAsDouble("double_values_0"),
-                        data.getAsDouble("double_values_1"),
-                        data.getAsDouble("double_values_2"),
-                        data.getAsInteger("accuracy"),
-                        data.getAsString("label"));
-
                 if (sampling) {
+                    Sample rotationSample = new Sample(data.getAsLong("timestamp"),
+                            data.getAsString("device_id"),
+                            data.getAsDouble("double_values_0"),
+                            data.getAsDouble("double_values_1"),
+                            data.getAsDouble("double_values_2"),
+                            data.getAsInteger("accuracy"),
+                            data.getAsString("label"));
+
                     rotationSamples += new Gson().toJson(rotationSample) + ",";
                 }
             }
@@ -180,8 +181,6 @@ public class GameFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //Log.d(MainActivity.STOP_TAG, "onResume");
 
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
@@ -195,13 +194,10 @@ public class GameFragment extends Fragment {
         Point size = new Point();
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         display.getSize(size);
+        deviceXres = size.x;
+        deviceYres = size.y;
         ballXmax = (float) size.x - ballSize;
         ballYmax = (float) size.y - ballSize - 235 - 175; // toolbar = 235, bottom nav bar = 175
-
-        gameData = "{\"gamedata\":[{\"ball_radius\":" + ballSize + ",";
-        gameData += "\"sensitivity\":" + sensitivity + ",";
-        gameData += "\"device_x_res\":" + size.x + ",";
-        gameData += "\"device_y_res\":" + size.y + "," + "\"samples\":[";
 
         // put ball to the center
         ballXpos = ballXmax /2;
@@ -212,16 +208,70 @@ public class GameFragment extends Fragment {
         smallCircleYpos = (size.y - smallCircleSize - 235 - 175)/2;
         bigCircleXpos = (size.x - bigCircleSize)/2;
         bigCircleYpos = (size.y - bigCircleSize - 235 -175)/2;
+
+        // Initializing timer
+        countDownTimer = new CountDownTimer(gameTime + 5000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // updating UI according to timeframes and handling sensors
+                if ((millisUntilFinished >= gameTime + 1000) && (millisUntilFinished <= gameTime + 4000)) {
+                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime/1000)) + "...";
+                    timer.setText(counter);
+                }
+
+                if ((millisUntilFinished >= gameTime) && (millisUntilFinished < gameTime + 1000)) {
+                    timer.setText("Start!");
+                    sampling = true;
+                }
+
+                if ((millisUntilFinished >= 0) && (millisUntilFinished < gameTime)) {
+                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime/1000)*(-1));
+                    timer.setText(counter);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                sampling = false;
+                if (getContext() != null) {
+                    stopGame();
+                }
+            }
+        };
     }
 
-    // Inflate BallView and start data sampling
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (countDownTimer != null) countDownTimer.cancel();
+
+        Accelerometer.setSensorObserver(null);
+        Aware.stopAccelerometer(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
+
+        LinearAccelerometer.setSensorObserver(null);
+        Aware.stopLinearAccelerometer(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
+
+        Gyroscope.setSensorObserver(null);
+        Aware.stopGyroscope(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
+
+        Rotation.setSensorObserver(null);
+        Aware.stopRotation(getContext().getApplicationContext());
+        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
+
+    }
+
+    // Inflate BallView and start sensors
     private void startGame() {
 
         playBtn.setVisibility(View.INVISIBLE);
         playBtn.setEnabled(false);
         timer.setText("Get ready");
 
-        // adding custom BallView to the activity
+        // adding custom BallView to the fragment
         ballView = new BallView(getContext());
         containerLayout.addView(ballView);
 
@@ -236,65 +286,21 @@ public class GameFragment extends Fragment {
         Gyroscope.setSensorObserver(observerGyroscope);
         Rotation.setSensorObserver(observerRotation);
 
-        // timer initialization
-        new CountDownTimer(gameTime + 5000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                // updating UI according to timeframes and handling sensors
-                if ((millisUntilFinished >= gameTime + 999) && (millisUntilFinished <= gameTime + 3999)) {
-                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime /1000)) + "...";
-                    timer.setText(counter);
-                }
+        // recording game settings to gamedata
+        gameData = "{\"gamedata\":[{\"ball_radius\":" + ballSize + ",";
+        gameData += "\"sensitivity\":" + sensitivity + ",";
+        gameData += "\"device_x_res\":" + deviceXres + ",";
+        gameData += "\"device_y_res\":" + deviceYres + "," + "\"samples\":[";
 
-                if ((millisUntilFinished >= gameTime - 1) && (millisUntilFinished < gameTime + 999)) {
-                    timer.setText("Start!");
-                    sampling = true;
-                }
+        // making sample strings empty (for second and following games)
+        accelSamples = "";
+        linaccelSamples = "";
+        gyroSamples = "";
+        rotationSamples = "";
 
-                if ((millisUntilFinished >= 0) && (millisUntilFinished < gameTime - 1)) {
-                    String counter = String.valueOf((millisUntilFinished/1000 - gameTime /1000)*(-1));
-                    timer.setText(counter);
-                }
-            }
+        // starting timer
+        countDownTimer.start();
 
-            public void onFinish() {
-                sampling = false;
-                if (getContext() != null) {
-                    stopGame();
-                }
-            }
-        }.start();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        //Log.d(MainActivity.STOP_TAG, "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        //Log.d(MainActivity.STOP_TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //Log.d(MainActivity.STOP_TAG, "onDestroy");
-
-        Aware.stopAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
-
-        Aware.stopLinearAccelerometer(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
-
-        Aware.stopGyroscope(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
-
-        Aware.stopRotation(getContext().getApplicationContext());
-        Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
-
-        //Log.d(MainActivity.STOP_TAG, "onDestroy done");
     }
 
     // Stop data sampling
@@ -311,15 +317,19 @@ public class GameFragment extends Fragment {
         ballYpos = ballYmax /2;
 
         // Stopping sensors
+        Accelerometer.setSensorObserver(null);
         Aware.stopAccelerometer(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
 
+        LinearAccelerometer.setSensorObserver(null);
         Aware.stopLinearAccelerometer(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_LINEAR_ACCELEROMETER, false);
 
+        Gyroscope.setSensorObserver(null);
         Aware.stopGyroscope(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_GYROSCOPE, false);
 
+        Rotation.setSensorObserver(null);
         Aware.stopRotation(getContext().getApplicationContext());
         Aware.setSetting(getContext().getApplicationContext(), Aware_Preferences.STATUS_ROTATION, false);
 
@@ -342,6 +352,7 @@ public class GameFragment extends Fragment {
 
         // Recording result to local .txt file
         // for testing only
+        /*
         File root = new File(Environment.getExternalStorageDirectory().toString());
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
@@ -358,6 +369,7 @@ public class GameFragment extends Fragment {
             Log.d(MainActivity.STOP_TAG, "Logging not done");
             Log.d(MainActivity.STOP_TAG, e.getMessage());
         }
+        */
     }
 
     // updating ball's X and Y positioning
