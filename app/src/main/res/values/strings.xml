@@ -32,7 +32,7 @@
 
     <string name="key_sensitivity_title">Sensitivity</string>
     <string name="key_sensitivity">key_sensitivity</string>
-    <string name="key_sensitivity_value">3</string>
+    <string name="key_sensitivity_value">3.0</string>
 
     <string name="key_game_time_title">Game time</string>
     <string name="key_game_time">key_game_time</string>

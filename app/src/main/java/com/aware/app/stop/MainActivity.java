@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -25,6 +26,8 @@ import com.aware.Aware_Preferences;
 import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -209,6 +212,16 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_FINGERPRINT)) {
                 Log.d(MainActivity.STOP_TAG, "Broadcast received");
+
+                Random r = new Random();
+                float sensivity = 1.0f + r.nextFloat()*(5.0f - 1.0f);
+                sensivity = Float.parseFloat(String.format("%.1f", sensivity));
+
+                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+                SharedPreferences.Editor editor = sPref.edit();
+                editor.putString("key_sensitivity", String.valueOf(sensivity));
+                editor.commit();
+
                 Aware.debug(context, "STOP-notification triggered: " + intent.getStringExtra("trigger-time"));
                 notifyShow(context,intent.getStringExtra("trigger-time") + ": play a game and record medication");
             }
