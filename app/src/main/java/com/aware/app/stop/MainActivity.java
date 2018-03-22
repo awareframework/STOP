@@ -116,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+        if (id == R.id.main_feedback) {
+            startActivity(new Intent(this, FeedbackActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

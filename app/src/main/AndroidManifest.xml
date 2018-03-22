@@ -47,7 +47,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
         </activity>
-
+        <activity
+            android:name=".FeedbackActivity"
+            android:label="@string/main_feedback"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aware.app.stop.MainActivity" />
+        </activity>
 
         <provider
             android:name=".database.Provider"
@@ -70,7 +77,7 @@
                 android:resource="@xml/sync_stop" />
         </service>
 
-        <receiver android:name=".MainActivity$ParkinsonSnapshot" >
+        <receiver android:name=".MainActivity$ParkinsonSnapshot">
             <intent-filter>
                 <action android:name="ACTION_STOP_FINGERPRINT" />
             </intent-filter>

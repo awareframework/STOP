@@ -40,19 +40,22 @@ public class Provider extends ContentProvider {
     //Database table names
     public static final String DB_TBL_GAME = "ball_game";
     public static final String DB_TBL_MEDICATION = "medication";
+    public static final String DB_TBL_FEEDBACK = "feedback";
 
     //ContentProvider query indexes
     private static final int TABLE_GAME_DIR = 1;
     private static final int TABLE_GAME_ITEM = 2;
     private static final int TABLE_MEDICATION_DIR = 3;
     private static final int TABLE_MEDICATION_ITEM = 4;
+    private static final int TABLE_FEEDBACK_DIR = 5;
+    private static final int TABLE_FEEDBACK_ITEM = 6;
 
     /**
      * Database tables:
      * - ball game data
      */
     public static final String[] DATABASE_TABLES = {
-            DB_TBL_GAME, DB_TBL_MEDICATION
+            DB_TBL_GAME, DB_TBL_MEDICATION, DB_TBL_FEEDBACK
     };
 
     //These are columns that we need to sync data, don't change this!
@@ -60,7 +63,6 @@ public class Provider extends ContentProvider {
         String _ID = "_id";
         String TIMESTAMP = "timestamp";
         String DEVICE_ID = "device_id";
-        //String DATA = "data";
     }
 
     /**
@@ -96,12 +98,31 @@ public class Provider extends ContentProvider {
                     Medication_Data.TIMESTAMP + " real default 0," +
                     Medication_Data.DEVICE_ID + " text default ''";
 
+    /**
+     * Feedback table
+     */
+    public static final class Feedback_Data implements AWAREColumns {
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_FEEDBACK);
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.feedback";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.feedback";
+
+        public static final String DEVICE_NAME = "device_name";
+        public static final String FEEDBACK = "feedback";
+    }
+
+    //Feedback table fields
+    private static final String DB_TBL_FEEDBACK_FIELDS =
+            Feedback_Data._ID + " integer primary key autoincrement," +
+                    Feedback_Data.TIMESTAMP + " real default 0," +
+                    Feedback_Data.DEVICE_ID + " text default ''," +
+                    Feedback_Data.DEVICE_NAME + " text default ''," +
+                    Feedback_Data.FEEDBACK + " text default ''";
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
      */
     public static final String[] TABLES_FIELDS = {
-            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS
+            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS, DB_TBL_FEEDBACK_FIELDS
     };
 
     //Helper variables for ContentProvider - DO NOT CHANGE
@@ -119,6 +140,7 @@ public class Provider extends ContentProvider {
     //For each table, create a hashmap needed for database queries
     private HashMap<String, String> tableGameHash;
     private HashMap<String, String> tableMedicationHash;
+    private HashMap<String, String> tableFeedbackHash;
 
     /**
      * Returns the provider authority that is dynamic
@@ -140,9 +162,13 @@ public class Provider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[0], TABLE_GAME_DIR);
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[0] + "/#", TABLE_GAME_ITEM);
 
-        //Game table indexes DIR and ITEM
+        //Medication table indexes DIR and ITEM
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[1], TABLE_MEDICATION_DIR);
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[1] + "/#", TABLE_MEDICATION_ITEM);
+
+        //Feedback table indexes DIR and ITEM
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[2], TABLE_FEEDBACK_DIR);
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[2] + "/#", TABLE_FEEDBACK_ITEM);
 
         //Game table HasMap
         tableGameHash = new HashMap<>();
@@ -156,6 +182,14 @@ public class Provider extends ContentProvider {
         tableMedicationHash.put(Medication_Data._ID, Medication_Data._ID);
         tableMedicationHash.put(Medication_Data.TIMESTAMP, Medication_Data.TIMESTAMP);
         tableMedicationHash.put(Medication_Data.DEVICE_ID, Medication_Data.DEVICE_ID);
+
+        //Medication table HasMap
+        tableFeedbackHash = new HashMap<>();
+        tableFeedbackHash.put(Feedback_Data._ID, Feedback_Data._ID);
+        tableFeedbackHash.put(Feedback_Data.TIMESTAMP, Feedback_Data.TIMESTAMP);
+        tableFeedbackHash.put(Feedback_Data.DEVICE_ID, Feedback_Data.DEVICE_ID);
+        tableFeedbackHash.put(Feedback_Data.DEVICE_NAME, Feedback_Data.DEVICE_NAME);
+        tableFeedbackHash.put(Feedback_Data.FEEDBACK, Feedback_Data.FEEDBACK);
 
         return true;
     }
@@ -175,6 +209,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_MEDICATION_DIR:
                 count = database.delete(DATABASE_TABLES[1], selection, selectionArgs);
+                break;
+
+            case TABLE_FEEDBACK_DIR:
+                count = database.delete(DATABASE_TABLES[2], selection, selectionArgs);
                 break;
 
             default:
@@ -218,7 +256,19 @@ public class Provider extends ContentProvider {
                 database.setTransactionSuccessful();
                 database.endTransaction();
                 if (medication_id > 0) {
-                    Uri dataUri = ContentUris.withAppendedId(Game_Data.CONTENT_URI, medication_id);
+                    Uri dataUri = ContentUris.withAppendedId(Medication_Data.CONTENT_URI, medication_id);
+                    getContext().getContentResolver().notifyChange(dataUri, null, false);
+                    return dataUri;
+                }
+                database.endTransaction();
+                throw new SQLException("Failed to insert row into " + uri);
+
+            case TABLE_FEEDBACK_DIR:
+                long feedback_id = database.insert(DATABASE_TABLES[2], Feedback_Data.DEVICE_ID, values);
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                if (feedback_id > 0) {
+                    Uri dataUri = ContentUris.withAppendedId(Feedback_Data.CONTENT_URI, feedback_id);
                     getContext().getContentResolver().notifyChange(dataUri, null, false);
                     return dataUri;
                 }
@@ -248,6 +298,11 @@ public class Provider extends ContentProvider {
             case TABLE_MEDICATION_DIR:
                 qb.setTables(DATABASE_TABLES[1]);
                 qb.setProjectionMap(tableMedicationHash); //the hashmap of the table
+                break;
+
+            case TABLE_FEEDBACK_DIR:
+                qb.setTables(DATABASE_TABLES[2]);
+                qb.setProjectionMap(tableFeedbackHash); //the hashmap of the table
                 break;
 
             default:
@@ -282,6 +337,11 @@ public class Provider extends ContentProvider {
             case TABLE_MEDICATION_ITEM:
                 return Medication_Data.CONTENT_ITEM_TYPE;
 
+            case TABLE_FEEDBACK_DIR:
+                return Feedback_Data.CONTENT_TYPE;
+            case TABLE_FEEDBACK_ITEM:
+                return Feedback_Data.CONTENT_ITEM_TYPE;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -303,6 +363,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_MEDICATION_DIR:
                 count = database.update(DATABASE_TABLES[1], values, selection, selectionArgs);
+                break;
+
+            case TABLE_FEEDBACK_DIR:
+                count = database.update(DATABASE_TABLES[2], values, selection, selectionArgs);
                 break;
 
             default:

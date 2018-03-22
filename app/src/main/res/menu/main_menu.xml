@@ -9,4 +9,11 @@
         android:title="@string/main_settings"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/main_feedback"
+        android:orderInCategory="99"
+        android:icon="@drawable/ic_feedback_light"
+        android:title="@string/main_feedback"
+        app:showAsAction="always" />
+
 </menu>
