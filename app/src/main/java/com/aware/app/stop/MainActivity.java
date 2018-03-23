@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,10 +20,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
+import com.aware.app.stop.database.Provider;
 import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
@@ -32,12 +33,10 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mMainNav;
-    private FrameLayout mMainFrame;
     private GameFragment gameFragment;
     private MedicationFragment medicationFragment;
 
     private static NotificationManager manager;
-
 
     public static final String STOP_TAG = "STOP_TAG";
     public static final String ACTION_STOP_FINGERPRINT = "ACTION_STOP_FINGERPRINT";
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // Setting up application preferences
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
         Aware.isBatteryOptimizationIgnored(getApplicationContext(), "com.aware.app.stop");
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
@@ -55,17 +55,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Get an instance of the NotificationManager service
         manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        if (manager != null) manager.cancel(5);
+        if (manager != null) manager.cancel(99);
 
+        // Tracking notification opening state
+        Intent intent  = getIntent();
+        String time = intent.getStringExtra("trigger-time");
+        if (time != null) {
+            String event = intent.getStringExtra("trigger-time") + "_opened";
+
+            //Insert notification opened event to db
+            ContentValues values = new ContentValues();
+            values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
+            values.put(Provider.Notification_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+            values.put(Provider.Notification_Data.EVENT, event);
+            getContentResolver().insert(Provider.Notification_Data.CONTENT_URI, values);
+        }
+
+        // Schedule notifications to show four times per day
         scheduleNotification();
 
-        mMainFrame = findViewById(R.id.main_frame);
+        // UI initialization
         mMainNav = findViewById(R.id.main_nav);
-        //mMainNav.setSelectedItemId(R.id.nav_game);
 
         medicationFragment = new MedicationFragment();
         gameFragment = new GameFragment();
-
         setFragment(gameFragment);
 
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -86,11 +99,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
+    // Replacing fragments method
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -106,12 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.main_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
@@ -123,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Notification scheduler: 4 times per day
+    // Notification scheduler: four times per day
     private void scheduleNotification() {
 
         try {
-
+            // Morning notification 8:00 - 11:59
             Scheduler.Schedule morning = Scheduler.getSchedule(this, "morning");
             if (morning == null) {
                 morning = new Scheduler.Schedule("morning");
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 Aware.startScheduler(getApplicationContext());
             }
 
+            // Noon notification 12:00 - 14:59
             Scheduler.Schedule noon = Scheduler.getSchedule(this, "noon");
             if (noon == null) {
                 noon = new Scheduler.Schedule("noon");
@@ -154,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 Aware.startScheduler(getApplicationContext());
             }
 
+            // Afternoon notification 15:00 - 18:59
             Scheduler.Schedule afternoon = Scheduler.getSchedule(this, "afternoon");
             if (afternoon == null) {
                 afternoon = new Scheduler.Schedule("afternoon");
@@ -167,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 Aware.startScheduler(getApplicationContext());
             }
 
+            // Evening notification 19:00 - 21:59
             Scheduler.Schedule evening = Scheduler.getSchedule(this, "evening");
             if (evening == null) {
                 evening = new Scheduler.Schedule("evening");
@@ -186,24 +194,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Notification set up
-    private static void notifyShow(Context c, String notifyText) {
+    private static void notifyShow(Context c, String notifyText, String triggerTime) {
 
-        // Attach activity opened in onClick
-        PendingIntent contentIntent = PendingIntent.getActivity(c, 0,
-                new Intent(c, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        // Attach MainActivity opened in notification onClick
+        Intent intent = new Intent(c, MainActivity.class);
+        intent.putExtra("trigger-time", triggerTime);
+        PendingIntent contentIntent = PendingIntent.getActivity(c, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
-        long vibrate[] = {0, 1000};
         Notification.Builder builder = new Notification.Builder(c)
                 .setSmallIcon(R.drawable.ic_action_aware_studies)
                 .setOngoing(true)
-                .setVibrate(vibrate)
                 .setContentTitle("STOP")
                 .setContentText(notifyText)
                 .setContentIntent(contentIntent);
 
         // Build the notification and show it.
-        manager.notify(5, builder.build());
+        manager.notify(99, builder.build());
 
         // Vibrate at notification
         Vibrator vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
@@ -218,16 +225,26 @@ public class MainActivity extends AppCompatActivity {
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_FINGERPRINT)) {
                 Log.d(MainActivity.STOP_TAG, "Broadcast received");
 
+                // Randomize game sensitivity in 1-5 range every time when notification is shown
                 Random r = new Random();
                 int sensitivity = r.nextInt(6 - 1) + 1;
-
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
                 SharedPreferences.Editor editor = sPref.edit();
                 editor.putString("key_sensitivity", String.valueOf(sensitivity));
                 editor.commit();
 
-                Aware.debug(context, "STOP-notification triggered: " + intent.getStringExtra("trigger-time"));
-                notifyShow(context,intent.getStringExtra("trigger-time") + ": play a game and record medication");
+                // Show notification
+                notifyShow(context,intent.getStringExtra("trigger-time") + ": play a game and record medication",
+                        intent.getStringExtra("trigger-time").toLowerCase());
+
+                // Tracking notification shown state
+                // Insert notification shown event to db
+                String event = intent.getStringExtra("trigger-time").toLowerCase() + "_shown";
+                ContentValues values = new ContentValues();
+                values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
+                values.put(Provider.Notification_Data.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
+                values.put(Provider.Notification_Data.EVENT, event);
+                context.getContentResolver().insert(Provider.Notification_Data.CONTENT_URI, values);
             }
         }
     }

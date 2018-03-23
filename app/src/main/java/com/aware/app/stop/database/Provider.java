@@ -41,6 +41,7 @@ public class Provider extends ContentProvider {
     public static final String DB_TBL_GAME = "ball_game";
     public static final String DB_TBL_MEDICATION = "medication";
     public static final String DB_TBL_FEEDBACK = "feedback";
+    public static final String DB_TBL_NOTIFICATION = "notification_data";
 
     //ContentProvider query indexes
     private static final int TABLE_GAME_DIR = 1;
@@ -49,13 +50,15 @@ public class Provider extends ContentProvider {
     private static final int TABLE_MEDICATION_ITEM = 4;
     private static final int TABLE_FEEDBACK_DIR = 5;
     private static final int TABLE_FEEDBACK_ITEM = 6;
+    private static final int TABLE_NOTIFICATION_DIR = 7;
+    private static final int TABLE_NOTIFICATION_ITEM = 8;
 
     /**
      * Database tables:
-     * - ball game data
+     * - ball game data, medication data, feedback, notification data
      */
     public static final String[] DATABASE_TABLES = {
-            DB_TBL_GAME, DB_TBL_MEDICATION, DB_TBL_FEEDBACK
+            DB_TBL_GAME, DB_TBL_MEDICATION, DB_TBL_FEEDBACK, DB_TBL_NOTIFICATION
     };
 
     //These are columns that we need to sync data, don't change this!
@@ -119,10 +122,28 @@ public class Provider extends ContentProvider {
                     Feedback_Data.FEEDBACK + " text default ''";
 
     /**
+     * Notificaion table
+     */
+    public static final class Notification_Data implements AWAREColumns {
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_NOTIFICATION);
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.notification_data";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.notification_data";
+
+        public static final String EVENT = "event";
+    }
+
+    //Notification table fields
+    private static final String DB_TBL_NOTIFICATION_FIELDS =
+            Notification_Data._ID + " integer primary key autoincrement," +
+                    Notification_Data.TIMESTAMP + " real default 0," +
+                    Notification_Data.DEVICE_ID + " text default ''," +
+                    Notification_Data.EVENT + " text default ''";
+
+    /**
      * Share the fields with AWARE so we can replicate the table schema on the server
      */
     public static final String[] TABLES_FIELDS = {
-            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS, DB_TBL_FEEDBACK_FIELDS
+            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS, DB_TBL_FEEDBACK_FIELDS, DB_TBL_NOTIFICATION_FIELDS
     };
 
     //Helper variables for ContentProvider - DO NOT CHANGE
@@ -141,6 +162,7 @@ public class Provider extends ContentProvider {
     private HashMap<String, String> tableGameHash;
     private HashMap<String, String> tableMedicationHash;
     private HashMap<String, String> tableFeedbackHash;
+    private HashMap<String, String> tableNotificationHash;
 
     /**
      * Returns the provider authority that is dynamic
@@ -170,6 +192,10 @@ public class Provider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[2], TABLE_FEEDBACK_DIR);
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[2] + "/#", TABLE_FEEDBACK_ITEM);
 
+        //Notification table indexes DIR and ITEM
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[3], TABLE_NOTIFICATION_DIR);
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[3] + "/#", TABLE_NOTIFICATION_ITEM);
+
         //Game table HasMap
         tableGameHash = new HashMap<>();
         tableGameHash.put(Game_Data._ID, Game_Data._ID);
@@ -190,6 +216,13 @@ public class Provider extends ContentProvider {
         tableFeedbackHash.put(Feedback_Data.DEVICE_ID, Feedback_Data.DEVICE_ID);
         tableFeedbackHash.put(Feedback_Data.DEVICE_NAME, Feedback_Data.DEVICE_NAME);
         tableFeedbackHash.put(Feedback_Data.FEEDBACK, Feedback_Data.FEEDBACK);
+
+        //Notification table HasMap
+        tableNotificationHash = new HashMap<>();
+        tableNotificationHash.put(Notification_Data._ID, Notification_Data._ID);
+        tableNotificationHash.put(Notification_Data.TIMESTAMP, Notification_Data.TIMESTAMP);
+        tableNotificationHash.put(Notification_Data.DEVICE_ID, Notification_Data.DEVICE_ID);
+        tableNotificationHash.put(Notification_Data.EVENT, Notification_Data.EVENT);
 
         return true;
     }
@@ -213,6 +246,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_FEEDBACK_DIR:
                 count = database.delete(DATABASE_TABLES[2], selection, selectionArgs);
+                break;
+
+            case TABLE_NOTIFICATION_DIR:
+                count = database.delete(DATABASE_TABLES[3], selection, selectionArgs);
                 break;
 
             default:
@@ -275,6 +312,18 @@ public class Provider extends ContentProvider {
                 database.endTransaction();
                 throw new SQLException("Failed to insert row into " + uri);
 
+            case TABLE_NOTIFICATION_DIR:
+                long notification_id = database.insert(DATABASE_TABLES[3], Notification_Data.DEVICE_ID, values);
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                if (notification_id > 0) {
+                    Uri dataUri = ContentUris.withAppendedId(Notification_Data.CONTENT_URI, notification_id);
+                    getContext().getContentResolver().notifyChange(dataUri, null, false);
+                    return dataUri;
+                }
+                database.endTransaction();
+                throw new SQLException("Failed to insert row into " + uri);
+
             default:
                 database.endTransaction();
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -303,6 +352,11 @@ public class Provider extends ContentProvider {
             case TABLE_FEEDBACK_DIR:
                 qb.setTables(DATABASE_TABLES[2]);
                 qb.setProjectionMap(tableFeedbackHash); //the hashmap of the table
+                break;
+
+            case TABLE_NOTIFICATION_DIR:
+                qb.setTables(DATABASE_TABLES[3]);
+                qb.setProjectionMap(tableNotificationHash); //the hashmap of the table
                 break;
 
             default:
@@ -342,6 +396,11 @@ public class Provider extends ContentProvider {
             case TABLE_FEEDBACK_ITEM:
                 return Feedback_Data.CONTENT_ITEM_TYPE;
 
+            case TABLE_NOTIFICATION_DIR:
+                return Notification_Data.CONTENT_TYPE;
+            case TABLE_NOTIFICATION_ITEM:
+                return Notification_Data.CONTENT_ITEM_TYPE;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -367,6 +426,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_FEEDBACK_DIR:
                 count = database.update(DATABASE_TABLES[2], values, selection, selectionArgs);
+                break;
+
+            case TABLE_NOTIFICATION_DIR:
+                count = database.update(DATABASE_TABLES[3], values, selection, selectionArgs);
                 break;
 
             default:
