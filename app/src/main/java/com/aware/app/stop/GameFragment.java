@@ -9,10 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +27,6 @@ import com.aware.LinearAccelerometer;
 import com.aware.Rotation;
 import com.aware.app.stop.database.Provider;
 import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class GameFragment extends Fragment {
 
@@ -68,6 +62,9 @@ public class GameFragment extends Fragment {
     private float sensitivity; // 3.0 is default
     private int gameTime; // in milliseconds
 
+    // sampling flag
+    boolean sampling = false;
+
     // Strings for storing sampling data in JSON format
     private String gameData;
     private String accelSamples;
@@ -75,9 +72,13 @@ public class GameFragment extends Fragment {
     private String gyroSamples;
     private String rotationSamples;
 
-    // sampling flag
-    boolean sampling = false;
-
+    private static final String SAMPLE_KEY_TIMESTAMP = "timestamp";
+    private static final String SAMPLE_KEY_DEVICE_ID = "device_id";
+    private static final String SAMPLE_KEY_DOUBLE_VALUES_0 = "double_values_0";
+    private static final String SAMPLE_KEY_DOUBLE_VALUES_1 = "double_values_1";
+    private static final String SAMPLE_KEY_DOUBLE_VALUES_2 = "double_values_2";
+    private static final String SAMPLE_KEY_ACCURACY = "accuracy";
+    private static final String SAMPLE_KEY_LABEL = "label";
 
     public GameFragment() {
         // Required empty public constructor
@@ -106,18 +107,18 @@ public class GameFragment extends Fragment {
         observerAccelerometer = new Accelerometer.AWARESensorObserver() {
             @Override
             public void onAccelerometerChanged(ContentValues data) {
-                ballXaccel = data.getAsFloat("double_values_0");
-                ballYaccel = -data.getAsFloat("double_values_1");
-                updateBall(data.getAsLong("timestamp"));
+                ballXaccel = data.getAsFloat(SAMPLE_KEY_DOUBLE_VALUES_0);
+                ballYaccel = -data.getAsFloat(SAMPLE_KEY_DOUBLE_VALUES_1);
+                updateBall(data.getAsLong(SAMPLE_KEY_TIMESTAMP));
 
                 if (sampling) {
-                    Sample accelSample = new Sample(data.getAsLong("timestamp"),
-                            data.getAsString("device_id"),
-                            data.getAsDouble("double_values_0"),
-                            data.getAsDouble("double_values_1"),
-                            data.getAsDouble("double_values_2"),
-                            data.getAsInteger("accuracy"),
-                            data.getAsString("label"));
+                    Sample accelSample = new Sample(data.getAsLong(SAMPLE_KEY_TIMESTAMP),
+                            data.getAsString(SAMPLE_KEY_DEVICE_ID),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_0),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_1),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_2),
+                            data.getAsInteger(SAMPLE_KEY_ACCURACY),
+                            data.getAsString(SAMPLE_KEY_LABEL));
 
                     accelSamples += new Gson().toJson(accelSample) + ",";
                 }
@@ -128,13 +129,13 @@ public class GameFragment extends Fragment {
             @Override
             public void onLinearAccelChanged(ContentValues data) {
                 if (sampling) {
-                    Sample linaccelSample = new Sample(data.getAsLong("timestamp"),
-                            data.getAsString("device_id"),
-                            data.getAsDouble("double_values_0"),
-                            data.getAsDouble("double_values_1"),
-                            data.getAsDouble("double_values_2"),
-                            data.getAsInteger("accuracy"),
-                            data.getAsString("label"));
+                    Sample linaccelSample = new Sample(data.getAsLong(SAMPLE_KEY_TIMESTAMP),
+                            data.getAsString(SAMPLE_KEY_DEVICE_ID),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_0),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_1),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_2),
+                            data.getAsInteger(SAMPLE_KEY_ACCURACY),
+                            data.getAsString(SAMPLE_KEY_LABEL));
 
                     linaccelSamples += new Gson().toJson(linaccelSample) + ",";
                 }
@@ -145,13 +146,13 @@ public class GameFragment extends Fragment {
             @Override
             public void onGyroscopeChanged(ContentValues data) {
                 if (sampling) {
-                    Sample gyroSample = new Sample(data.getAsLong("timestamp"),
-                            data.getAsString("device_id"),
-                            data.getAsDouble("double_values_0"),
-                            data.getAsDouble("double_values_1"),
-                            data.getAsDouble("double_values_2"),
-                            data.getAsInteger("accuracy"),
-                            data.getAsString("label"));
+                    Sample gyroSample = new Sample(data.getAsLong(SAMPLE_KEY_TIMESTAMP),
+                            data.getAsString(SAMPLE_KEY_DEVICE_ID),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_0),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_1),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_2),
+                            data.getAsInteger(SAMPLE_KEY_ACCURACY),
+                            data.getAsString(SAMPLE_KEY_LABEL));
 
                     gyroSamples += new Gson().toJson(gyroSample) + ",";
                 }
@@ -162,13 +163,13 @@ public class GameFragment extends Fragment {
             @Override
             public void onRotationChanged(ContentValues data) {
                 if (sampling) {
-                    Sample rotationSample = new Sample(data.getAsLong("timestamp"),
-                            data.getAsString("device_id"),
-                            data.getAsDouble("double_values_0"),
-                            data.getAsDouble("double_values_1"),
-                            data.getAsDouble("double_values_2"),
-                            data.getAsInteger("accuracy"),
-                            data.getAsString("label"));
+                    Sample rotationSample = new Sample(data.getAsLong(SAMPLE_KEY_TIMESTAMP),
+                            data.getAsString(SAMPLE_KEY_DEVICE_ID),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_0),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_1),
+                            data.getAsDouble(SAMPLE_KEY_DOUBLE_VALUES_2),
+                            data.getAsInteger(SAMPLE_KEY_ACCURACY),
+                            data.getAsString(SAMPLE_KEY_LABEL));
 
                     rotationSamples += new Gson().toJson(rotationSample) + ",";
                 }
@@ -184,11 +185,11 @@ public class GameFragment extends Fragment {
 
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), "100"));
-        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), "300"));
-        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), "500"));
-        sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), "3.0"));
-        gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), "10"))*1000;
+        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), String.valueOf(R.string.key_ball_size_value)));
+        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), String.valueOf(R.string.key_small_circle_size_value)));
+        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), String.valueOf(R.string.key_big_circle_size_value)));
+        sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), String.valueOf(R.string.key_sensitivity_value)));
+        gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), String.valueOf(R.string.key_game_time_value)))*1000;
 
         // detection of the display size
         Point size = new Point();
@@ -220,7 +221,7 @@ public class GameFragment extends Fragment {
                 }
 
                 if ((millisUntilFinished >= gameTime) && (millisUntilFinished < gameTime + 1000)) {
-                    timer.setText("Start!");
+                    timer.setText(R.string.game_start);
                     sampling = true;
                 }
 
@@ -269,7 +270,7 @@ public class GameFragment extends Fragment {
 
         playBtn.setVisibility(View.INVISIBLE);
         playBtn.setEnabled(false);
-        timer.setText("Get ready");
+        timer.setText(R.string.game_get_ready);
 
         // adding custom BallView to the fragment
         ballView = new BallView(getContext());
@@ -310,7 +311,7 @@ public class GameFragment extends Fragment {
         ballView = null;
         playBtn.setVisibility(View.VISIBLE);
         playBtn.setEnabled(true);
-        timer.setText("Done! Play again?");
+        timer.setText(R.string.game_done);
 
         // set ball coordinates to center for playinig again
         ballXpos = ballXmax /2;
@@ -347,29 +348,6 @@ public class GameFragment extends Fragment {
         values.put(Provider.Game_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
         values.put(Provider.Game_Data.DATA, result);
         getContext().getContentResolver().insert(Provider.Game_Data.CONTENT_URI, values);
-
-        Log.d(MainActivity.STOP_TAG, "JSON length " + String.valueOf(result.length()));
-
-        // Recording result to local .txt file
-        // for testing only
-        /*
-        File root = new File(Environment.getExternalStorageDirectory().toString());
-        Long tsLong = System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();
-        File gpxfile = new File(root, "samples" + ts +".txt");
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(gpxfile);
-            writer.append(result);
-            writer.flush();
-            writer.close();
-            Log.d(MainActivity.STOP_TAG, "Logging done");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(MainActivity.STOP_TAG, "Logging not done");
-            Log.d(MainActivity.STOP_TAG, e.getMessage());
-        }
-        */
     }
 
     // updating ball's X and Y positioning

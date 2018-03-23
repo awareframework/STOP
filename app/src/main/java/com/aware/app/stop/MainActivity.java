@@ -17,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
     public static final String STOP_TAG = "STOP_TAG";
     public static final String ACTION_STOP_FINGERPRINT = "ACTION_STOP_FINGERPRINT";
 
+    private static final String PACKAGE_NAME = "com.aware.app.stop";
+    private static final String TRIGGER_TIME = "trigger_time";
+    private static final String NOTIFICATION_EVENT_OPENED = "_opened";
+    private static final String NOTIFICATION_EVENT_SHOWN = "_shown";
+    private static final String NOTIFICATION_TEXT = ": play a game and record medication";
+    private static final String SCHEDULE_MORNING = "Morning";
+    private static final String SCHEDULE_NOON = "Noon";
+    private static final String SCHEDULE_AFTERNOON = "Afternoon";
+    private static final String SCHEDULE_EVENING = "Evening";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting up application preferences
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
-        Aware.isBatteryOptimizationIgnored(getApplicationContext(), "com.aware.app.stop");
+        Aware.isBatteryOptimizationIgnored(getApplicationContext(), PACKAGE_NAME);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
 
@@ -59,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Tracking notification opening state
         Intent intent  = getIntent();
-        String time = intent.getStringExtra("trigger-time");
+        String time = intent.getStringExtra(TRIGGER_TIME);
         if (time != null) {
-            String event = intent.getStringExtra("trigger-time") + "_opened";
+            String event = time + NOTIFICATION_EVENT_OPENED;
 
             //Insert notification opened event to db
             ContentValues values = new ContentValues();
@@ -133,56 +142,56 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // Morning notification 8:00 - 11:59
-            Scheduler.Schedule morning = Scheduler.getSchedule(this, "morning");
+            Scheduler.Schedule morning = Scheduler.getSchedule(this, SCHEDULE_MORNING);
             if (morning == null) {
-                morning = new Scheduler.Schedule("morning");
+                morning = new Scheduler.Schedule(SCHEDULE_MORNING);
                 morning.addHour(8).addHour(11)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra("trigger-time", "Morning");
+                        .addActionExtra(TRIGGER_TIME, SCHEDULE_MORNING);
 
                 Scheduler.saveSchedule(getApplicationContext(), morning);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Noon notification 12:00 - 14:59
-            Scheduler.Schedule noon = Scheduler.getSchedule(this, "noon");
+            Scheduler.Schedule noon = Scheduler.getSchedule(this, SCHEDULE_NOON);
             if (noon == null) {
-                noon = new Scheduler.Schedule("noon");
+                noon = new Scheduler.Schedule(SCHEDULE_NOON);
                 noon.addHour(12).addHour(14)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra("trigger-time", "Noon");
+                        .addActionExtra(TRIGGER_TIME, SCHEDULE_NOON);
 
                 Scheduler.saveSchedule(getApplicationContext(), noon);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Afternoon notification 15:00 - 18:59
-            Scheduler.Schedule afternoon = Scheduler.getSchedule(this, "afternoon");
+            Scheduler.Schedule afternoon = Scheduler.getSchedule(this, SCHEDULE_AFTERNOON);
             if (afternoon == null) {
-                afternoon = new Scheduler.Schedule("afternoon");
+                afternoon = new Scheduler.Schedule(SCHEDULE_AFTERNOON);
                 afternoon.addHour(15).addHour(18)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra("trigger-time", "Afternoon");
+                        .addActionExtra(TRIGGER_TIME, SCHEDULE_AFTERNOON);
 
                 Scheduler.saveSchedule(getApplicationContext(), afternoon);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Evening notification 19:00 - 21:59
-            Scheduler.Schedule evening = Scheduler.getSchedule(this, "evening");
+            Scheduler.Schedule evening = Scheduler.getSchedule(this, SCHEDULE_EVENING);
             if (evening == null) {
-                evening = new Scheduler.Schedule("evening");
+                evening = new Scheduler.Schedule(SCHEDULE_EVENING);
                 evening.addHour(19).addHour(21)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra("trigger-time", "Evening");
+                        .addActionExtra(TRIGGER_TIME, SCHEDULE_EVENING);
 
                 Scheduler.saveSchedule(getApplicationContext(), evening);
                 Aware.startScheduler(getApplicationContext());
@@ -198,14 +207,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Attach MainActivity opened in notification onClick
         Intent intent = new Intent(c, MainActivity.class);
-        intent.putExtra("trigger-time", triggerTime);
+        intent.putExtra(TRIGGER_TIME, triggerTime);
         PendingIntent contentIntent = PendingIntent.getActivity(c, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
         Notification.Builder builder = new Notification.Builder(c)
-                .setSmallIcon(R.drawable.ic_action_aware_studies)
+                .setSmallIcon(R.drawable.ic_medication)
                 .setOngoing(true)
-                .setContentTitle("STOP")
+                .setContentTitle(c.getString(R.string.app_name))
                 .setContentText(notifyText)
                 .setContentIntent(contentIntent);
 
@@ -214,7 +223,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Vibrate at notification
         Vibrator vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(500);
+        if (vibrator != null) {
+            vibrator.vibrate(500);
+        }
     }
 
     // BroadcastReceiver to trigger notifications
@@ -223,23 +234,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_FINGERPRINT)) {
-                Log.d(MainActivity.STOP_TAG, "Broadcast received");
 
                 // Randomize game sensitivity in 1-5 range every time when notification is shown
                 Random r = new Random();
                 int sensitivity = r.nextInt(6 - 1) + 1;
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
                 SharedPreferences.Editor editor = sPref.edit();
-                editor.putString("key_sensitivity", String.valueOf(sensitivity));
+                editor.putString(context.getString(R.string.key_sensitivity), String.valueOf(sensitivity));
                 editor.commit();
 
                 // Show notification
-                notifyShow(context,intent.getStringExtra("trigger-time") + ": play a game and record medication",
-                        intent.getStringExtra("trigger-time").toLowerCase());
+                notifyShow(context,intent.getStringExtra(TRIGGER_TIME) + NOTIFICATION_TEXT,
+                        intent.getStringExtra(TRIGGER_TIME).toLowerCase());
 
                 // Tracking notification shown state
                 // Insert notification shown event to db
-                String event = intent.getStringExtra("trigger-time").toLowerCase() + "_shown";
+                String event = intent.getStringExtra(TRIGGER_TIME).toLowerCase() + NOTIFICATION_EVENT_SHOWN;
                 ContentValues values = new ContentValues();
                 values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
                 values.put(Provider.Notification_Data.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));

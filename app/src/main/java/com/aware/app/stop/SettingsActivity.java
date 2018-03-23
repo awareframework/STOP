@@ -12,7 +12,6 @@ import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
@@ -170,14 +169,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     } else {
                         builder = new AlertDialog.Builder(getActivity());
                     }
-                    builder.setTitle("Are you sure?")
-                            .setMessage("This will delete all recorded medications")
-                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.settings_are_you_sure)
+                            .setMessage(R.string.settings_delete_warning)
+                            .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // remove all records in medications list
                                     getActivity().getContentResolver().delete(Provider.Medication_Data.CONTENT_URI, null, null);
-                                    Toast.makeText(getActivity(), "Medication list cleared", Toast.LENGTH_SHORT).show();
-                                    Log.d(MainActivity.STOP_TAG, "Medication list cleared");
+                                    Toast.makeText(getActivity(), R.string.settings_list_cleared, Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

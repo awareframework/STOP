@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,8 +81,7 @@ public class MedicationFragment extends Fragment{
                 values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
                 values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                 getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
-                Log.d(MainActivity.STOP_TAG, "Now timestamp inserted");
+                Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
 
                 updateList();
             }
@@ -100,8 +98,7 @@ public class MedicationFragment extends Fragment{
                     listenVoice();
 
                 } else {
-                    Toast.makeText(getContext(), "Internet connection is disabled. Please enable it or use \"Specify time\" option ",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.medication_no_internet, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -129,20 +126,19 @@ public class MedicationFragment extends Fragment{
                                 values.put(Provider.Medication_Data.TIMESTAMP, specified.getTimeInMillis());
                                 values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                                 getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                                Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
-                                Log.d(MainActivity.STOP_TAG, "Specified: " + String.valueOf(specified.getTimeInMillis()));
+                                Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
 
                                 updateList();
 
                             }
                         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DATE));
-                        dateSpecify.setTitle("Medication date");
+                        dateSpecify.setTitle(R.string.medication_specify_date);
                         dateSpecify.setCancelable(false);
                         dateSpecify.show();
 
                     }
                 }, Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), true);
-                timeSpecify.setTitle("Medication time");
+                timeSpecify.setTitle(R.string.medication_specify_time);
                 timeSpecify.setCancelable(false);
                 timeSpecify.show();
             }
@@ -173,16 +169,15 @@ public class MedicationFragment extends Fragment{
         if (requestCode == RC_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                Log.d(MainActivity.STOP_TAG, "Voice: " + results.get(0));
 
                 // parsing timestamp from users response
                 TimestampParser tp = new TimestampParser(getContext());
                 try {
-                    Log.d(MainActivity.STOP_TAG, "Parse started");
                     verifyTime(tp.execute(results.get(0)).get());
+
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
-                    Log.d(MainActivity.STOP_TAG, "UI:Parser error: " + e.getMessage());
+                    Toast.makeText(getContext(), R.string.medication_error + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -194,7 +189,7 @@ public class MedicationFragment extends Fragment{
         listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK);
         listenToUser.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, "When have you taken medication last time?");
+        listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.voice_when_taken);
         startActivityForResult(listenToUser, RC_SPEECH_INPUT);
     }
 
@@ -206,8 +201,6 @@ public class MedicationFragment extends Fragment{
             final Date date = new Date(time);
             final Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-
-            Log.d(MainActivity.STOP_TAG, "Parsed: " + String.valueOf(time));
 
             // transforming timestamp to readable date format to show in dialog
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd.MM.yyyy");
@@ -221,9 +214,9 @@ public class MedicationFragment extends Fragment{
             } else {
                 builder = new AlertDialog.Builder(getContext());
             }
-            builder.setTitle("Check medication time")
+            builder.setTitle(R.string.medication_check_title)
                     .setMessage(formattedDate)
-                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
                             // Date is OK, write it to db
@@ -232,23 +225,20 @@ public class MedicationFragment extends Fragment{
                             values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                             getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
 
-                            Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
-                            Log.d(MainActivity.STOP_TAG, "Confirmed: " + time);
-
+                            Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
                             updateList();
 
                         }
 
                     })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
                             dialog.dismiss();
-                            Log.d(MainActivity.STOP_TAG, "Cancelled: " + time);
                         }
 
                     })
-                    .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
+                    .setNeutralButton(R.string.edit, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -268,30 +258,29 @@ public class MedicationFragment extends Fragment{
                                             values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
                                             values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                                             getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                                            Toast.makeText(getContext(), "Medication recorded", Toast.LENGTH_SHORT).show();
-                                            Log.d(MainActivity.STOP_TAG, "Updated: " + String.valueOf(calendar.getTimeInMillis()));
 
+                                            Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
                                             updateList();
 
                                         }
                                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-                                    dateEdit.setTitle("Check date");
+                                    dateEdit.setTitle(R.string.medication_check_date);
                                     dateEdit.setCancelable(false);
                                     dateEdit.show();
 
                                 }
                             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                            timeEdit.setTitle("Check time");
+                            timeEdit.setTitle(R.string.medication_check_time);
                             timeEdit.setCancelable(false);
                             timeEdit.show();
                         }
                     })
-                    .setIcon(R.drawable.ic_action_aware_studies_light)
+                    .setIcon(R.drawable.ic_medication_light)
                     .setCancelable(false)
                     .show();
 
         } else {
-            Toast.makeText(getContext(), "Cannot recognize date, please try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.medication_cannot_recognize, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -331,8 +320,6 @@ public class MedicationFragment extends Fragment{
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
-        Log.d(MainActivity.STOP_TAG, "onClicked: " + String.valueOf(time));
-
         // transforming timestamp to readable date format to show in dialog
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd.MM.yyyy");
         sdf.setTimeZone(TimeZone.getDefault());
@@ -345,9 +332,9 @@ public class MedicationFragment extends Fragment{
         } else {
             builder = new AlertDialog.Builder(getContext());
         }
-        builder.setTitle("Modify medication record")
+        builder.setTitle(R.string.medication_modify_title)
                 .setMessage(formattedDate)
-                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                         // Modify timestamp
@@ -365,46 +352,41 @@ public class MedicationFragment extends Fragment{
                                         ContentValues update_values = new ContentValues();
                                         update_values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
                                         getContext().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
-                                        Toast.makeText(getContext(), "Medication edited", Toast.LENGTH_SHORT).show();
-                                        Log.d(MainActivity.STOP_TAG, "Edited: " + String.valueOf(calendar.getTimeInMillis()));
 
+                                        Toast.makeText(getContext(), R.string.medication_edited, Toast.LENGTH_SHORT).show();
                                         updateList();
 
                                     }
                                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-                                dateEdit.setTitle("Edit date");
+                                dateEdit.setTitle(R.string.medication_edit_date);
                                 dateEdit.show();
 
                             }
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                        timeEdit.setTitle("Edit time");
+                        timeEdit.setTitle(R.string.medication_edit_time);
                         timeEdit.show();
                     }
 
                 })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                         dialog.dismiss();
-                        Log.d(MainActivity.STOP_TAG, "Cancelled: " + time);
                     }
 
                 })
-                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         // Remove timestamp from db
                         getContext().getContentResolver().delete(Provider.Medication_Data.CONTENT_URI, Provider.Medication_Data._ID + "=" + id, null);
-
-                        Toast.makeText(getContext(), "Medication deleted", Toast.LENGTH_SHORT).show();
-                        Log.d(MainActivity.STOP_TAG, "Deleted: " + String.valueOf(time));
-
+                        Toast.makeText(getContext(), R.string.medication_deleted, Toast.LENGTH_SHORT).show();
                         updateList();
 
                     }
                 })
-                .setIcon(R.drawable.ic_action_aware_studies_light)
+                .setIcon(R.drawable.ic_medication_light)
                 .show();
 
         modify.close();
@@ -429,7 +411,6 @@ public class MedicationFragment extends Fragment{
         public void bindView(View view, Context context, Cursor cursor) {
 
             TextView tvTimestamp = view.findViewById(R.id.timestamp);
-
             long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"));
             Date date = new Date(timestamp);
             Calendar calendar = Calendar.getInstance();
@@ -439,7 +420,6 @@ public class MedicationFragment extends Fragment{
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm,  dd MMMM yyyy");
             sdf.setTimeZone(TimeZone.getDefault());
             String formattedDate = sdf.format(date);
-
             tvTimestamp.setText(formattedDate);
         }
 
@@ -448,12 +428,10 @@ public class MedicationFragment extends Fragment{
 
             View view = super.getView(position, convertView, parent);
             TextView number = view.findViewById(R.id.number);
-
             String order = String.valueOf(total - position) + ")";
             number.setText(order);
 
             return view;
         }
     }
-
 }

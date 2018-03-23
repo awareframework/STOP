@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:text="List of medication records" />
+        android:text="@string/medication_list_heading" />
 
     <TextView
         android:id="@+id/noRecords"
@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/listHeading"
         android:layout_marginTop="90dp"
-        android:text="No records have been made yet"
+        android:text="@string/medication_no_record"
         android:visibility="invisible"/>
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_above="@+id/micBtn"
         android:layout_marginBottom="10dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:text="When have you taken medication last time?" />
+        android:text="@string/medication_when_last_time" />
 
     <Button
         android:id="@+id/specifyBtn"
@@ -50,7 +50,7 @@
         android:layout_marginBottom="10dp"
         android:layout_toStartOf="@+id/micBtn"
         android:layout_marginEnd="20dp"
-        android:text="Specify time"/>
+        android:text="@string/medication_specify"/>
 
     <ImageButton
         android:id="@+id/micBtn"
@@ -59,7 +59,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_mic"/>
+        android:src="@drawable/ic_mic"
+        android:contentDescription="@string/specify_with_voice"/>
 
     <Button
         android:id="@+id/nowBtn"
@@ -69,6 +70,6 @@
         android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/micBtn"
         android:layout_marginStart="20dp"
-        android:text="Now"/>
+        android:text="@string/medication_now"/>
 
 </RelativeLayout>

@@ -11,7 +11,6 @@ import android.content.SyncRequest;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
@@ -22,12 +21,13 @@ import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1716/92JJSIIh0GfS";
+    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1735/2PG6yXSz3Ipj";
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        // List of required permission
         ArrayList<String> REQUIRED_PERMISSIONS = new ArrayList<>();
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_SYNC_SETTINGS);
@@ -35,8 +35,6 @@ public class SplashActivity extends AppCompatActivity {
         REQUIRED_PERMISSIONS.add(Manifest.permission.GET_ACCOUNTS);
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_SYNC_SETTINGS);
         REQUIRED_PERMISSIONS.add(Manifest.permission.READ_SYNC_SETTINGS);
-        //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_WIFI_STATE);
-        //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_NETWORK_STATE);
 
         boolean permissions_ok = true;
         for (String p : REQUIRED_PERMISSIONS) {
@@ -47,28 +45,22 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (permissions_ok) {
-            Log.d(MainActivity.STOP_TAG, "Permissions ok");
-
             Intent aware = new Intent(getApplicationContext(), Aware.class);
             startService(aware);
 
             if (Aware.isStudy(this)) {
-                Log.d(MainActivity.STOP_TAG, "Study ok");
-
+                // Open MainActivity when all conditions are ok
                 Intent main = new Intent(this, MainActivity.class);
                 startActivity(main);
                 finish();
 
             } else {
-                Log.d(MainActivity.STOP_TAG, "Study not ok, joining...");
-
                 Aware.joinStudy(this, STUDY_URL);
                 IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
                 registerReceiver(joinObserver, joinFilter);
             }
 
         } else {
-            Log.d(MainActivity.STOP_TAG, "Permissions not ok, requesting them...");
 
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
@@ -77,13 +69,12 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-
+    // Reciever waiting for study joined state
     private JoinObserver joinObserver = new JoinObserver();
     private class JoinObserver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(Aware.ACTION_JOINED_STUDY)) {
-                Log.d(MainActivity.STOP_TAG, "Study ok, joined");
 
                 Account aware_account = Aware.getAWAREAccount(getApplicationContext());
                 String authority = Provider.getAuthority(getApplicationContext());
@@ -96,6 +87,7 @@ public class SplashActivity extends AppCompatActivity {
                         .setExtras(new Bundle()).build();
                 ContentResolver.requestSync(request);
 
+                // Open MainActivity when all conditions are ok
                 Intent main = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(main);
                 unregisterReceiver(joinObserver);

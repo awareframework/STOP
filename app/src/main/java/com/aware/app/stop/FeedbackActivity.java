@@ -8,7 +8,6 @@ import android.speech.RecognizerIntent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -64,7 +63,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK);
                 listenToUser.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-                listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, "What do you think about STOP?");
+                listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.voice_what_think);
                 startActivityForResult(listenToUser, RC_SPEECH_INPUT);
             }
         });
@@ -85,12 +84,11 @@ public class FeedbackActivity extends AppCompatActivity {
                     values.put(Provider.Feedback_Data.FEEDBACK, result);
                     getContentResolver().insert(Provider.Feedback_Data.CONTENT_URI, values);
 
-                    Toast.makeText(getApplicationContext(), "Feedback saved. Thank you!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.feedback_saved, Toast.LENGTH_SHORT).show();
                     finish();
-                    Log.d(MainActivity.STOP_TAG, "Feedback: " + result);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please enter your feedback", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.feedback_enter, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -103,8 +101,6 @@ public class FeedbackActivity extends AppCompatActivity {
         if (requestCode == RC_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                Log.d(MainActivity.STOP_TAG, "Voice: " + results.get(0));
-
                 voiceText += results.get(0) + ". ";
                 feedback.setText(voiceText);
             }

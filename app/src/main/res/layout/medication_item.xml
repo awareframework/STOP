@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:textAppearance="?android:textAppearanceMedium"
             android:gravity="center"
-            android:text="10)"/>
+            android:text="@string/medication_item_number_sample"/>
 
         <TextView
             android:id="@+id/timestamp"
@@ -23,7 +23,7 @@
             android:layout_toEndOf="@+id/number"
             android:textAppearance="?android:textAppearanceMedium"
             android:gravity="center"
-            android:text="13:55, 21 December 2018"/>
+            android:text="@string/medication_item_timestamp_sample"/>
 
     </RelativeLayout>
 

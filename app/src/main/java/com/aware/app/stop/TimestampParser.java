@@ -3,7 +3,6 @@ package com.aware.app.stop;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -76,7 +75,7 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
             }
 
         } catch (Exception e) {
-            Log.d(MainActivity.STOP_TAG, "Async:Parser error: " + String.valueOf(e));
+            e.printStackTrace();
         }
 
         return timestamp;
