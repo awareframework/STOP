@@ -93,12 +93,15 @@ public class Provider extends ContentProvider {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_MEDICATION);
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.medication";
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.medication";
+
+        public static final String MEDICATION_TIMESTAMP = "double_medication";
     }
 
     //Medication table fields
     private static final String DB_TBL_MEDICATION_FIELDS =
             Medication_Data._ID + " integer primary key autoincrement," +
                     Medication_Data.TIMESTAMP + " real default 0," +
+                    Medication_Data.MEDICATION_TIMESTAMP + " real default 0," +
                     Medication_Data.DEVICE_ID + " text default ''";
 
     /**
@@ -207,9 +210,10 @@ public class Provider extends ContentProvider {
         tableMedicationHash = new HashMap<>();
         tableMedicationHash.put(Medication_Data._ID, Medication_Data._ID);
         tableMedicationHash.put(Medication_Data.TIMESTAMP, Medication_Data.TIMESTAMP);
+        tableMedicationHash.put(Medication_Data.MEDICATION_TIMESTAMP, Medication_Data.MEDICATION_TIMESTAMP);
         tableMedicationHash.put(Medication_Data.DEVICE_ID, Medication_Data.DEVICE_ID);
 
-        //Medication table HasMap
+        //Feedback table HasMap
         tableFeedbackHash = new HashMap<>();
         tableFeedbackHash.put(Feedback_Data._ID, Feedback_Data._ID);
         tableFeedbackHash.put(Feedback_Data.TIMESTAMP, Feedback_Data.TIMESTAMP);

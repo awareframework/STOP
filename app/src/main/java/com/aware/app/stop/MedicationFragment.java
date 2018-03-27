@@ -78,8 +78,10 @@ public class MedicationFragment extends Fragment{
             public void onClick(View v) {
                 // Inserting data to database
                 ContentValues values = new ContentValues();
-                values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                String timestamp = String.valueOf(System.currentTimeMillis());
+                values.put(Provider.Medication_Data.TIMESTAMP, timestamp);
                 values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, timestamp);
                 getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
                 Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
 
@@ -123,7 +125,8 @@ public class MedicationFragment extends Fragment{
 
                                 // Date is specified, write it to db
                                 ContentValues values = new ContentValues();
-                                values.put(Provider.Medication_Data.TIMESTAMP, specified.getTimeInMillis());
+                                values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                                values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, specified.getTimeInMillis());
                                 values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                                 getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
                                 Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
@@ -221,7 +224,8 @@ public class MedicationFragment extends Fragment{
 
                             // Date is OK, write it to db
                             ContentValues values = new ContentValues();
-                            values.put(Provider.Medication_Data.TIMESTAMP, time);
+                            values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                            values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, time);
                             values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                             getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
 
@@ -255,7 +259,8 @@ public class MedicationFragment extends Fragment{
 
                                             // Date is fixed, write it to db
                                             ContentValues values = new ContentValues();
-                                            values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
+                                            values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                                            values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
                                             values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
                                             getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
 
@@ -289,8 +294,8 @@ public class MedicationFragment extends Fragment{
 
         medicationList.setAdapter(null);
 
-        String[] columns = new String[]{Provider.Medication_Data._ID, Provider.Medication_Data.TIMESTAMP};
-        String order = Provider.Medication_Data.TIMESTAMP + " DESC";
+        String[] columns = new String[]{Provider.Medication_Data._ID, Provider.Medication_Data.MEDICATION_TIMESTAMP};
+        String order = Provider.Medication_Data.MEDICATION_TIMESTAMP + " DESC";
         cursor = getContext().getContentResolver().query(Provider.Medication_Data.CONTENT_URI, columns, null, null, order);
 
         if (cursor != null) {
@@ -310,12 +315,12 @@ public class MedicationFragment extends Fragment{
     private void modifyRecord(final long id) {
 
         // query to db to retrieve timestamp for selected id
-        String[] columns = new String[]{Provider.Medication_Data._ID, Provider.Medication_Data.TIMESTAMP};
+        String[] columns = new String[]{Provider.Medication_Data._ID, Provider.Medication_Data.MEDICATION_TIMESTAMP};
         String selection = Provider.Medication_Data._ID + " = " + id;
         Cursor modify = getContext().getContentResolver().query(Provider.Medication_Data.CONTENT_URI, columns, selection , null, null);
         modify.moveToFirst();
 
-        final long time = modify.getLong(modify.getColumnIndexOrThrow("timestamp"));
+        final long time = modify.getLong(modify.getColumnIndexOrThrow("double_medication"));
         final Date date = new Date(time);
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -350,7 +355,7 @@ public class MedicationFragment extends Fragment{
 
                                         // Date is fixed, write it to db
                                         ContentValues update_values = new ContentValues();
-                                        update_values.put(Provider.Medication_Data.TIMESTAMP, calendar.getTimeInMillis());
+                                        update_values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
                                         getContext().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
 
                                         Toast.makeText(getContext(), R.string.medication_edited, Toast.LENGTH_SHORT).show();
@@ -411,7 +416,7 @@ public class MedicationFragment extends Fragment{
         public void bindView(View view, Context context, Cursor cursor) {
 
             TextView tvTimestamp = view.findViewById(R.id.timestamp);
-            long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"));
+            long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("double_medication"));
             Date date = new Date(timestamp);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);

@@ -219,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(contentIntent);
 
         // Build the notification and show it.
+        if (manager == null) manager = (NotificationManager) c.getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         manager.notify(99, builder.build());
 
         // Vibrate at notification

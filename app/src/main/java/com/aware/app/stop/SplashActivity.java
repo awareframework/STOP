@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1735/2PG6yXSz3Ipj";
+    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1744/R0gyAmSxQGB1";
 
     @Override
     protected void onResume() {
