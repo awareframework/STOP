@@ -63,7 +63,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 listenToUser.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK);
                 listenToUser.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-                listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.voice_what_think);
+                listenToUser.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_what_think));
                 startActivityForResult(listenToUser, RC_SPEECH_INPUT);
             }
         });

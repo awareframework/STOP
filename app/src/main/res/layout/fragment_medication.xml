@@ -50,6 +50,7 @@
         android:layout_marginBottom="10dp"
         android:layout_toStartOf="@+id/micBtn"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/button_style"
         android:text="@string/medication_specify"/>
 
     <ImageButton
@@ -60,7 +61,8 @@
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_mic"
-        android:contentDescription="@string/specify_with_voice"/>
+        android:contentDescription="@string/specify_with_voice"
+        android:background="@drawable/button_style"/>
 
     <Button
         android:id="@+id/nowBtn"
@@ -70,6 +72,7 @@
         android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/micBtn"
         android:layout_marginStart="20dp"
+        android:background="@drawable/button_style"
         android:text="@string/medication_now"/>
 
 </RelativeLayout>
