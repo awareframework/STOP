@@ -50,7 +50,15 @@
         <activity
             android:name=".FeedbackActivity"
             android:label="@string/main_feedback"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aware.app.stop.MainActivity" />
+        </activity>
+        <activity
+            android:name=".HealthActivity"
+            android:label="@string/main_daily_survey"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
@@ -80,6 +88,7 @@
         <receiver android:name=".MainActivity$ParkinsonSnapshot">
             <intent-filter>
                 <action android:name="ACTION_STOP_FINGERPRINT" />
+                <action android:name="ACTION_STOP_SURVEY" />
             </intent-filter>
         </receiver>
 

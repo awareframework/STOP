@@ -42,6 +42,7 @@ public class Provider extends ContentProvider {
     public static final String DB_TBL_MEDICATION = "medication";
     public static final String DB_TBL_FEEDBACK = "feedback";
     public static final String DB_TBL_NOTIFICATION = "notification_data";
+    public static final String DB_TBL_HEALTH = "health";
 
     //ContentProvider query indexes
     private static final int TABLE_GAME_DIR = 1;
@@ -52,13 +53,15 @@ public class Provider extends ContentProvider {
     private static final int TABLE_FEEDBACK_ITEM = 6;
     private static final int TABLE_NOTIFICATION_DIR = 7;
     private static final int TABLE_NOTIFICATION_ITEM = 8;
+    private static final int TABLE_HEALTH_DIR = 9;
+    private static final int TABLE_HEALTH_ITEM = 10;
 
     /**
      * Database tables:
-     * - ball game data, medication data, feedback, notification data
+     * - ball game data, medication data, feedback, notification data, health
      */
     public static final String[] DATABASE_TABLES = {
-            DB_TBL_GAME, DB_TBL_MEDICATION, DB_TBL_FEEDBACK, DB_TBL_NOTIFICATION
+            DB_TBL_GAME, DB_TBL_MEDICATION, DB_TBL_FEEDBACK, DB_TBL_NOTIFICATION, DB_TBL_HEALTH
     };
 
     //These are columns that we need to sync data, don't change this!
@@ -143,10 +146,28 @@ public class Provider extends ContentProvider {
                     Notification_Data.EVENT + " text default ''";
 
     /**
+     * Health table
+     */
+    public static final class Health_Data implements AWAREColumns {
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_HEALTH);
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.health";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.health";
+
+        public static final String PD_VALUE = "pd_value";
+    }
+
+    //Health table fields
+    private static final String DB_TBL_HEALTH_FIELDS =
+            Health_Data._ID + " integer primary key autoincrement," +
+                    Health_Data.TIMESTAMP + " real default 0," +
+                    Health_Data.DEVICE_ID + " text default ''," +
+                    Health_Data.PD_VALUE + " text default ''";
+
+    /**
      * Share the fields with AWARE so we can replicate the table schema on the server
      */
     public static final String[] TABLES_FIELDS = {
-            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS, DB_TBL_FEEDBACK_FIELDS, DB_TBL_NOTIFICATION_FIELDS
+            DB_TBL_GAME_FIELDS, DB_TBL_MEDICATION_FIELDS, DB_TBL_FEEDBACK_FIELDS, DB_TBL_NOTIFICATION_FIELDS, DB_TBL_HEALTH_FIELDS
     };
 
     //Helper variables for ContentProvider - DO NOT CHANGE
@@ -166,6 +187,7 @@ public class Provider extends ContentProvider {
     private HashMap<String, String> tableMedicationHash;
     private HashMap<String, String> tableFeedbackHash;
     private HashMap<String, String> tableNotificationHash;
+    private HashMap<String, String> tableHealthHash;
 
     /**
      * Returns the provider authority that is dynamic
@@ -199,6 +221,10 @@ public class Provider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[3], TABLE_NOTIFICATION_DIR);
         sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[3] + "/#", TABLE_NOTIFICATION_ITEM);
 
+        //Health table indexes DIR and ITEM
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[4], TABLE_HEALTH_DIR);
+        sUriMatcher.addURI(AUTHORITY, DATABASE_TABLES[4] + "/#", TABLE_HEALTH_ITEM);
+
         //Game table HasMap
         tableGameHash = new HashMap<>();
         tableGameHash.put(Game_Data._ID, Game_Data._ID);
@@ -228,6 +254,13 @@ public class Provider extends ContentProvider {
         tableNotificationHash.put(Notification_Data.DEVICE_ID, Notification_Data.DEVICE_ID);
         tableNotificationHash.put(Notification_Data.EVENT, Notification_Data.EVENT);
 
+        //Health table HasMap
+        tableHealthHash = new HashMap<>();
+        tableHealthHash.put(Health_Data._ID, Health_Data._ID);
+        tableHealthHash.put(Health_Data.TIMESTAMP, Health_Data.TIMESTAMP);
+        tableHealthHash.put(Health_Data.DEVICE_ID, Health_Data.DEVICE_ID);
+        tableHealthHash.put(Health_Data.PD_VALUE, Health_Data.PD_VALUE);
+
         return true;
     }
 
@@ -254,6 +287,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_NOTIFICATION_DIR:
                 count = database.delete(DATABASE_TABLES[3], selection, selectionArgs);
+                break;
+
+            case TABLE_HEALTH_DIR:
+                count = database.delete(DATABASE_TABLES[4], selection, selectionArgs);
                 break;
 
             default:
@@ -328,6 +365,18 @@ public class Provider extends ContentProvider {
                 database.endTransaction();
                 throw new SQLException("Failed to insert row into " + uri);
 
+            case TABLE_HEALTH_DIR:
+                long health_id = database.insert(DATABASE_TABLES[4], Health_Data.DEVICE_ID, values);
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                if (health_id > 0) {
+                    Uri dataUri = ContentUris.withAppendedId(Health_Data.CONTENT_URI, health_id);
+                    getContext().getContentResolver().notifyChange(dataUri, null, false);
+                    return dataUri;
+                }
+                database.endTransaction();
+                throw new SQLException("Failed to insert row into " + uri);
+
             default:
                 database.endTransaction();
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -361,6 +410,11 @@ public class Provider extends ContentProvider {
             case TABLE_NOTIFICATION_DIR:
                 qb.setTables(DATABASE_TABLES[3]);
                 qb.setProjectionMap(tableNotificationHash); //the hashmap of the table
+                break;
+
+            case TABLE_HEALTH_DIR:
+                qb.setTables(DATABASE_TABLES[4]);
+                qb.setProjectionMap(tableHealthHash); //the hashmap of the table
                 break;
 
             default:
@@ -405,6 +459,11 @@ public class Provider extends ContentProvider {
             case TABLE_NOTIFICATION_ITEM:
                 return Notification_Data.CONTENT_ITEM_TYPE;
 
+            case TABLE_HEALTH_DIR:
+                return Health_Data.CONTENT_TYPE;
+            case TABLE_HEALTH_ITEM:
+                return Health_Data.CONTENT_ITEM_TYPE;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -434,6 +493,10 @@ public class Provider extends ContentProvider {
 
             case TABLE_NOTIFICATION_DIR:
                 count = database.update(DATABASE_TABLES[3], values, selection, selectionArgs);
+                break;
+
+            case TABLE_HEALTH_DIR:
+                count = database.update(DATABASE_TABLES[4], values, selection, selectionArgs);
                 break;
 
             default:

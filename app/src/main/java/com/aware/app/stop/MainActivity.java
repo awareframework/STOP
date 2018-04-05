@@ -27,28 +27,40 @@ import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
 
+import java.util.Calendar;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    // UI elements
     private BottomNavigationView mMainNav;
     private GameFragment gameFragment;
     private MedicationFragment medicationFragment;
 
-    private static NotificationManager manager;
-
     public static final String STOP_TAG = "STOP_TAG";
     public static final String ACTION_STOP_FINGERPRINT = "ACTION_STOP_FINGERPRINT";
-
+    public static final String ACTION_STOP_SURVEY = "ACTION_STOP_SURVEY";
     private static final String PACKAGE_NAME = "com.aware.app.stop";
-    private static final String TRIGGER_TIME = "trigger_time";
-    private static final String NOTIFICATION_EVENT_OPENED = "_opened";
+
+    // Notification variables
+    private static NotificationManager manager;
+    public static final String NOTIFICATION_TRIGGER_EVENT = "notification_trigger_event";
+    public static final String NOTIFICATION_EVENT_OPENED = "_opened";
     private static final String NOTIFICATION_EVENT_SHOWN = "_shown";
-    private static final String NOTIFICATION_TEXT = ": play a game and record medication";
-    private static final String SCHEDULE_MORNING = "Morning";
-    private static final String SCHEDULE_NOON = "Noon";
-    private static final String SCHEDULE_AFTERNOON = "Afternoon";
-    private static final String SCHEDULE_EVENING = "Evening";
+
+    // Game notification variables
+    private static final int GAME_NOTIFICATION_ID = 1;
+    private static final String GAME_SCHEDULE_MORNING = "Morning";
+    private static final String GAME_SCHEDULE_NOON = "Noon";
+    private static final String GAME_SCHEDULE_AFTERNOON = "Afternoon";
+    private static final String GAME_SCHEDULE_EVENING = "Evening";
+    private static final String GAME_NOTIFICATION_TEXT = ": play a game and record medication";
+
+    // Daily health survey notification variables
+    public static final int SURVEY_NOTIFICATION_ID = 2;
+    public static final String SURVEY_SCHEDULE = "Daily survey";
+    private static final String SURVEY_NOTIFICATION_TEXT = ": how was yesterday?";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +75,13 @@ public class MainActivity extends AppCompatActivity {
         Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
 
         // Get an instance of the NotificationManager service
+        // Cancel GameNotification when MainActivity opens
         manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        if (manager != null) manager.cancel(99);
+        if (manager != null) manager.cancel(GAME_NOTIFICATION_ID);
 
         // Tracking notification opening state
         Intent intent  = getIntent();
-        String time = intent.getStringExtra(TRIGGER_TIME);
+        String time = intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT);
         if (time != null) {
             String event = time + NOTIFICATION_EVENT_OPENED;
 
@@ -126,6 +139,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.main_health) {
+            startActivity(new Intent(this, HealthActivity.class));
+            return true;
+        }
         if (id == R.id.main_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
@@ -142,58 +159,71 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // Morning notification 8:00 - 11:59
-            Scheduler.Schedule morning = Scheduler.getSchedule(this, SCHEDULE_MORNING);
+            Scheduler.Schedule morning = Scheduler.getSchedule(this, GAME_SCHEDULE_MORNING);
             if (morning == null) {
-                morning = new Scheduler.Schedule(SCHEDULE_MORNING);
+                morning = new Scheduler.Schedule(GAME_SCHEDULE_MORNING);
                 morning.addHour(8).addHour(11)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra(TRIGGER_TIME, SCHEDULE_MORNING);
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_MORNING);
 
                 Scheduler.saveSchedule(getApplicationContext(), morning);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Noon notification 12:00 - 14:59
-            Scheduler.Schedule noon = Scheduler.getSchedule(this, SCHEDULE_NOON);
+            Scheduler.Schedule noon = Scheduler.getSchedule(this, GAME_SCHEDULE_NOON);
             if (noon == null) {
-                noon = new Scheduler.Schedule(SCHEDULE_NOON);
+                noon = new Scheduler.Schedule(GAME_SCHEDULE_NOON);
                 noon.addHour(12).addHour(14)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra(TRIGGER_TIME, SCHEDULE_NOON);
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_NOON);
 
                 Scheduler.saveSchedule(getApplicationContext(), noon);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Afternoon notification 15:00 - 18:59
-            Scheduler.Schedule afternoon = Scheduler.getSchedule(this, SCHEDULE_AFTERNOON);
+            Scheduler.Schedule afternoon = Scheduler.getSchedule(this, GAME_SCHEDULE_AFTERNOON);
             if (afternoon == null) {
-                afternoon = new Scheduler.Schedule(SCHEDULE_AFTERNOON);
+                afternoon = new Scheduler.Schedule(GAME_SCHEDULE_AFTERNOON);
                 afternoon.addHour(15).addHour(18)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra(TRIGGER_TIME, SCHEDULE_AFTERNOON);
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_AFTERNOON);
 
                 Scheduler.saveSchedule(getApplicationContext(), afternoon);
                 Aware.startScheduler(getApplicationContext());
             }
 
             // Evening notification 19:00 - 21:59
-            Scheduler.Schedule evening = Scheduler.getSchedule(this, SCHEDULE_EVENING);
+            Scheduler.Schedule evening = Scheduler.getSchedule(this, GAME_SCHEDULE_EVENING);
             if (evening == null) {
-                evening = new Scheduler.Schedule(SCHEDULE_EVENING);
+                evening = new Scheduler.Schedule(GAME_SCHEDULE_EVENING);
                 evening.addHour(19).addHour(21)
                         .random(1,0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra(TRIGGER_TIME, SCHEDULE_EVENING);
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_EVENING);
 
                 Scheduler.saveSchedule(getApplicationContext(), evening);
+                Aware.startScheduler(getApplicationContext());
+            }
+
+            // Survey notification 10:00
+            Scheduler.Schedule survey = Scheduler.getSchedule(this, SURVEY_SCHEDULE);
+            if (survey == null) {
+                survey = new Scheduler.Schedule(SURVEY_SCHEDULE);
+                survey.addHour(10).addMinute(0)
+                        .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
+                        .setActionIntentAction(MainActivity.ACTION_STOP_SURVEY)
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, SURVEY_SCHEDULE);
+
+                Scheduler.saveSchedule(getApplicationContext(), survey);
                 Aware.startScheduler(getApplicationContext());
             }
 
@@ -203,24 +233,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Notification set up
-    private static void notifyShow(Context c, String notifyText, String triggerTime) {
+    private static void notifyShow(Context c, int notifyId, String notifyText, String triggerEvent) {
 
-        // Attach MainActivity opened in notification onClick
-        Intent intent = new Intent(c, MainActivity.class);
-        intent.putExtra(TRIGGER_TIME, triggerTime);
+        // Attach activity for notification onClick
+        Intent intent = null;
+        if (notifyId == GAME_NOTIFICATION_ID) intent = new Intent(c, MainActivity.class);
+        if (notifyId == SURVEY_NOTIFICATION_ID) intent = new Intent(c, HealthActivity.class);
+        intent.putExtra(NOTIFICATION_TRIGGER_EVENT, triggerEvent);
         PendingIntent contentIntent = PendingIntent.getActivity(c, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
         Notification.Builder builder = new Notification.Builder(c)
-                .setSmallIcon(R.drawable.ic_medication)
                 .setOngoing(true)
                 .setContentTitle(c.getString(R.string.app_name))
                 .setContentText(notifyText)
                 .setContentIntent(contentIntent);
 
+        // Set icon depending on notification type
+        if (notifyId == GAME_NOTIFICATION_ID) builder.setSmallIcon(R.drawable.ic_medication);
+        if (notifyId == SURVEY_NOTIFICATION_ID) builder.setSmallIcon(R.drawable.ic_question_light);
+
         // Build the notification and show it.
         if (manager == null) manager = (NotificationManager) c.getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(99, builder.build());
+        manager.notify(notifyId, builder.build());
 
         // Vibrate at notification
         Vibrator vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
@@ -235,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_FINGERPRINT)) {
-
                 // Randomize game sensitivity in 1-5 range every time when notification is shown
                 Random r = new Random();
                 int sensitivity = r.nextInt(6 - 1) + 1;
@@ -244,19 +278,25 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(context.getString(R.string.key_sensitivity), String.valueOf(sensitivity));
                 editor.commit();
 
-                // Show notification
-                notifyShow(context,intent.getStringExtra(TRIGGER_TIME) + NOTIFICATION_TEXT,
-                        intent.getStringExtra(TRIGGER_TIME).toLowerCase());
-
-                // Tracking notification shown state
-                // Insert notification shown event to db
-                String event = intent.getStringExtra(TRIGGER_TIME).toLowerCase() + NOTIFICATION_EVENT_SHOWN;
-                ContentValues values = new ContentValues();
-                values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
-                values.put(Provider.Notification_Data.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
-                values.put(Provider.Notification_Data.EVENT, event);
-                context.getContentResolver().insert(Provider.Notification_Data.CONTENT_URI, values);
+                // Show game notification
+                notifyShow(context, GAME_NOTIFICATION_ID,intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + GAME_NOTIFICATION_TEXT,
+                        intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT).toLowerCase());
             }
+
+            if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_SURVEY)) {
+                // Show survey notification
+                notifyShow(context, SURVEY_NOTIFICATION_ID,intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + SURVEY_NOTIFICATION_TEXT,
+                        intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT).toLowerCase());
+            }
+
+            // Tracking notification shown state
+            // Insert notification shown event to db
+            String event = intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT).toLowerCase().replace(" ", "_") + NOTIFICATION_EVENT_SHOWN;
+            ContentValues values = new ContentValues();
+            values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
+            values.put(Provider.Notification_Data.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
+            values.put(Provider.Notification_Data.EVENT, event);
+            context.getContentResolver().insert(Provider.Notification_Data.CONTENT_URI, values);
         }
     }
 }
