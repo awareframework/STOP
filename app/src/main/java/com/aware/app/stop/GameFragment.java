@@ -216,6 +216,9 @@ public class GameFragment extends Fragment {
         bigCircleXpos = (size.x - bigCircleSize)/2;
         bigCircleYpos = (size.y - bigCircleSize - 235 -175)/2;
 
+        // sampling to false to prevent unnecessary data recording
+        sampling = false;
+
         // Initializing timer
         countDownTimer = new CountDownTimer(gameTime + 5000, 1000) {
             @Override
@@ -248,11 +251,23 @@ public class GameFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
 
+        // reset UI to the initial state
+        containerLayout.removeAllViews();
+        ballView = null;
+        playBtn.setVisibility(View.VISIBLE);
+        playBtn.setEnabled(true);
+        timer.setText(R.string.game_press_button_to_play);
+
+        // sampling to false to prevent unnecessary data recording
+        sampling = false;
+
+        // cancelling timer
         if (countDownTimer != null) countDownTimer.cancel();
 
+        // stopping sensors
         Accelerometer.setSensorObserver(null);
         Aware.stopAccelerometer(getContext());
         Aware.setSetting(getContext(), Aware_Preferences.STATUS_ACCELEROMETER, false);
