@@ -23,7 +23,7 @@
     <string name="game_start">Start</string>
     <string name="game_get_ready">Get ready</string>
     <string name="game_play">Play</string>
-    <string name="game_done">Done! Play again?</string>
+    <string name="game_done">Done! Play again?\nScore:\u0020</string>
 
     <!-- Medication fragment strings-->
     <string name="medication_list_heading">List of medication records</string>

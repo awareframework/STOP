@@ -50,7 +50,8 @@ public class GameFragment extends Fragment {
     private float ballYpos, ballYmax, ballYaccel, ballYvel = 0.0f;
     private float bigCircleXpos, bigCircleYpos;
     private float smallCircleXpos, smallCircleYpos;
-    private int deviceXres, deviceYres;
+    private double ballMaxDistance, scoreRaw;
+    private int deviceXres, deviceYres, scoreCounter;
     private Bitmap ball;
     private Bitmap circleBig;
     private Bitmap circleSmall;
@@ -197,12 +198,17 @@ public class GameFragment extends Fragment {
         display.getSize(size);
         deviceXres = size.x;
         deviceYres = size.y;
+
+        // setting up the maximum allowed X and Y values
         ballXmax = (float) size.x - ballSize;
         ballYmax = (float) size.y - ballSize - 235 - 175; // toolbar = 235, bottom nav bar = 175
 
         // put ball to the center
         ballXpos = ballXmax /2;
         ballYpos = ballYmax /2;
+
+        // count maximum possible distance ball can cover from center
+        ballMaxDistance = Math.sqrt(ballXpos*ballXpos + ballYpos*ballYpos);
 
         // put circles to the center
         smallCircleXpos = (size.x - smallCircleSize)/2;
@@ -293,11 +299,13 @@ public class GameFragment extends Fragment {
         gameData += "\"device_x_res\":" + deviceXres + ",";
         gameData += "\"device_y_res\":" + deviceYres + "," + "\"samples\":[";
 
-        // making sample strings empty (for second and following games)
+        // making sample values empty (for second and following games)
         accelSamples = "";
         linaccelSamples = "";
         gyroSamples = "";
         rotationSamples = "";
+        scoreRaw = 0;
+        scoreCounter = 0;
 
         // starting timer
         countDownTimer.start();
@@ -307,11 +315,16 @@ public class GameFragment extends Fragment {
     // Stop data sampling
     private void stopGame() {
 
+        // calculating game score
+        double finalScore = 100 - ((scoreRaw/scoreCounter)/ ballMaxDistance)*100;
+        String gameDone = getString(R.string.game_done) + String.format("%.1f", finalScore);
+
+        // updating UI
         containerLayout.removeAllViews();
         ballView = null;
         playBtn.setVisibility(View.VISIBLE);
         playBtn.setEnabled(true);
-        timer.setText(R.string.game_done);
+        timer.setText(gameDone);
 
         // set ball coordinates to center for playinig again
         ballXpos = ballXmax /2;
@@ -335,7 +348,7 @@ public class GameFragment extends Fragment {
         Aware.setSetting(getContext(), Aware_Preferences.STATUS_ROTATION, false);
 
         // Adjusting data to final JSON format
-        String gamedata = gameData.substring(0, gameData.length()-1) + "]}],";
+        String gamedata = gameData.substring(0, gameData.length()-1) + "],\"score\":"+ finalScore +"}],";
         String acccel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
         String linaccel = "\"linearaccelerometer\":[" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
         String gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
@@ -362,12 +375,17 @@ public class GameFragment extends Fragment {
         ballYpos -= yS;
 
         float changeX = ballXpos - ballXmax/2;
-        float changey = ballYpos - ballYmax/2;
+        float changeY = ballYpos - ballYmax/2;
+        double distance = Math.sqrt(changeX*changeX + changeY*changeY);
 
         if (sampling) {
             gameData += "{\"timestamp\":" + timestamp + ",";
             gameData += "\"ball_x\":" + changeX + ",";
-            gameData += "\"ball_y\":" + changey + "},";
+            gameData += "\"ball_y\":" + changeY + ",";
+            gameData += "\"distance\":" + distance + "},";
+
+            scoreRaw += distance;
+            scoreCounter += 1;
         }
 
         //off screen movements
