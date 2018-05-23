@@ -214,11 +214,12 @@ public class MainActivity extends AppCompatActivity {
                 Aware.startScheduler(getApplicationContext());
             }
 
-            // Survey notification 10:00
+            // Survey notification 10:00 - 11:00
             Scheduler.Schedule survey = Scheduler.getSchedule(this, SURVEY_SCHEDULE);
             if (survey == null) {
                 survey = new Scheduler.Schedule(SURVEY_SCHEDULE);
-                survey.addHour(10).addMinute(0)
+                survey.addHour(10)
+                        .random(1, 0)
                         .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
                         .setActionIntentAction(MainActivity.ACTION_STOP_SURVEY)
                         .addActionExtra(NOTIFICATION_TRIGGER_EVENT, SURVEY_SCHEDULE);

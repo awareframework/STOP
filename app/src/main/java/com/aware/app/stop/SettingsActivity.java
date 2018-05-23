@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -131,10 +132,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_ball_size)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_small_circle_size)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_big_circle_size)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_sensitivity)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_game_time)));
+
+            Preference buttonReset = findPreference(getString(R.string.key_game_reset_default));
+            buttonReset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // Reset values to defaults
+                    SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                    SharedPreferences.Editor editor = sPref.edit();
+                    editor.putString(getActivity().getApplicationContext().getString(R.string.key_ball_size), "150");
+                    editor.putString(getActivity().getApplicationContext().getString(R.string.key_sensitivity), "3");
+                    editor.putString(getActivity().getApplicationContext().getString(R.string.key_game_time), "10");
+                    editor.commit();
+
+                    bindPreferenceSummaryToValue(findPreference(getString(R.string.key_ball_size)));
+                    bindPreferenceSummaryToValue(findPreference(getString(R.string.key_sensitivity)));
+                    bindPreferenceSummaryToValue(findPreference(getString(R.string.key_game_time)));
+                    Toast.makeText(getActivity(), R.string.settings_default_applied, Toast.LENGTH_SHORT).show();
+
+                    return true;
+                }
+            });
         }
 
         @Override

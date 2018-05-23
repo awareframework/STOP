@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aware.Accelerometer;
 import com.aware.Aware;
@@ -64,14 +65,14 @@ public class GameFragment extends Fragment {
     private int gameTime; // in milliseconds
 
     // sampling flag
-    boolean sampling = false;
+    static boolean sampling;
 
     // Strings for storing sampling data in JSON format
     private String gameData;
-    private String accelSamples;
-    private String linaccelSamples;
-    private String gyroSamples;
-    private String rotationSamples;
+    private StringBuffer accelSamples = new StringBuffer();
+    private StringBuffer linaccelSamples = new StringBuffer();
+    private StringBuffer gyroSamples = new StringBuffer();
+    private StringBuffer rotationSamples = new StringBuffer();
 
     private static final String SAMPLE_KEY_TIMESTAMP = "timestamp";
     private static final String SAMPLE_KEY_DEVICE_ID = "device_id";
@@ -99,7 +100,11 @@ public class GameFragment extends Fragment {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGame();
+                if (ballSize>0 && gameTime>0 && sensitivity>0) {
+                    startGame();
+                } else {
+                    Toast.makeText(getContext(), R.string.game_invalid_settings, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -121,7 +126,7 @@ public class GameFragment extends Fragment {
                             data.getAsInteger(SAMPLE_KEY_ACCURACY),
                             data.getAsString(SAMPLE_KEY_LABEL));
 
-                    accelSamples += new Gson().toJson(accelSample) + ",";
+                    accelSamples.append(new Gson().toJson(accelSample)).append(",");
                 }
             }
         };
@@ -138,7 +143,7 @@ public class GameFragment extends Fragment {
                             data.getAsInteger(SAMPLE_KEY_ACCURACY),
                             data.getAsString(SAMPLE_KEY_LABEL));
 
-                    linaccelSamples += new Gson().toJson(linaccelSample) + ",";
+                    linaccelSamples.append(new Gson().toJson(linaccelSample)).append(",");
                 }
             }
         };
@@ -155,7 +160,7 @@ public class GameFragment extends Fragment {
                             data.getAsInteger(SAMPLE_KEY_ACCURACY),
                             data.getAsString(SAMPLE_KEY_LABEL));
 
-                    gyroSamples += new Gson().toJson(gyroSample) + ",";
+                    gyroSamples.append(new Gson().toJson(gyroSample)).append(",");
                 }
             }
         };
@@ -172,7 +177,7 @@ public class GameFragment extends Fragment {
                             data.getAsInteger(SAMPLE_KEY_ACCURACY),
                             data.getAsString(SAMPLE_KEY_LABEL));
 
-                    rotationSamples += new Gson().toJson(rotationSample) + ",";
+                    rotationSamples.append(new Gson().toJson(rotationSample)).append(",");
                 }
             }
         };
@@ -187,8 +192,8 @@ public class GameFragment extends Fragment {
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), String.valueOf(R.string.key_ball_size_value)));
-        smallCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_small_circle_size), String.valueOf(R.string.key_small_circle_size_value)));
-        bigCircleSize = Integer.parseInt(sPref.getString(getString(R.string.key_big_circle_size), String.valueOf(R.string.key_big_circle_size_value)));
+        smallCircleSize = ballSize*3;
+        bigCircleSize = ballSize*5;
         sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), String.valueOf(R.string.key_sensitivity_value)));
         gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), String.valueOf(R.string.key_game_time_value)))*1000;
 
@@ -315,10 +320,10 @@ public class GameFragment extends Fragment {
         gameData += "\"device_y_res\":" + deviceYres + "," + "\"samples\":[";
 
         // making sample values empty (for second and following games)
-        accelSamples = "";
-        linaccelSamples = "";
-        gyroSamples = "";
-        rotationSamples = "";
+        accelSamples.setLength(0);
+        linaccelSamples.setLength(0);
+        gyroSamples.setLength(0);
+        rotationSamples.setLength(0);
         scoreRaw = 0;
         scoreCounter = 0;
 
@@ -364,11 +369,11 @@ public class GameFragment extends Fragment {
 
         // Adjusting data to final JSON format
         String gamedata = gameData.substring(0, gameData.length()-1) + "],\"score\":"+ finalScore +"}],";
-        String acccel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
+        String accel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
         String linaccel = "\"linearaccelerometer\":[" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
         String gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
         String rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
-        String result = gamedata + acccel + linaccel + gyro + rotation;
+        String result = gamedata + accel + linaccel + gyro + rotation;
 
         // Inserting data to database
         ContentValues values = new ContentValues();

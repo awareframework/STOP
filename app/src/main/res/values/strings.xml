@@ -24,6 +24,7 @@
     <string name="game_get_ready">Get ready</string>
     <string name="game_play">Play</string>
     <string name="game_done">Done! Play again?\nScore:\u0020</string>
+    <string name="game_invalid_settings">None of the game settings can be 0. Please update first</string>
 
     <!-- Medication fragment strings-->
     <string name="medication_list_heading">List of medication records</string>
@@ -67,24 +68,21 @@
     <string name="pref_header_medication">Medication</string>
     <string name="key_ball_size_title">Ball size</string>
     <string name="key_ball_size">key_ball_size</string>
-    <string name="key_ball_size_value">100</string>
-    <string name="key_small_circle_size_title">Small circle size</string>
-    <string name="key_small_circle_size">key_small_circle_size</string>
-    <string name="key_small_circle_size_value">300</string>
-    <string name="key_big_circle_size_title">Big circle size</string>
-    <string name="key_big_circle_size">key_big_circle_size</string>
-    <string name="key_big_circle_size_value">500</string>
+    <string name="key_ball_size_value">150</string>
     <string name="key_sensitivity_title">Sensitivity</string>
     <string name="key_sensitivity">key_sensitivity</string>
     <string name="key_sensitivity_value">3</string>
     <string name="key_game_time_title">Game time</string>
     <string name="key_game_time">key_game_time</string>
     <string name="key_game_time_value">10</string>
+    <string name="key_game_reset_default_title">Reset to default settings</string>
+    <string name="key_game_reset_default">key_game_reset_default</string>
     <string name="key_medication_title">Clear medication list</string>
     <string name="key_medication">key_medication</string>
     <string name="settings_are_you_sure">Are you sure?</string>
     <string name="settings_delete_warning">This will delete all recorded medications</string>
     <string name="settings_list_cleared">Medication list cleared</string>
+    <string name="settings_default_applied">Default setting were applied</string>
 
     <!-- AWARE notifications strings-->
     <string name="foreground_notification_title">STOP</string>

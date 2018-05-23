@@ -4,20 +4,21 @@
 
     <item
         android:id="@+id/main_health"
+        android:orderInCategory="1"
         android:icon="@drawable/ic_question_light"
         android:title="@string/main_daily_survey"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/main_settings"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_settings_light"
         android:title="@string/main_settings"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/main_feedback"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:icon="@drawable/ic_feedback_light"
         android:title="@string/main_feedback"
         app:showAsAction="never" />

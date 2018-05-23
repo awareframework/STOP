@@ -12,28 +12,6 @@
         android:title="@string/key_ball_size_title" />
 
     <EditTextPreference
-        android:id="@+id/smallCircleSize"
-        android:capitalize="words"
-        android:defaultValue="@string/key_small_circle_size_value"
-        android:inputType="number"
-        android:key="@string/key_small_circle_size"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/key_small_circle_size_title" />
-
-    <EditTextPreference
-        android:id="@+id/bigCircleSize"
-        android:capitalize="words"
-        android:defaultValue="@string/key_big_circle_size_value"
-        android:inputType="number"
-        android:key="@string/key_big_circle_size"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/key_big_circle_size_title" />
-
-    <EditTextPreference
         android:id="@+id/sensitivity"
         android:capitalize="words"
         android:defaultValue="@string/key_sensitivity_value"
@@ -54,5 +32,9 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/key_game_time_title" />
+
+    <Preference
+        android:title="@string/key_game_reset_default_title"
+        android:key="@string/key_game_reset_default" />
 
 </PreferenceScreen>
