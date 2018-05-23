@@ -12,7 +12,7 @@ The built-in game that asks a user to keep the ball in the center of the circles
 Journal for recording medication sessions time to follow the medication adherece. Timestams recording is available either with intelligence voice recognition or with manual input.
 
 ### Notifications
-The application triggers notifications four times per day to remind user to play a game and record last medication sessions and once per day at 10:00 to ask user to report the severity level of PD for the previous day.
+The application triggers notifications four times per day to remind user to play a game and record last medication sessions and once per day between 10:00 and 11:00 to ask user to report the severity level of PD for the previous day.
 
 ### Feedback
 The feedback for the application can be sent straight from the application. Both manual input and voice recognition are supported.
@@ -27,7 +27,7 @@ Field | Type | Description
 _id | INTEGER | primary key auto-incremented
 timestamp | REAL | unix timestamp in milliseconds of sample
 device_id | TEXT | AWARE device ID
-data | LONGTEXT | ball game data in JSON forma: ball size; ball speed; device screen resolution; game score; accelerometer, linear accelerometer, gyroscope and rotation samplings
+data | LONGTEXT | ball game data in JSON format: ball size; ball speed; device screen resolution; game score; accelerometer, linear accelerometer, gyroscope and rotation samplings
 
 ### Medication data
 > content://com.aware.app.stop.database.provider.stop_project/medication
