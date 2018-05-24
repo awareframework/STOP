@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ConsentActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <RelativeLayout
+            android:id="@+id/consentGeneral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/consentAge"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:text="Your age"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@+id/consentAge"
+                android:layout_marginStart="30dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="3"/>
+
+            <TextView
+                android:id="@+id/consentPD"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/consentAge"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Do you have diagnosed PD?" />
+
+            <CheckBox
+                android:id="@+id/checkboxPD"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/consentAge"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@+id/consentPD"
+                android:checked="true"
+                android:text="Yes" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/detailsPD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:id="@+id/consentWhen"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:text="When was PD diagnosed" />
+
+            <EditText
+                android:id="@+id/etWhen"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/consentWhen"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="2"/>
+
+            <Spinner
+                android:id="@+id/spinnerWhen"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/consentWhen"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/etWhen"
+                android:entries="@array/spinnerWhenItems"/>
+
+            <TextView
+                android:id="@+id/consentSymptoms"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/etWhen"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Define your symptoms" />
+
+            <com.aware.app.stop.NonScrollListView
+                android:id="@+id/symptomsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/consentSymptoms"
+                android:layout_marginTop="5dp">
+            </com.aware.app.stop.NonScrollListView>
+
+            <TextView
+                android:id="@+id/consentMedication"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:text="Define medications you take"
+                android:layout_below="@+id/symptomsList"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"/>
+
+            <EditText
+                android:id="@+id/etMedication"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/consentMedication"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:gravity="start"
+                android:background="@drawable/et_medications"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/consentSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_style"
+            android:text="@string/submit"/>
+
+    </LinearLayout>
+
+</ScrollView>
