@@ -61,6 +61,10 @@
     <string name="health_question">How was your PD yesterday?</string>
     <string name="health_survey_saved">Survey recorded. Thank you!</string>
     <string name="health_empty_response">Please select PD level</string>
+    <string name="survey_response_some">Some</string>
+    <string name="survey_response_none">None</string>
+    <string name="survey_response_severe">Severe</string>
+
 
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Settings</string>

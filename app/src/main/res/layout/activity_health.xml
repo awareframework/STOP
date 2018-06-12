@@ -30,7 +30,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="None"/>
+            android:text="@string/survey_response_none"/>
 
         <RadioButton
             android:id="@+id/pd_value_two"
@@ -38,7 +38,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Some"/>
+            android:text="@string/survey_response_some"/>
 
         <RadioButton
             android:id="@+id/pd_value_three"
@@ -46,7 +46,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Severe"/>
+            android:text="@string/survey_response_severe"/>
 
     </RadioGroup>
 

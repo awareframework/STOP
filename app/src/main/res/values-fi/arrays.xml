@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="spinnerWhenItems">
+        <item>kuukautta sitten</item>
+        <item>vuotta sitten</item>
+    </string-array>
+
+    <string-array name="listSymptoms">
+        <item>Resting tremor</item>
+        <item>Bradykinesia</item>
+        <item>Rigidity</item>
+        <item>Postural instability</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+    </string-array>
+
+    <string-array name="listSymptomsDescription">
+        <item>A tremor is an involuntary, somewhat rhythmic, muscle contraction and relaxation involving oscillations or twitching movements of one or more body parts. It is the most common of all involuntary movements and can affect the hands, arms, eyes, face, head, vocal folds, trunk, and legs</item>
+        <item>2 2 2</item>
+        <item>3 3 3</item>
+        <item>4 4 4</item>
+        <item>5 5 5</item>
+        <item>6 6 6</item>
+        <item>7 7 7</item>
+        <item>8 8 8</item>
+    </string-array>
+
+</resources>

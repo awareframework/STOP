@@ -157,22 +157,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // Morning notification 8:00 - 11:59
-            Scheduler.Schedule test = Scheduler.getSchedule(this, GAME_SCHEDULE_MORNING);
-            if (test == null) {
-                test = new Scheduler.Schedule(GAME_SCHEDULE_MORNING);
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.MINUTE, 2);
-                test.setTimer(calendar)
-                        .random(1,0)
-                        .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
-                        .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
-                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_MORNING);
-
-                Scheduler.saveSchedule(getApplicationContext(), test);
-                Aware.startScheduler(getApplicationContext());
-            }
-
-            // Morning notification 8:00 - 11:59
             Scheduler.Schedule morning = Scheduler.getSchedule(this, GAME_SCHEDULE_MORNING);
             if (morning == null) {
                 morning = new Scheduler.Schedule(GAME_SCHEDULE_MORNING);
