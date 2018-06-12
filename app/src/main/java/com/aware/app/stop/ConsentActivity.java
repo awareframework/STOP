@@ -2,8 +2,11 @@ package com.aware.app.stop;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -37,6 +40,9 @@ import android.widget.Toast;
 //import com.plumillonforge.android.chipview.Chip;
 //import com.plumillonforge.android.chipview.ChipView;
 
+import com.aware.Aware;
+import com.aware.Aware_Preferences;
+import com.aware.app.stop.database.Provider;
 import com.github.florent37.viewtooltip.ViewTooltip;
 
 import java.util.ArrayList;
@@ -51,6 +57,8 @@ public class ConsentActivity extends AppCompatActivity {
     private Button consentSubmit;
     private NonScrollListView symptomsList;
     private RelativeLayout detailsPD;
+    private EditText etAge, etWhen, etMedication;
+    private AlertDialog consentDialog;
 
     private SymptomAdapter symptomAdapter;
 
@@ -59,10 +67,20 @@ public class ConsentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consent);
 
+        detailsPD = findViewById(R.id.detailsPD);
+        checkBox = findViewById(R.id.checkboxPD);
+        spinnerWhen = findViewById(R.id.spinnerWhen);
+        symptomsList = findViewById(R.id.symptomsList);
+        consentSubmit = findViewById(R.id.consentSubmit);
+        etAge = findViewById(R.id.etAge);
+        etWhen = findViewById(R.id.etWhen);
+        etMedication = findViewById(R.id.etMedication);
+
         // Consent form dialog. Has to be accepted for further app use
-        final AlertDialog consentDialog = new AlertDialog.Builder(this)
+        // TODO: CRASHES AFTER FEW SECOND AFTER ACCEPTED
+        consentDialog = new AlertDialog.Builder(this)
                 .setTitle("App consent form")
-                .setMessage("1text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n text \n ")
+                .setMessage("Consent summary goes here. To be updated")
                 .setPositiveButton("Accept", null)
                 .setNegativeButton("Decline", null)
                 .setCancelable(false)
@@ -89,12 +107,10 @@ public class ConsentActivity extends AppCompatActivity {
 
             }
         });
-        //consentDialog.show();
+        consentDialog.show();
 
-        detailsPD = findViewById(R.id.detailsPD);
 
-        // PD
-        checkBox = findViewById(R.id.checkboxPD);
+        // "Do you have PD" checkbox, dismiss PD details entries for non-PD user
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -108,11 +124,6 @@ public class ConsentActivity extends AppCompatActivity {
             }
         });
 
-        spinnerWhen = findViewById(R.id.spinnerWhen);
-        symptomsList = findViewById(R.id.symptomsList);
-
-
-
         // retrieve symptoms data from arrays.xml and parse it to Symptom.class array
         final String[] listSymptoms = getResources().getStringArray(R.array.listSymptoms);
         String[] listSymptomsDescription = getResources().getStringArray(R.array.listSymptomsDescription);
@@ -125,25 +136,90 @@ public class ConsentActivity extends AppCompatActivity {
         symptomAdapter = new SymptomAdapter(this, symptomList);
         symptomsList.setAdapter(symptomAdapter);
 
-
-        consentSubmit = findViewById(R.id.consentSubmit);
         consentSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder sb = new StringBuilder();
-                for (int i=0; i<symptomAdapter.getCount(); i++) {
-                    CheckedTextView checkedTextView = symptomsList.getChildAt(i).findViewById(R.id.symptomName);
-                    if (checkedTextView.isChecked()) sb.append(symptomAdapter.getItem(i).getName()).append(", ");
-                }
 
-                String result = sb.toString();
-                result = result.substring(0, result.length()-2);
-                Toast.makeText(ConsentActivity.this, result, Toast.LENGTH_LONG).show();
+                String age = etAge.getText().toString();
+
+                if (checkBox.isChecked()) {
+
+                    // retrieve data from entries
+                    String whenSpinner = spinnerWhen.getSelectedItem().toString();
+                    String whenPD = etWhen.getText().toString();
+                    String medications = etMedication.getText().toString();
+                    String when = whenPD + " " + whenSpinner;
+
+                    // retrieve symptoms from the list
+                    StringBuilder sb = new StringBuilder();
+                    for (int i=0; i<symptomAdapter.getCount(); i++) {
+                        CheckedTextView checkedTextView = symptomsList.getChildAt(i).findViewById(R.id.symptomName);
+                        if (checkedTextView.isChecked()) sb.append(symptomAdapter.getItem(i).getName()).append(", ");
+                    }
+                    String symptoms = sb.toString();
+                    if (symptoms.length()!=0) symptoms = symptoms.substring(0, symptoms.length()-2);
+
+                    // insert data to db
+                    if (!age.equals("") && !whenPD.equals("") && !medications.equals("")) {
+
+                        ContentValues values = new ContentValues();
+                        values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
+                        values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+                        values.put(Provider.Consent_Data.AGE, age);
+                        values.put(Provider.Consent_Data.PD_DIAGNOSED, "diagnosed-pd");
+                        values.put(Provider.Consent_Data.PD_DIAGNOSED_DATE, when);
+                        values.put(Provider.Consent_Data.PD_SYMPTOMS, symptoms);
+                        values.put(Provider.Consent_Data.PD_MEDICATIONS, medications);
+                        getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
+
+                        // save consent state as true
+                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = consent.edit();
+                        editor.putBoolean("consent", true);
+                        editor.commit();
+
+                        // Open MainActivity when all conditions are ok
+                        Intent main = new Intent(ConsentActivity.this, MainActivity.class);
+                        startActivity(main);
+                        finish();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please insert data to empty entries", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+
+                    if (!age.equals("")) {
+                        ContentValues values = new ContentValues();
+                        values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
+                        values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+                        values.put(Provider.Consent_Data.AGE, age);
+                        values.put(Provider.Consent_Data.PD_DIAGNOSED, "non-pd");
+                        values.put(Provider.Consent_Data.PD_DIAGNOSED_DATE, "null");
+                        values.put(Provider.Consent_Data.PD_SYMPTOMS, "null");
+                        values.put(Provider.Consent_Data.PD_MEDICATIONS, "null");
+                        getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
+
+                        // save consent state as true
+                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = consent.edit();
+                        editor.putBoolean("consent", true);
+                        editor.commit();
+
+                        // Open MainActivity when all conditions are ok
+                        Intent main = new Intent(ConsentActivity.this, MainActivity.class);
+                        startActivity(main);
+                        finish();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please specify your age", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
             }
         });
     }
 
-    ArrayList<View> viewsList = new ArrayList<>();
 
     // custom ListView adapted for Symptoms
     private class SymptomAdapter extends ArrayAdapter<Symptom> {
@@ -151,7 +227,7 @@ public class ConsentActivity extends AppCompatActivity {
         private Context mContext;
         private List<Symptom> symptomList;
 
-        public SymptomAdapter(@NonNull Context context, ArrayList<Symptom> list) {
+        private SymptomAdapter(@NonNull Context context, ArrayList<Symptom> list) {
             super(context,0, list);
             mContext = context;
             symptomList = list;
@@ -217,16 +293,12 @@ public class ConsentActivity extends AppCompatActivity {
             symptomInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     if (!currentSymptom.isDescriptionShown()) {
                         viewTooltip.show();
                         symptomInfo.setClickable(false);
-                        //currentSymptom.setDescriptionShown(true);
                     } else {
                         viewTooltip.close();
                         symptomInfo.setClickable(false);
-                        //currentSymptom.setDescriptionShown(false);
                     }
                 }
             });
@@ -234,4 +306,5 @@ public class ConsentActivity extends AppCompatActivity {
             return listItem;
         }
     }
+
 }
