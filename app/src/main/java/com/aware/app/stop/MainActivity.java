@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -48,18 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOTIFICATION_EVENT_OPENED = "_opened";
     private static final String NOTIFICATION_EVENT_SHOWN = "_shown";
 
-    // Game notification variables
+    // Notification type identifiers
     private static final int GAME_NOTIFICATION_ID = 1;
-    private static final String GAME_SCHEDULE_MORNING = "Morning";
-    private static final String GAME_SCHEDULE_NOON = "Noon";
-    private static final String GAME_SCHEDULE_AFTERNOON = "Afternoon";
-    private static final String GAME_SCHEDULE_EVENING = "Evening";
-    private static final String GAME_NOTIFICATION_TEXT = ": play a game and record medication";
-
-    // Daily health survey notification variables
     public static final int SURVEY_NOTIFICATION_ID = 2;
-    public static final String SURVEY_SCHEDULE = "Daily survey";
-    private static final String SURVEY_NOTIFICATION_TEXT = ": how was yesterday?";
 
 
     @Override
@@ -157,7 +149,29 @@ public class MainActivity extends AppCompatActivity {
     // Notification scheduler: four times per day
     private void scheduleNotification() {
 
+        String GAME_SCHEDULE_MORNING = getString(R.string.notification_game_morning);
+        String GAME_SCHEDULE_NOON = getString(R.string.notification_game_noon);
+        String GAME_SCHEDULE_AFTERNOON = getString(R.string.notification_game_afternoon);
+        String GAME_SCHEDULE_EVENING = getString(R.string.notification_game_evening);
+        String SURVEY_SCHEDULE = getString(R.string.notification_survey);
+
         try {
+            // Morning notification 8:00 - 11:59
+            Scheduler.Schedule test = Scheduler.getSchedule(this, GAME_SCHEDULE_MORNING);
+            if (test == null) {
+                test = new Scheduler.Schedule(GAME_SCHEDULE_MORNING);
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MINUTE, 2);
+                test.setTimer(calendar)
+                        .random(1,0)
+                        .setActionType(Scheduler.ACTION_TYPE_BROADCAST)
+                        .setActionIntentAction(MainActivity.ACTION_STOP_FINGERPRINT)
+                        .addActionExtra(NOTIFICATION_TRIGGER_EVENT, GAME_SCHEDULE_MORNING);
+
+                Scheduler.saveSchedule(getApplicationContext(), test);
+                Aware.startScheduler(getApplicationContext());
+            }
+
             // Morning notification 8:00 - 11:59
             Scheduler.Schedule morning = Scheduler.getSchedule(this, GAME_SCHEDULE_MORNING);
             if (morning == null) {
@@ -280,13 +294,15 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
 
                 // Show game notification
-                notifyShow(context, GAME_NOTIFICATION_ID,intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + GAME_NOTIFICATION_TEXT,
+                notifyShow(context, GAME_NOTIFICATION_ID,
+                        intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + context.getString(R.string.notification_game_text),
                         intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT).toLowerCase());
             }
 
             if (intent.getAction().equalsIgnoreCase(MainActivity.ACTION_STOP_SURVEY)) {
                 // Show survey notification
-                notifyShow(context, SURVEY_NOTIFICATION_ID,intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + SURVEY_NOTIFICATION_TEXT,
+                notifyShow(context, SURVEY_NOTIFICATION_ID,
+                        intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT) + context.getString(R.string.notification_survey_text),
                         intent.getStringExtra(NOTIFICATION_TRIGGER_EVENT).toLowerCase());
             }
 

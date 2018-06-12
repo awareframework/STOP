@@ -79,10 +79,10 @@ public class ConsentActivity extends AppCompatActivity {
         // Consent form dialog. Has to be accepted for further app use
         // TODO: CRASHES AFTER FEW SECOND AFTER ACCEPTED
         consentDialog = new AlertDialog.Builder(this)
-                .setTitle("App consent form")
-                .setMessage("Consent summary goes here. To be updated")
-                .setPositiveButton("Accept", null)
-                .setNegativeButton("Decline", null)
+                .setTitle(R.string.consent_app_consent)
+                .setMessage(R.string.consent_app_consent_details)
+                .setPositiveButton(R.string.consent_accept, null)
+                .setNegativeButton(R.string.consent_decline, null)
                 .setCancelable(false)
                 .create();
 
@@ -101,7 +101,7 @@ public class ConsentActivity extends AppCompatActivity {
                 decline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "You cannot use the application until you accept the consent form", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -115,10 +115,10 @@ public class ConsentActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    checkBox.setText("Yes");
+                    checkBox.setText(getString(R.string.consent_yes));
                     detailsPD.setVisibility(View.VISIBLE);
                 } else {
-                    checkBox.setText("No");
+                    checkBox.setText(R.string.consent_no);
                     detailsPD.setVisibility(View.GONE);
                 }
             }
@@ -184,7 +184,7 @@ public class ConsentActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please insert data to empty entries", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.consent_empty_entries, Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
@@ -212,7 +212,7 @@ public class ConsentActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please specify your age", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.consent_specify_age, Toast.LENGTH_SHORT).show();
                     }
 
                 }

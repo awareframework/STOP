@@ -84,6 +84,31 @@
     <string name="settings_list_cleared">Medication list cleared</string>
     <string name="settings_default_applied">Default setting were applied</string>
 
+    <!-- Consent activity strings-->
+    <string name="consent_age">Your age</string>
+    <string name="consent_do_you_have_pd">Do you have diagnosed PD?</string>
+    <string name="consent_yes">Yes</string>
+    <string name="consent_no">No</string>
+    <string name="consent_when_was_pd_diagnosed">When was PD diagnosed</string>
+    <string name="consent_define_your_symptoms">Define your symptoms</string>
+    <string name="consent_define_medications_you_take">Define medications you take</string>
+    <string name="consent_app_consent">Define medications you take</string>
+    <string name="consent_app_consent_details">NOT FOR TRANSLATE YET: Consent summary goes here. To be updated</string>
+    <string name="consent_accept">Accept</string>
+    <string name="consent_decline">Decline</string>
+    <string name="consent_cannot_use">You cannot use the application until you accept the consent form</string>
+    <string name="consent_empty_entries">Please insert data to empty entries</string>
+    <string name="consent_specify_age">Please specify your age</string>
+
+    <!-- Notifications strings-->
+    <string name="notification_game_morning">Morning</string>
+    <string name="notification_game_noon">Noon</string>
+    <string name="notification_game_afternoon">Afternoon</string>
+    <string name="notification_game_evening">Evening</string>
+    <string name="notification_game_text">: play a game and record medication</string>
+    <string name="notification_survey">Daily survey</string>
+    <string name="notification_survey_text">: how was yesterday?</string>
+
     <!-- AWARE notifications strings-->
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Medication tracking is active</string>

@@ -34,7 +34,7 @@ public class HealthActivity extends AppCompatActivity {
         Intent intent  = getIntent();
         String time = intent.getStringExtra(MainActivity.NOTIFICATION_TRIGGER_EVENT);
 
-        if (time!=null && time.equalsIgnoreCase(MainActivity.SURVEY_SCHEDULE)) {
+        if (time!=null && time.equalsIgnoreCase(getString(R.string.notification_survey))) {
             //Insert notification opened event to db
             String event = time + MainActivity.NOTIFICATION_EVENT_OPENED;
 
