@@ -96,14 +96,14 @@
     <string name="notification_survey_text">: Miten eilinen meni?</string>
 
     <!-- Consent activity strings-->
-    <string name="consent_age">Sinun ikäsi</string>
+    <string name="consent_age">Kuinka vanha olet?</string>
     <string name="consent_do_you_have_pd">Onko sinulla diagnosoitu Parkinsonin tauti?</string>
     <string name="consent_yes">Kyllä</string>
     <string name="consent_no">Ei</string>
     <string name="consent_when_was_pd_diagnosed">Milloin Parkinsonin tautisi diagnosoitiin?</string>
-    <string name="consent_define_your_symptoms">Määritä oireesi</string>
+    <string name="consent_define_your_symptoms">Mitä oireita sinulla on?</string>
     <string name="consent_define_medications_you_take">Määritä käyttämäsi lääkkeet</string>
-    <string name="consent_app_consent">Määritä käyttämäsi lääkkeet</string>
+    <string name="consent_app_consent">Suostumus sovelluksen käyttöön</string>
     <string name="consent_app_consent_details">NOT FOR TRANSLATE YET: Consent summary goes here. To be updated</string>
     <string name="consent_accept">Hyväksy</string>
     <string name="consent_decline">Kieltäydy</string>

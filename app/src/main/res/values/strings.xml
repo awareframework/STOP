@@ -96,7 +96,7 @@
     <string name="consent_when_was_pd_diagnosed">When was PD diagnosed</string>
     <string name="consent_define_your_symptoms">Define your symptoms</string>
     <string name="consent_define_medications_you_take">Define medications you take</string>
-    <string name="consent_app_consent">Define medications you take</string>
+    <string name="consent_app_consent">Application usage consent</string>
     <string name="consent_app_consent_details">NOT FOR TRANSLATE YET: Consent summary goes here. To be updated</string>
     <string name="consent_accept">Accept</string>
     <string name="consent_decline">Decline</string>

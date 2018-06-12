@@ -27,7 +27,7 @@
         <RadioButton
             android:id="@+id/pd_value_one"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_none"/>
@@ -35,7 +35,7 @@
         <RadioButton
             android:id="@+id/pd_value_two"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_some"/>
@@ -43,7 +43,7 @@
         <RadioButton
             android:id="@+id/pd_value_three"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_severe"/>

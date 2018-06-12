@@ -48,8 +48,8 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
-        android:layout_toStartOf="@+id/micBtn"
-        android:layout_marginEnd="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
         android:background="@drawable/button_style"
         android:text="@string/medication_specify"/>
 
@@ -70,8 +70,8 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
-        android:layout_toEndOf="@+id/micBtn"
-        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/button_style"
         android:text="@string/medication_now"/>
 

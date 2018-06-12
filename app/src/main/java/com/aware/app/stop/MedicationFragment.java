@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +105,8 @@ public class MedicationFragment extends Fragment{
                 }
             }
         });
+        // Disable recognition feature to Finnish language devices due to Wit.ai
+        if (Locale.getDefault().getLanguage().equals("fi")) micBtn.setVisibility(View.INVISIBLE);
 
         // Specify button allows user to select date via TimePicker and DatePicker (when internet is disabled)
         specifyBtn = view.findViewById(R.id.specifyBtn);
