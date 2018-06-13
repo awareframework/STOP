@@ -1,49 +1,34 @@
 package com.aware.app.stop;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.annotation.LayoutRes;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
-//import com.plumillonforge.android.chipview.Chip;
-//import com.plumillonforge.android.chipview.ChipView;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
-import com.github.florent37.viewtooltip.ViewTooltip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +85,8 @@ public class ConsentActivity extends AppCompatActivity {
                 decline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_LONG).show();
+                        ConsentActivity.this.finishAffinity();
+                        //Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -124,14 +110,21 @@ public class ConsentActivity extends AppCompatActivity {
         });
 
         // retrieve symptoms data from arrays.xml and parse it to Symptom.class array
-        final String[] listSymptoms = getResources().getStringArray(R.array.listSymptoms);
-        String[] listSymptomsDescription = getResources().getStringArray(R.array.listSymptomsDescription);
-        final ArrayList<Symptom> symptomList = new ArrayList<>();
-        for (int i=0; i<listSymptoms.length; i++) {
-            symptomList.add(new Symptom(listSymptoms[i], listSymptomsDescription[i], false));
+        TypedArray arrayOfArrays = getResources().obtainTypedArray(R.array.symptomsList);
+        ArrayList<Symptom> symptomList = new ArrayList<>();
+
+        for (int i=0; i<arrayOfArrays.length(); i++) {
+            int resId = arrayOfArrays.getResourceId(i, -1);
+            if (resId < 0) {
+                continue;
+            }
+
+            String[] symptomArray = getResources().getStringArray(resId);
+            symptomList.add(new Symptom(symptomArray[0], symptomArray[1],
+                    symptomArray[2], symptomArray[3], symptomArray[4], symptomArray[5]));
         }
 
-        // initialize custom adapter and apply it to ListView
+        //initialize custom adapter and apply it to ListView
         symptomAdapter = new SymptomAdapter(this, symptomList);
         symptomsList.setAdapter(symptomAdapter);
 
@@ -247,60 +240,21 @@ public class ConsentActivity extends AppCompatActivity {
                 listItem = LayoutInflater.from(mContext).inflate(R.layout.symptom_list_item, parent, false);
             }
 
-            final Symptom currentSymptom = symptomList.get(position);
+            Symptom currentSymptom = symptomList.get(position);
 
-            final CheckedTextView symptomText = listItem.findViewById(R.id.symptomName);
+            TextView symptomText = listItem.findViewById(R.id.symptomName);
+            RadioButton rate0 = listItem.findViewById(R.id.rate0);
+            RadioButton rate1 = listItem.findViewById(R.id.rate1);
+            RadioButton rate2 = listItem.findViewById(R.id.rate2);
+            RadioButton rate3 = listItem.findViewById(R.id.rate3);
+            RadioButton rate4 = listItem.findViewById(R.id.rate4);
+
             symptomText.setText(currentSymptom.getName());
-
-            symptomText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (symptomText.isChecked()) {
-                        symptomText.setChecked(false);
-                    } else {
-                        symptomText.setChecked(true);
-                    }
-                }
-            });
-
-            // Show tooltip about the selected symptom
-            final ImageView symptomInfo = listItem.findViewById(R.id.symptomInfo);
-
-            final ViewTooltip viewTooltip = ViewTooltip.on((Activity) getContext(), symptomInfo)
-                    .autoHide(true, 10000)
-                    .clickToHide(true)
-                    .corner(30)
-                    .color(Color.parseColor("#2196F3"))
-                    .position(ViewTooltip.Position.LEFT)
-                    .text(currentSymptom.getDescription())
-                    .onDisplay(new ViewTooltip.ListenerDisplay() {
-                        @Override
-                        public void onDisplay(View view) {
-                            currentSymptom.setDescriptionShown(true);
-                            symptomInfo.setClickable(true);
-
-                        }
-                    })
-                    .onHide(new ViewTooltip.ListenerHide() {
-                        @Override
-                        public void onHide(View view) {
-                            currentSymptom.setDescriptionShown(false);
-                            symptomInfo.setClickable(true);
-                        }
-                    });
-
-            symptomInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!currentSymptom.isDescriptionShown()) {
-                        viewTooltip.show();
-                        symptomInfo.setClickable(false);
-                    } else {
-                        viewTooltip.close();
-                        symptomInfo.setClickable(false);
-                    }
-                }
-            });
+            rate0.setText(currentSymptom.getRate0());
+            rate1.setText(currentSymptom.getRate1());
+            rate2.setText(currentSymptom.getRate2());
+            rate3.setText(currentSymptom.getRate3());
+            rate4.setText(currentSymptom.getRate4());
 
             return listItem;
         }

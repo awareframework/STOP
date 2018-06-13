@@ -15,95 +15,132 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/consentGeneral"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:orientation="vertical"
             android:layout_marginTop="5dp">
 
-            <TextView
-                android:id="@+id/consentAge"
-                android:layout_width="200dp"
+            <LinearLayout
+                android:id="@+id/layoutPD"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:text="@string/consent_age"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:layout_marginStart="3dp">
 
-            <EditText
-                android:id="@+id/etAge"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_toEndOf="@+id/consentAge"
-                android:layout_marginStart="30dp"
-                android:gravity="center"
-                android:inputType="number"
-                android:maxLength="3"/>
+                <TextView
+                    android:id="@+id/consentPD"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:text="@string/consent_do_you_have_pd"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
 
-            <TextView
-                android:id="@+id/consentPD"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/consentAge"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/consent_do_you_have_pd" />
+                <CheckBox
+                    android:id="@+id/checkboxPD"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:checked="true"
+                    android:text="@string/consent_yes"/>
 
-            <CheckBox
-                android:id="@+id/checkboxPD"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/consentAge"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@+id/consentPD"
-                android:checked="true"
-                android:text="@string/consent_yes" />
+            </LinearLayout>
 
-        </RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etUsernameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/consent_username"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etAgeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etUsernameLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:hint="@string/consent_age"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/detailsPD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/consentWhen"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:text="@string/consent_when_was_pd_diagnosed" />
+            <LinearLayout
+                android:id="@+id/etWhenLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/etWhen"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/consentWhen"
-                android:layout_marginStart="15dp"
-                android:gravity="center"
-                android:inputType="number"
-                android:maxLength="2"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/etWhenTextLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <Spinner
-                android:id="@+id/spinnerWhen"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_below="@id/consentWhen"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/etWhen"
-                android:entries="@array/spinnerWhenItems"/>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/etWhen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:hint="@string/consent_when_was_pd_diagnosed"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinnerWhen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:entries="@array/spinnerWhenItems"/>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etMedicationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etWhenLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etMedication"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/consent_define_medications_you_take"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/consentSymptoms"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/etWhen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etMedicationLayout"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="3dp"
                 android:gravity="center_vertical"
                 android:text="@string/consent_define_your_symptoms" />
 
@@ -114,27 +151,6 @@
                 android:layout_below="@id/consentSymptoms"
                 android:layout_marginTop="5dp">
             </com.aware.app.stop.NonScrollListView>
-
-            <TextView
-                android:id="@+id/consentMedication"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:text="@string/consent_define_medications_you_take"
-                android:layout_below="@+id/symptomsList"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"/>
-
-            <EditText
-                android:id="@+id/etMedication"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_below="@+id/consentMedication"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:gravity="start"
-                android:background="@drawable/et_medications"/>
 
         </RelativeLayout>
 

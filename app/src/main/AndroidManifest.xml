@@ -3,19 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.aware.app.stop">
 
-    <!--<permission-->
-        <!--android:name="com.aware.READ_CONTEXT_DATA"-->
-        <!--android:description="@string/read_permission"-->
-        <!--android:icon="@drawable/ic_launcher_settings"-->
-        <!--android:label="Read AWARE&apos;s Context data"-->
-        <!--android:protectionLevel="normal" />-->
-    <!--<permission-->
-        <!--android:name="com.aware.WRITE_CONTEXT_DATA"-->
-        <!--android:description="@string/write_permission"-->
-        <!--android:icon="@drawable/ic_launcher_settings"-->
-        <!--android:label="Write to AWARE&apos;s Context data"-->
-        <!--android:protectionLevel="normal" />-->
-
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -63,6 +50,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
         </activity>
+        <activity
+            android:name=".ConsentActivity">
+        </activity>
 
         <provider
             android:name=".database.Provider"
@@ -92,7 +82,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ConsentActivity"></activity>
     </application>
 
 </manifest>

@@ -2,26 +2,64 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeightSmall"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp">
 
-    <CheckedTextView
+    <TextView
         android:id="@+id/symptomName"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:gravity="center_vertical"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:drawableStart="?android:listChoiceIndicatorMultiple" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="Sample name"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
 
-    <ImageView
-        android:id="@+id/symptomInfo"
-        android:layout_width="?android:attr/listPreferredItemHeightSmall"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:src="@drawable/ic_info"
-        android:scaleType="center"/>
+    <RadioGroup
+        android:id="@+id/symptomRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rate0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="rate0"/>
+
+        <RadioButton
+            android:id="@+id/rate1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="rate1"/>
+
+        <RadioButton
+            android:id="@+id/rate2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="rate2"/>
+
+        <RadioButton
+            android:id="@+id/rate3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="rate3"/>
+
+        <RadioButton
+            android:id="@+id/rate4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="rate4"/>
+
+    </RadioGroup>
 
 </LinearLayout>
 
