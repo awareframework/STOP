@@ -100,7 +100,7 @@ public class ConsentActivity extends AppCompatActivity {
                 decline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_LONG).show();
                     }
                 });
 

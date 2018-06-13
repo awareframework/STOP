@@ -48,6 +48,7 @@
     <string name="medication_no_internet">Internet connection is disabled. Please enable it or use \"Specify time\" option </string>
     <string name="medication_cannot_recognize">Cannot recognize date, please try again</string>
     <string name="medication_recorded">Medication recorded</string>
+    <string name="medication_parser_dialog">Please wait…</string>
 
     <!-- Feedback activity strings-->
     <string name="feedback">Feedback</string>

@@ -47,6 +47,8 @@
     <string name="medication_no_internet">Ei internet yhteyttä. Takista yhteys tai valitse \"Specify time\" </string>
     <string name="medication_cannot_recognize">Päivämäärää ei tunnistettu, yritä uudelleen</string>
     <string name="medication_recorded">Merkintä tallennettu</string>
+    <string name="medication_parser_dialog">Odota…</string>
+
 
     <!-- Feedback activity strings-->
     <string name="feedback">Palaute</string>

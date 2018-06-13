@@ -28,7 +28,7 @@ public class TimestampParser extends AsyncTask<String, String, Long> {
     // Parser constructor
     TimestampParser(Context context) {
         dialog = new ProgressDialog(context);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(context.getString(R.string.medication_specify_time));
     }
 
     protected Long doInBackground(String... text) {
