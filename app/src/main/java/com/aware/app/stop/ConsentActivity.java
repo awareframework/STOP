@@ -77,7 +77,6 @@ public class ConsentActivity extends AppCompatActivity {
         etMedication = findViewById(R.id.etMedication);
 
         // Consent form dialog. Has to be accepted for further app use
-        // TODO: CRASHES AFTER FEW SECOND AFTER ACCEPTED
         consentDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.consent_app_consent)
                 .setMessage(R.string.consent_app_consent_details)

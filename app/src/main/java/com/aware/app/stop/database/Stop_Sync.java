@@ -26,7 +26,8 @@ public class Stop_Sync extends Service {
                                 Provider.Medication_Data.CONTENT_URI,
                                 Provider.Feedback_Data.CONTENT_URI,
                                 Provider.Notification_Data.CONTENT_URI,
-                                Provider.Health_Data.CONTENT_URI
+                                Provider.Health_Data.CONTENT_URI,
+                                Provider.Consent_Data.CONTENT_URI
                         }
                 );
             }
