@@ -2,141 +2,142 @@
 <resources>
 
     <string-array name="spinnerWhenItems">
-        <item>kuukautta sitten</item>
+        <item>kk sitten</item>
         <item>vuotta sitten</item>
     </string-array>
 
     <array name="symptomsList">
         <item>@array/symptomSpeech</item>
-        <item>@array/symptomSalvia</item>
-        <item>@array/symptomChewing</item>
-        <item>@array/symptomEating</item>
+        <item>@array/symptomSalivation</item>
+        <item>@array/symptomSwallowing</item>
+        <item>@array/symptomHandwriting</item>
+        <item>@array/symptomCuttingFood</item>
         <item>@array/symptomDressing</item>
         <item>@array/symptomHygiene</item>
-        <item>@array/symptomHandwriting</item>
-        <item>@array/symptomHobbies</item>
-        <item>@array/symptomBed</item>
-        <item>@array/symptomTremor</item>
-        <item>@array/symptomGetOut</item>
-        <item>@array/symptomWalking</item>
+        <item>@array/symptomTurningInBed</item>
+        <item>@array/symptomFalling</item>
         <item>@array/symptomFreezing</item>
+        <item>@array/symptomWalking</item>
+        <item>@array/symptomTremor</item>
+        <item>@array/symptomParkinsonism</item>
+
     </array>
 
     <string-array name="symptomSpeech">
-        <item>Speech</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: My speech is soft, slurred or uneven, but it does not cause others to ask me to repeat myself</item>
-        <item>Mild: My speech causes people to ask me to occasionally repeat myself, but not everyday</item>
-        <item>Moderate: My speech is unclear enough that others ask me to repeat myself every day even though most of my speech is understood</item>
-        <item>Severe: Most or all of my speech cannot be understood</item>
+        <item>Puhe</item>
+        <item>Normaalia</item>
+        <item>Lievästi vaikeutunut, täysin ymmärrettävissä</item>
+        <item>Kohtalaisesti vaikeutunut. Pyydetään joskus toistamaan sanottavansa</item>
+        <item>Vahvasti vaikeutunut. Pyydetään usein toistamaan sanottavansa</item>
+        <item>Suurimman osan ajasta puhe ei ole ymmärrettävissä</item>
     </string-array>
 
-    <string-array name="symptomSalvia">
-        <item>Saliva and drooling</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I have too much saliva, but do not drool</item>
-        <item>Mild: I have some drooling during sleep, but none when I am awake</item>
-        <item>Moderate: I have some drooling when I am awake, but I usually do not need tissues or a handkerchief</item>
-        <item>Severe: I have so much drooling that I regularly need to use tissues or a handkerchief to protect my clothes</item>
+    <string-array name="symptomSalivation">
+        <item>Syljen eritys</item>
+        <item>Normaalia</item>
+        <item>Lievää, mutta selvästi lisääntynyt, voi olla yöllistä syljen valumista</item>
+        <item>Kohtalaisesti lisääntynyt, voi olla vähäistä syljen valumista</item>
+        <item>Huomattavasti lisääntynyt syljen eritys, johon liittyy jonkin verran syljen valumista</item>
+        <item>Huomattavaa syljen valumista, tarvitsee jatkuvasti nenäliinoja</item>
     </string-array>
 
-    <string-array name="symptomChewing">
-        <item>Chewing and swallowing</item>
-        <item>Normal: No problems</item>
-        <item>Slight: I am aware of slowness in my chewing or increased effort at swallowing, but I do not choke or need to have my food specially prepared</item>
-        <item>Mild: I need to have my pills cut or my food specially prepared because of chewing or swallowing problems, but I have not choked over the past week</item>
-        <item>Moderate: I choked at least once in the past week</item>
-        <item>Severe: Because of chewing and swallowing problems, I need a feeding tube</item>
-    </string-array>
-
-    <string-array name="symptomEating">
-        <item>Eating tasks</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow, but I do not need any help handling my food and have not had food spills while eating</item>
-        <item>Mild: I am slow with my eating and have occasional food spills. I may need help with a few tasks such as cutting meat</item>
-        <item>Moderate: I need help with many eating tasks but can manage some alone</item>
-        <item>Severe: I need help for most or all eating tasks</item>
-    </string-array>
-
-    <string-array name="symptomDressing">
-        <item>Dressing</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow but I do not need help</item>
-        <item>Mild: I am slow and need help for a few dressing tasks (buttons, bracelets)</item>
-        <item>Moderate: I need help for many dressing tasks</item>
-        <item>Severe: I need help for most or all dressing tasks</item>
-    </string-array>
-
-    <string-array name="symptomHygiene">
-        <item>Hygiene</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow but I do not need any help</item>
-        <item>Mild: I need someone else to help me with some hygiene tasks</item>
-        <item>Moderate: I need help for many hygiene tasks</item>
-        <item>Severe: I need help for most or all of my hygiene tasks</item>
+    <string-array name="symptomSwallowing">
+        <item>Nieleminen</item>
+        <item>Normaalia</item>
+        <item>Harvoin yskimistä tai kakistelua niellessä</item>
+        <item>Toisinaan yskimistä tai kakistelua niellessä</item>
+        <item>Tarvitsee soseutettua ruokaa</item>
+        <item>Tarvitsee nenämaha­ tai PEG­letkun</item>
     </string-array>
 
     <string-array name="symptomHandwriting">
-        <item>Handwriting</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: My writing is slow, clumsy or uneven, but all words are clear</item>
-        <item>Mild: Some words are unclear and difficult to read</item>
-        <item>Moderate: Many words are unclear and difficult to read</item>
-        <item>Severe: Most or all words cannot be read</item>
+        <item>Kirjoittaminen ja käsiala</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta tai käsiala pientä</item>
+        <item>Kohtalaisen hidasta tai käsiala pientä; kaikki sanat luettavissa</item>
+        <item>Huomattavan poikkeavaa; kaikista sanoista ei enää saa selvää</item>
+        <item>Valtaosasta sanoista ei saa selvää</item>
     </string-array>
 
-    <string-array name="symptomHobbies">
-        <item>Doing hobbies and other activities</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am a bit slow but do these activities easily</item>
-        <item>Mild: I have some difficulty doing these activities</item>
-        <item>Moderate: I have major problems doing these activities, but still do most</item>
-        <item>Severe: I am unable to do most or all of these activities</item>
+    <string-array name="symptomCuttingFood">
+        <item>Ruokailuvälineiden käyttö ja ruuan paloittelu</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta ja kömpelöä, mutta ei tarvitse apua</item>
+        <item>Hidasta ja kömpelöä, voi paloitella useammat ruuat, tarvitsee hieman apua</item>
+        <item>Tarvitsee apua ruuan paloittelussa, mutta syö itse hitaasti</item>
+        <item>Syötettävä</item>
     </string-array>
 
-    <string-array name="symptomBed">
-        <item>Turning in bed</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I have a bit of trouble turning, but I do not need any help</item>
-        <item>Mild: I have a lot of trouble turning and need occasional help from someone else</item>
-        <item>Moderate: To turn over I often need help from someone else</item>
-        <item>Severe: I am unable to turn over without help from someone else</item>
+    <string-array name="symptomDressing">
+        <item>Pukeutuminen</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta, ei tarvitse apua</item>
+        <item>Tarvitsee joskus apua napittamisessa ja käden hihaan pujottamisessa</item>
+        <item>Tarvitsee huomattavasti apua, mutta pystyy tekemään jotain itse</item>
+        <item>Ei pysty pukeutumaan ilman apua</item>
     </string-array>
 
-    <string-array name="symptomTremor">
-        <item>Tremor</item>
-        <item>Normal: Not at all. I have no shaking or tremor</item>
-        <item>Slight: Shaking or tremor occurs but does not cause problems with any activities</item>
-        <item>Mild: Shaking or tremor causes problems with only a few activities</item>
-        <item>Moderate: Shaking or tremor causes problems with many of my daily activities</item>
-        <item>Severe: Shaking or tremor causes problems with most or all activities</item>
+    <string-array name="symptomHygiene">
+        <item>Hygienia</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta, ei tarvitse apua</item>
+        <item>Tarvitsee apua suihkussa tai kylvyssä, tai hoitaa hygieniaansa hyvin hitaasti</item>
+        <item>Tarvitsee apua peseytymisessä, hampaiden harjauksessa, hiusten kampaamisessa,  WC:ssä käynnissä</item>
+        <item>Käyttää katetria tai muuta apuvälinettä</item>
     </string-array>
 
-    <string-array name="symptomGetOut">
-        <item>Getting out of bed, a car, or a deep chair</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow or awkward, but I usually can do it on my first try</item>
-        <item>Mild: I need more than one try to get up or need occasional help</item>
-        <item>Moderate: I sometimes need help to get up, but most times I can still do it on my own</item>
-        <item>Severe: I need help most or all of the time</item>
+    <string-array name="symptomTurningInBed">
+        <item>Sängyssä kääntyminen ja vuodevaatteiden kohentaminen</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta ja kömpelöä, ei tarvitse apua</item>
+        <item>Kääntyminen ja vuodevaatteiden kohentaminen selvästi vaikeaa</item>
+        <item>Voi aloittaa kääntymisen tai vuodevaatteiden kohentamisen, mutta ei pysty tekemään sitä loppuun ilman apua</item>
+        <item>Avuton, ei pysty kääntymään eikä kohentamaan vuodevaatteita ilman apua</item>
     </string-array>
 
-    <string-array name="symptomWalking">
-        <item>Walking and balance</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slightly slow or may drag a leg. I never use a walking aid</item>
-        <item>Mild: I occasionally use a walking aid, but I do not need any help from another person</item>
-        <item>Moderate: : I usually use a walking aid (cane, walker) to walk safely without falling. However, I do not usually need the support of another person</item>
-        <item>Severe: I usually use the support of another person to walk safely without falling</item>
+    <string-array name="symptomFalling">
+        <item>Sängyssä kääntyminen ja vuodevaatteiden kohentaminen</item>
+        <item>Normaalia</item>
+        <item>Hieman hidasta ja kömpelöä, ei tarvitse apua</item>
+        <item>Kääntyminen ja vuodevaatteiden kohentaminen selvästi vaikeaa</item>
+        <item>Voi aloittaa kääntymisen tai vuodevaatteiden kohentamisen, mutta ei pysty tekemään sitä loppuun ilman apua</item>
+        <item>Avuton, ei pysty kääntymään eikä kohentamaan vuodevaatteita ilman apua</item>
     </string-array>
 
     <string-array name="symptomFreezing">
-        <item>Freezing</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I briefly freeze but I can easily start walking again. I do not need help from someone else or a walking aid (cane or walker) because of freezing</item>
-        <item>Mild: I freeze and have trouble starting to walk again, but I do not need someone’s help or a walking aid (cane or walker) because of freezing</item>
-        <item>Moderate: When I freeze I have a lot of trouble starting to walk again and, because of freezing, I sometimes need to use a walking aid or need someone else’s help</item>
-        <item>Severe: Because of freezing, most or all of the time, I need to use a walking aid or someone’s help</item>
+        <item>Jähmettyminen kävellessä</item>
+        <item>Ei esiinny</item>
+        <item>Harvinaista, joskus liikkeelle lähtiessä</item>
+        <item>Satunnaisesti</item>
+        <item>Usein. Joskus kaatumisia jähmettymisen takia</item>
+        <item>Usein kaatumisia jähmettymisen takia</item>
+    </string-array>
+
+    <string-array name="symptomWalking">
+        <item>Kävely</item>
+        <item>Normaalia</item>
+        <item>Lievästi vaikeutunut, käsien myötäliikkeet voivat olla vaimentuneet tai voi laahata jalkaansa</item>
+        <item>Kohtalaisesti vaikeutunut, mutta ei tarvitse apua lainkaan tai tarvitsee sitä vain vähän</item>
+        <item>Selvästi vaikeutunut, tarvitsee apua</item>
+        <item>Ei pysty kävelemään edes autettuna</item>
+    </string-array>
+
+    <string-array name="symptomTremor">
+        <item>Vapina</item>
+        <item>Ei ole</item>
+        <item>Lievää tai ajoittaista</item>
+        <item>Kohtalaista; haittaa potilasta</item>
+        <item>Vaikeaa; haittaa monia toimintoja</item>
+        <item>Erittäin vaikeaa; haittaa lähes kaikkia toimintoja</item>
+    </string-array>
+
+    <string-array name="symptomParkinsonism">
+        <item>Parkinsonismiin liittyvät sensoriset oireet (Tuntohäiriöt ja kivut)</item>
+        <item>Ei ole</item>
+        <item>Ajoittaista puutumista, pistelyä tai lievää kipua</item>
+        <item>Usein puutumista, pistelyä tai kipua; ei vaivaa potilasta</item>
+        <item>Usein kivuliaita tuntemuksia</item>
+        <item>Sietämätöntä kipua</item>
     </string-array>
 
 </resources>

@@ -8,7 +8,6 @@
     <string name="main_feedback">Feedback</string>
     <string name="main_daily_survey">Daily survey</string>
     <string name="provider_game_label">STOP App data</string>
-
     <string name="submit">Submit</string>
     <string name="confirm">Confirm</string>
     <string name="edit">Edit</string>
@@ -65,7 +64,6 @@
     <string name="survey_response_some">Some</string>
     <string name="survey_response_none">None</string>
     <string name="survey_response_severe">Severe</string>
-
 
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Settings</string>

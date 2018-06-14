@@ -2,11 +2,11 @@
 
     <!-- General strings-->
     <string name="app_name">STOP</string>
-    <string name="nav_medication">Lääkitys</string>
+    <string name="nav_medication">Lääkepäiväkirja</string>
     <string name="nav_game">Peli</string>
     <string name="main_settings">Asetukset</string>
     <string name="main_feedback">Palaute</string>
-    <string name="main_daily_survey">Päivittäinen kysely</string>
+    <string name="main_daily_survey">Päivittäinen oireiden arviointi</string>
     <string name="provider_game_label">STOP sovelluksen tiedot</string>
     <string name="submit">Lähetä</string>
     <string name="confirm">Vahvista</string>
@@ -20,15 +20,15 @@
     <!-- Game fragment strings-->
     <string name="game_press_button_to_play">Aloita peli painamalla nappia</string>
     <string name="game_start">Peli alkaa</string>
-    <string name="game_get_ready">Valmistaudu</string>
+    <string name="game_get_ready">Peli alkaa pian</string>
     <string name="game_play">Pelaa</string>
-    <string name="game_done">Valmista! Haluatko pelata uudelleen?\nScore:\u0020</string>
+    <string name="game_done">Peli loppui! Haluatko pelata uudelleen?\nTulos:\u0020</string>
     <string name="game_invalid_settings">Mikään asetuksista ei voi olla 0, ole hyvä ja päivitä</string>
 
     <!-- Medication fragment strings-->
     <string name="medication_list_heading">Lääkepäiväkirja</string>
     <string name="medication_no_record">Ei merkintöjä</string>
-    <string name="medication_when_last_time">Milloin otit lääkkeen?</string>
+    <string name="medication_when_last_time">Milloin otit lääkkeet?</string>
     <string name="medication_specify">Määritä aika</string>
     <string name="medication_now">Nyt</string>
     <string name="medication_item_number_sample">1)</string>
@@ -44,11 +44,10 @@
     <string name="medication_edited">Muutokset tallennettu</string>
     <string name="medication_deleted">Merkintä poistettu</string>
     <string name="medication_error">Virhe: </string>
-    <string name="medication_no_internet">Ei internet yhteyttä. Takista yhteys tai valitse \"Specify time\" </string>
+    <string name="medication_no_internet">Ei internet yhteyttä. Takista yhteys tai valitse \"Määritä aika\" </string>
     <string name="medication_cannot_recognize">Päivämäärää ei tunnistettu, yritä uudelleen</string>
     <string name="medication_recorded">Merkintä tallennettu</string>
     <string name="medication_parser_dialog">Odota…</string>
-
 
     <!-- Feedback activity strings-->
     <string name="feedback">Palaute</string>
@@ -68,7 +67,7 @@
 
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Asetukset</string>
-    <string name="pref_header_ball_game">Pallopeli</string>
+    <string name="pref_header_ball_game">Peli</string>
     <string name="pref_header_medication">Lääkitys</string>
     <string name="key_ball_size_title">Pallon koko</string>
     <string name="key_ball_size">key_ball_size</string>
@@ -84,9 +83,26 @@
     <string name="key_medication_title">Tyhjennä lääkepäiväkirja</string>
     <string name="key_medication">key_medication</string>
     <string name="settings_are_you_sure">Oletko varma?</string>
-    <string name="settings_delete_warning">This will delete all recorded medications</string>
-    <string name="settings_list_cleared">Medication list cleared</string>
-    <string name="settings_default_applied">Oletusasetukset talletettu</string>
+    <string name="settings_delete_warning">Tämä poistaa kaikki lääkepäiväkirjan merkinnät.</string>
+    <string name="settings_list_cleared">Merkinnät poistettu.</string>
+    <string name="settings_default_applied">Oletusasetukset tallennettu</string>
+
+    <!-- Consent activity strings-->
+    <string name="consent_username">Käyttäjätunnus</string>
+    <string name="consent_age">Kuinka vanha olet?</string>
+    <string name="consent_do_you_have_pd">Onko sinulla diagnosoitu Parkinsonin tauti?</string>
+    <string name="consent_yes">Kyllä</string>
+    <string name="consent_no">Ei</string>
+    <string name="consent_when_was_pd_diagnosed">Park. diagnosoitu</string>
+    <string name="consent_define_your_symptoms">Mitä oireita sinulla on?</string>
+    <string name="consent_define_medications_you_take">Mitä lääkkeitä käytät Park. tautiin?</string>
+    <string name="consent_app_consent">Suostumus sovelluksen käyttöön</string>
+    <string name="consent_accept">Hyväksy</string>
+    <string name="consent_decline">Kieltäydy</string>
+    <string name="consent_cannot_use">Et voi käyttää sovellusta hyväksymättä suostumuslomaketta</string>
+    <string name="consent_empty_entries">Täytä puuttuvat tiedot</string>
+    <string name="consent_specify_age">Kerro ikäsi</string>
+    <string name="consent_app_consent_details">Tämä sovellus on kehitetty STOP: Sentient Tracking of Parkinson’s tutkimusta varten.\n\nSovellus kerää seuravia tietoja tutkimusta varten:\n* Tietoja käyttäjästä: Asennuksen jälkeen sovellus kysyy osallistujan ikää ja Parkinsonin taudin diagnosointiaikaa ja pyytää arvioimaan oireita UPDRS asteikon osan II mukaisesti.\n* Mobiililaitteen sisäisistä antureista kerättävä tieto: Sovellus pyytää osallistujaa pelaamaan yksinkertaista pallopeliä kymmenen sekunnin ajan. Pelin aikana kerätään dataa laitteen liikkeentunnistusanturista eli gyroskoopista, kiihtyvyysanturista ja lineaarisesta kiihtyvyysanturista.\n* Lääkepäiväkirja: Sovellus pyytää osallistujaa kirjaamaan ylös lääkkeenottoajankohdat.\n* Tieto muistutuksista: Sovellus lähettää muistutuksen neljä kertaa päivässä, pyytäen osallistujaa pelaamaan peliä ja täyttämään lääkepäiväkirjaa. Muistutuksen aika ja avaamisaika tallennetaan.\n* Palaute: Osallistuja voi antaa palautetta sovelluksesta.\n\nHyväksymällä tämän suostumuslomakkeen, annat suostumuksen tietojen keräämiseen ja käyttämiseen osana Oulun ja Manchesterin yliopistojen tutkimuksessa ja julkaisuissa. Voit keskeyttää tutkimuksen halutessasi milloin vain. Sovelluksen kautta voi poistaa sinusta kerätyt tiedot ennen sovelluksen poistamista. Jos poistat sovelluksen ilman kerättyjen tietojen poistamista, tietojen keräys keskeytyy ja aiemmin kerättyä tietoa voidaan käyttää tutkimuksessa.</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Aamu</string>
@@ -97,26 +113,10 @@
     <string name="notification_survey">Päivittäinen kysely</string>
     <string name="notification_survey_text">: Miten eilinen meni?</string>
 
-    <!-- Consent activity strings-->
-    <string name="consent_age">Kuinka vanha olet?</string>
-    <string name="consent_do_you_have_pd">Onko sinulla diagnosoitu Parkinsonin tauti?</string>
-    <string name="consent_yes">Kyllä</string>
-    <string name="consent_no">Ei</string>
-    <string name="consent_when_was_pd_diagnosed">Milloin Parkinsonin tautisi diagnosoitiin?</string>
-    <string name="consent_define_your_symptoms">Mitä oireita sinulla on?</string>
-    <string name="consent_define_medications_you_take">Määritä käyttämäsi lääkkeet</string>
-    <string name="consent_app_consent">Suostumus sovelluksen käyttöön</string>
-    <string name="consent_accept">Hyväksy</string>
-    <string name="consent_decline">Kieltäydy</string>
-    <string name="consent_cannot_use">Et voi käyttää sovellusta hyväksymättä suostumuslomaketta</string>
-    <string name="consent_empty_entries">Täytä puuttuvat tiedot</string>
-    <string name="consent_specify_age">Kerro ikäsi</string>
-    <string name="consent_app_consent_details">Tämä sovellus on kehitetty STOP: Sentient Tracking of Parkinson’s tutkimusta varten.\n\nSovellus kerää seuravia tietoja tutkimusta varten:\n* Tietoja käyttäjästä: Asennuksen jälkeen sovellus kysyy osallistujan ikää ja Parkinsonin taudin diagnosointiaikaa ja pyytää arvioimaan oireita UPDRS asteikon osan II mukaisesti.\n* Mobiililaitteen sisäisistä antureista kerättävä tieto: Sovellus pyytää osallistujaa pelaamaan yksinkertaista pallopeliä kymmenen sekunnin ajan. Pelin aikana kerätään dataa laitteen liikkeentunnistusanturista eli gyroskoopista, kiihtyvyysanturista ja lineaarisesta kiihtyvyysanturista.\n* Lääkepäiväkirja: Sovellus pyytää osallistujaa kirjaamaan ylös lääkkeenottoajankohdat.\n* Tieto muistutuksista: Sovellus lähettää muistutuksen neljä kertaa päivässä, pyytäen osallistujaa pelaamaan peliä ja täyttämään lääkepäiväkirjaa. Muistutuksen aika ja avaamisaika tallennetaan.\n* Palaute: Osallistuja voi antaa palautetta sovelluksesta.\n\nHyväksymällä tämän suostumuslomakkeen, annat suostumuksen tietojen keräämiseen ja käyttämiseen osana Oulun ja Manchesterin yliopistojen tutkimuksessa ja julkaisuissa. Voit keskeyttää tutkimuksen halutessasi milloin vain. Sovelluksen kautta voi poistaa sinusta kerätyt tiedot ennen sovelluksen poistamista. Jos poistat sovelluksen ilman kerättyjen tietojen poistamista, tietojen keräys keskeytyy ja aiemmin kerättyä tietoa voidaan käyttää tutkimuksessa.</string>
-
     <!-- AWARE notifications strings-->
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Lääkityksen seuranta on aktiivinen</string>
     <string name="aware_activate_battery_optimize_ignore_title">STOP</string>
-    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akunkeston optimointilistaan\' list.</string>
+    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akun käytön optimointilistaan\' list.</string>
 
 </resources>

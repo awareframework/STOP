@@ -8,135 +8,136 @@
 
     <array name="symptomsList">
         <item>@array/symptomSpeech</item>
-        <item>@array/symptomSalvia</item>
-        <item>@array/symptomChewing</item>
-        <item>@array/symptomEating</item>
+        <item>@array/symptomSalivation</item>
+        <item>@array/symptomSwallowing</item>
+        <item>@array/symptomHandwriting</item>
+        <item>@array/symptomCuttingFood</item>
         <item>@array/symptomDressing</item>
         <item>@array/symptomHygiene</item>
-        <item>@array/symptomHandwriting</item>
-        <item>@array/symptomHobbies</item>
-        <item>@array/symptomBed</item>
-        <item>@array/symptomTremor</item>
-        <item>@array/symptomGetOut</item>
-        <item>@array/symptomWalking</item>
+        <item>@array/symptomTurningInBed</item>
+        <item>@array/symptomFalling</item>
         <item>@array/symptomFreezing</item>
+        <item>@array/symptomWalking</item>
+        <item>@array/symptomTremor</item>
+        <item>@array/symptomParkinsonism</item>
+
     </array>
 
     <string-array name="symptomSpeech">
         <item>Speech</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: My speech is soft, slurred or uneven, but it does not cause others to ask me to repeat myself</item>
-        <item>Mild: My speech causes people to ask me to occasionally repeat myself, but not everyday</item>
-        <item>Moderate: My speech is unclear enough that others ask me to repeat myself every day even though most of my speech is understood</item>
-        <item>Severe: Most or all of my speech cannot be understood</item>
+        <item>Normal</item>
+        <item>Mildly affected. No difficulty being understood</item>
+        <item>Moderately affected. Sometimes asked to repeat statements</item>
+        <item>Severely affected. Frequently asked to repeat statements</item>
+        <item>Unintelligible most of the time</item>
     </string-array>
 
-    <string-array name="symptomSalvia">
-        <item>Saliva and drooling</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I have too much saliva, but do not drool</item>
-        <item>Mild: I have some drooling during sleep, but none when I am awake</item>
-        <item>Moderate: I have some drooling when I am awake, but I usually do not need tissues or a handkerchief</item>
-        <item>Severe: I have so much drooling that I regularly need to use tissues or a handkerchief to protect my clothes</item>
+    <string-array name="symptomSalivation">
+        <item>Salivation</item>
+        <item>Normal</item>
+        <item>Slight but definite excess of saliva in mouth; may have nighttime drooling</item>
+        <item>Moderately excessive saliva; may have minimal drooling</item>
+        <item>Marked excess of saliva with some drooling</item>
+        <item>Marked drooling, requires constant tissue or handkerchief</item>
     </string-array>
 
-    <string-array name="symptomChewing">
-        <item>Chewing and swallowing</item>
-        <item>Normal: No problems</item>
-        <item>Slight: I am aware of slowness in my chewing or increased effort at swallowing, but I do not choke or need to have my food specially prepared</item>
-        <item>Mild: I need to have my pills cut or my food specially prepared because of chewing or swallowing problems, but I have not choked over the past week</item>
-        <item>Moderate: I choked at least once in the past week</item>
-        <item>Severe: Because of chewing and swallowing problems, I need a feeding tube</item>
-    </string-array>
-
-    <string-array name="symptomEating">
-        <item>Eating tasks</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow, but I do not need any help handling my food and have not had food spills while eating</item>
-        <item>Mild: I am slow with my eating and have occasional food spills. I may need help with a few tasks such as cutting meat</item>
-        <item>Moderate: I need help with many eating tasks but can manage some alone</item>
-        <item>Severe: I need help for most or all eating tasks</item>
-    </string-array>
-
-    <string-array name="symptomDressing">
-        <item>Dressing</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow but I do not need help</item>
-        <item>Mild: I am slow and need help for a few dressing tasks (buttons, bracelets)</item>
-        <item>Moderate: I need help for many dressing tasks</item>
-        <item>Severe: I need help for most or all dressing tasks</item>
-    </string-array>
-
-    <string-array name="symptomHygiene">
-        <item>Hygiene</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow but I do not need any help</item>
-        <item>Mild: I need someone else to help me with some hygiene tasks</item>
-        <item>Moderate: I need help for many hygiene tasks</item>
-        <item>Severe: I need help for most or all of my hygiene tasks</item>
+    <string-array name="symptomSwallowing">
+        <item>Swallowing</item>
+        <item>Normal</item>
+        <item>Rare choking</item>
+        <item>Occasional choking</item>
+        <item>Requires soft food</item>
+        <item>Requires ng tube or gastrotomy feeding</item>
     </string-array>
 
     <string-array name="symptomHandwriting">
         <item>Handwriting</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: My writing is slow, clumsy or uneven, but all words are clear</item>
-        <item>Mild: Some words are unclear and difficult to read</item>
-        <item>Moderate: Many words are unclear and difficult to read</item>
-        <item>Severe: Most or all words cannot be read</item>
+        <item>Normal</item>
+        <item>Slightly slow or small</item>
+        <item>Moderately slow or small; all words are legible</item>
+        <item>Severely affected; not all words are legible</item>
+        <item>The majority of words are not legible</item>
     </string-array>
 
-    <string-array name="symptomHobbies">
-        <item>Doing hobbies and other activities</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am a bit slow but do these activities easily</item>
-        <item>Mild: I have some difficulty doing these activities</item>
-        <item>Moderate: I have major problems doing these activities, but still do most</item>
-        <item>Severe: I am unable to do most or all of these activities</item>
+    <string-array name="symptomCuttingFood">
+        <item>Cutting Food and Handling Utensils</item>
+        <item>Normal</item>
+        <item>Somewhat slow and clumsy, but no help needed</item>
+        <item>Can cut most foods, although clumsy and slow; some help needed</item>
+        <item>Food must be cut by someone, but can still feed slowly</item>
+        <item>Needs to be fed</item>
     </string-array>
 
-    <string-array name="symptomBed">
-        <item>Turning in bed</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I have a bit of trouble turning, but I do not need any help</item>
-        <item>Mild: I have a lot of trouble turning and need occasional help from someone else</item>
-        <item>Moderate: To turn over I often need help from someone else</item>
-        <item>Severe: I am unable to turn over without help from someone else</item>
+    <string-array name="symptomDressing">
+        <item>Dressing</item>
+        <item>Normal</item>
+        <item>Somewhat slow, but no help needed</item>
+        <item>Occasional assistance with buttoning, getting arms in sleeves</item>
+        <item>Considerable help required, but can do some things alone</item>
+        <item>Helpless</item>
     </string-array>
 
-    <string-array name="symptomTremor">
-        <item>Tremor</item>
-        <item>Normal: Not at all. I have no shaking or tremor</item>
-        <item>Slight: Shaking or tremor occurs but does not cause problems with any activities</item>
-        <item>Mild: Shaking or tremor causes problems with only a few activities</item>
-        <item>Moderate: Shaking or tremor causes problems with many of my daily activities</item>
-        <item>Severe: Shaking or tremor causes problems with most or all activities</item>
+    <string-array name="symptomHygiene">
+        <item>Hygiene</item>
+        <item>Normal</item>
+        <item>Somewhat slow, but no help needed</item>
+        <item>Needs help to shower or bathe; or very slow in hygienic care</item>
+        <item>Requires assistance for washing, brushing teeth, combing hair, going to bathroom</item>
+        <item>Foley catheter or other mechanical aid</item>
     </string-array>
 
-    <string-array name="symptomGetOut">
-        <item>Getting out of bed, a car, or a deep chair</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slow or awkward, but I usually can do it on my first try</item>
-        <item>Mild: I need more than one try to get up or need occasional help</item>
-        <item>Moderate: I sometimes need help to get up, but most times I can still do it on my own</item>
-        <item>Severe: I need help most or all of the time</item>
+    <string-array name="symptomTurningInBed">
+        <item>Turning in Bed and Adjusting Bed Clothes</item>
+        <item>Normal</item>
+        <item>Somewhat slow and clumsy, but no help needed</item>
+        <item>Can turn alone or adjust sheets, but with great difficulty</item>
+        <item>Can initiate, but not turn or adjust sheets alone</item>
+        <item>Helpless</item>
     </string-array>
 
-    <string-array name="symptomWalking">
-        <item>Walking and balance</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I am slightly slow or may drag a leg. I never use a walking aid</item>
-        <item>Mild: I occasionally use a walking aid, but I do not need any help from another person</item>
-        <item>Moderate: : I usually use a walking aid (cane, walker) to walk safely without falling. However, I do not usually need the support of another person</item>
-        <item>Severe: I usually use the support of another person to walk safely without falling</item>
+    <string-array name="symptomFalling">
+        <item>Falling (Unrelated to Freezing)</item>
+        <item>None</item>
+        <item>Rare falling</item>
+        <item>Occasionally falls, less than once per day</item>
+        <item>Falls an average of once daily</item>
+        <item>Falls more than once daily</item>
     </string-array>
 
     <string-array name="symptomFreezing">
-        <item>Freezing</item>
-        <item>Normal: Not at all (no problems)</item>
-        <item>Slight: I briefly freeze but I can easily start walking again. I do not need help from someone else or a walking aid (cane or walker) because of freezing</item>
-        <item>Mild: I freeze and have trouble starting to walk again, but I do not need someone’s help or a walking aid (cane or walker) because of freezing</item>
-        <item>Moderate: When I freeze I have a lot of trouble starting to walk again and, because of freezing, I sometimes need to use a walking aid or need someone else’s help</item>
-        <item>Severe: Because of freezing, most or all of the time, I need to use a walking aid or someone’s help</item>
+        <item>Freezing when Walking</item>
+        <item>None</item>
+        <item>Rare freezing when walking; may have start hesitation</item>
+        <item>Occasional freezing when walking</item>
+        <item>Frequent freezing. Occasionally falls from freezing</item>
+        <item>Frequent falls from freezing</item>
+    </string-array>
+
+    <string-array name="symptomWalking">
+        <item>Walking</item>
+        <item>Normal</item>
+        <item>Mild difficulty. May not swing arms or may tend to drag leg</item>
+        <item>Moderate difficulty, but requires little or no assistance</item>
+        <item>Severe disturbance of walking, requiring assistance</item>
+        <item>Cannot walk at all, even with assistance</item>
+    </string-array>
+
+    <string-array name="symptomTremor">
+        <item>Tremor (Symptomatic complaint of tremor in any part of body)</item>
+        <item>Absent</item>
+        <item>Slight and infrequently present</item>
+        <item>Moderate; bothersome to patient</item>
+        <item>Severe; interferes with many activities</item>
+        <item>Marked; interferes with most activities</item>
+    </string-array>
+
+    <string-array name="symptomParkinsonism">
+        <item>Sensory Complaints Related to Parkinsonism</item>
+        <item>None</item>
+        <item>Occasionally has numbness, tingling, or mild aching</item>
+        <item>Frequently has numbness, tingling, or aching; not distressing</item>
+        <item>Frequent painful sensations</item>
+        <item>Excruciating pain</item>
     </string-array>
 
 </resources>
