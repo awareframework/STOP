@@ -17,10 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,6 +29,9 @@ import android.widget.Toast;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,7 @@ public class ConsentActivity extends AppCompatActivity {
     private Button consentSubmit;
     private NonScrollListView symptomsList;
     private RelativeLayout detailsPD;
-    private EditText etAge, etWhen, etMedication;
+    private EditText etUsername, etAge, etWhen, etMedication;
     private AlertDialog consentDialog;
 
     private SymptomAdapter symptomAdapter;
@@ -57,6 +60,7 @@ public class ConsentActivity extends AppCompatActivity {
         spinnerWhen = findViewById(R.id.spinnerWhen);
         symptomsList = findViewById(R.id.symptomsList);
         consentSubmit = findViewById(R.id.consentSubmit);
+        etUsername = findViewById(R.id.etUsername);
         etAge = findViewById(R.id.etAge);
         etWhen = findViewById(R.id.etWhen);
         etMedication = findViewById(R.id.etMedication);
@@ -128,40 +132,72 @@ public class ConsentActivity extends AppCompatActivity {
         symptomAdapter = new SymptomAdapter(this, symptomList);
         symptomsList.setAdapter(symptomAdapter);
 
+        // "Submit" button
         consentSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                // retrieve data from entries
+                String username = etUsername.getText().toString();
                 String age = etAge.getText().toString();
 
                 if (checkBox.isChecked()) {
 
                     // retrieve data from entries
-                    String whenSpinner = spinnerWhen.getSelectedItem().toString();
-                    String whenPD = etWhen.getText().toString();
+                    String whenPdStr = etWhen.getText().toString();
                     String medications = etMedication.getText().toString();
-                    String when = whenPD + " " + whenSpinner;
 
-                    // retrieve symptoms from the list
-                    StringBuilder sb = new StringBuilder();
+                    // retrieve symptoms values from the list
+                    boolean allChecked = true;
+                    JSONObject symptoms = new JSONObject();
                     for (int i=0; i<symptomAdapter.getCount(); i++) {
-                        CheckedTextView checkedTextView = symptomsList.getChildAt(i).findViewById(R.id.symptomName);
-                        if (checkedTextView.isChecked()) sb.append(symptomAdapter.getItem(i).getName()).append(", ");
+
+                        String symptomName = symptomAdapter.getItem(i).getName().replaceAll(" ", "_").toLowerCase();
+
+                        RadioGroup group = symptomsList.getChildAt(i).findViewById(R.id.symptomRate);
+                        int radioButtonId = group.getCheckedRadioButtonId();
+                        View radioButton = group.findViewById(radioButtonId);
+                        int value = group.indexOfChild(radioButton);
+                        if (value==-1) allChecked = false;
+
+                        try {
+                            symptoms.put(symptomName, value);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    String symptoms = sb.toString();
-                    if (symptoms.length()!=0) symptoms = symptoms.substring(0, symptoms.length()-2);
 
                     // insert data to db
-                    if (!age.equals("") && !whenPD.equals("") && !medications.equals("")) {
+                    if (!username.equals("") && !age.equals("") && !whenPdStr.equals("") && !medications.equals("") && allChecked) {
 
+                        int whenPD = Integer.valueOf(whenPdStr);
+                        long time = System.currentTimeMillis();
+                        long monthMillis = 2952000000L;
+                        long yearMillis = 31104000000L;
+                        if (spinnerWhen.getSelectedItemPosition() == 0) {
+                            time = time - monthMillis*whenPD;
+                        } else {
+                            time = time - yearMillis*whenPD;
+                        }
+
+                        // Transfer entries to JSON object
+                        JSONObject userdata = new JSONObject();
+                        try {
+                            userdata.put("username", username);
+                            userdata.put("age", Integer.valueOf(age));
+                            userdata.put("diagnosed_pd", checkBox.isChecked());
+                            userdata.put("diagnosed_time", time);
+                            userdata.put("medications", medications);
+                            userdata.put("symptoms", symptoms);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // insert
                         ContentValues values = new ContentValues();
                         values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
                         values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                        values.put(Provider.Consent_Data.AGE, age);
-                        values.put(Provider.Consent_Data.PD_DIAGNOSED, "diagnosed-pd");
-                        values.put(Provider.Consent_Data.PD_DIAGNOSED_DATE, when);
-                        values.put(Provider.Consent_Data.PD_SYMPTOMS, symptoms);
-                        values.put(Provider.Consent_Data.PD_MEDICATIONS, medications);
+                        values.put(Provider.Consent_Data.USER_DATA, userdata.toString());
                         getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
                         // save consent state as true
@@ -181,15 +217,23 @@ public class ConsentActivity extends AppCompatActivity {
 
                 } else {
 
-                    if (!age.equals("")) {
+                    if (!username.equals("") && !age.equals("")) {
+
+                        // Transfer entries to JSON object
+                        JSONObject userdata = new JSONObject();
+                        try {
+                            userdata.put("username", username);
+                            userdata.put("age", Integer.valueOf(age));
+                            userdata.put("diagnosed_pd", checkBox.isChecked());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // insert
                         ContentValues values = new ContentValues();
                         values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
                         values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
-                        values.put(Provider.Consent_Data.AGE, age);
-                        values.put(Provider.Consent_Data.PD_DIAGNOSED, "non-pd");
-                        values.put(Provider.Consent_Data.PD_DIAGNOSED_DATE, "null");
-                        values.put(Provider.Consent_Data.PD_SYMPTOMS, "null");
-                        values.put(Provider.Consent_Data.PD_MEDICATIONS, "null");
+                        values.put(Provider.Consent_Data.USER_DATA, userdata.toString());
                         getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
                         // save consent state as true

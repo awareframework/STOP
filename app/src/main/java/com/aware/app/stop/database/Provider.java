@@ -174,11 +174,7 @@ public class Provider extends ContentProvider {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.consent";
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.app.stop.database.provider.consent";
 
-        public static final String AGE = "age";
-        public static final String PD_DIAGNOSED = "pd_diagnosed";
-        public static final String PD_DIAGNOSED_DATE = "pd_diagnosed_date";
-        public static final String PD_SYMPTOMS = "pd_symptoms";
-        public static final String PD_MEDICATIONS = "pd_medications";
+        public static final String USER_DATA = "user_data";
 
     }
 
@@ -187,11 +183,7 @@ public class Provider extends ContentProvider {
             Consent_Data._ID + " integer primary key autoincrement," +
                     Consent_Data.TIMESTAMP + " real default 0," +
                     Consent_Data.DEVICE_ID + " text default ''," +
-                    Consent_Data.AGE + " text default ''," +
-                    Consent_Data.PD_DIAGNOSED + " text default ''," +
-                    Consent_Data.PD_DIAGNOSED_DATE + " text default ''," +
-                    Consent_Data.PD_SYMPTOMS + " text default ''," +
-                    Consent_Data.PD_MEDICATIONS + " text default ''";
+                    Consent_Data.USER_DATA + " text default ''";
 
 
     /**
@@ -303,11 +295,7 @@ public class Provider extends ContentProvider {
         tableConsentHash.put(Consent_Data._ID, Consent_Data._ID);
         tableConsentHash.put(Consent_Data.TIMESTAMP, Consent_Data.TIMESTAMP);
         tableConsentHash.put(Consent_Data.DEVICE_ID, Consent_Data.DEVICE_ID);
-        tableConsentHash.put(Consent_Data.AGE, Consent_Data.AGE);
-        tableConsentHash.put(Consent_Data.PD_DIAGNOSED, Consent_Data.PD_DIAGNOSED);
-        tableConsentHash.put(Consent_Data.PD_DIAGNOSED_DATE, Consent_Data.PD_DIAGNOSED_DATE);
-        tableConsentHash.put(Consent_Data.PD_SYMPTOMS, Consent_Data.PD_SYMPTOMS);
-        tableConsentHash.put(Consent_Data.PD_MEDICATIONS, Consent_Data.PD_MEDICATIONS);
+        tableConsentHash.put(Consent_Data.USER_DATA, Consent_Data.USER_DATA);
 
         return true;
     }
