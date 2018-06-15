@@ -1,16 +1,23 @@
 package com.aware.app.stop;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SyncRequest;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +54,7 @@ public class ConsentActivity extends AppCompatActivity {
     private RelativeLayout detailsPD;
     private EditText etUsername, etAge, etWhen, etMedication;
     private AlertDialog consentDialog;
+    private ProgressDialog progressDialog;
 
     private SymptomAdapter symptomAdapter;
 
@@ -206,10 +214,18 @@ public class ConsentActivity extends AppCompatActivity {
                         editor.putBoolean("consent", true);
                         editor.commit();
 
-                        // Open MainActivity when all conditions are ok
-                        Intent main = new Intent(ConsentActivity.this, MainActivity.class);
-                        startActivity(main);
-                        finish();
+                        // Join AWARE study if not joined yed
+                        joinObserver = new JoinObserver();
+                        Aware.joinStudy(ConsentActivity.this, SplashActivity.STUDY_URL);
+                        IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
+                        registerReceiver(joinObserver, joinFilter);
+
+                        // Progress dialog while joining the study
+                        progressDialog = new ProgressDialog(ConsentActivity.this);
+                        progressDialog.setMessage(getString(R.string.consent_loading));
+                        progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.show();
 
                     } else {
                         Toast.makeText(getApplicationContext(), R.string.consent_empty_entries, Toast.LENGTH_SHORT).show();
@@ -242,10 +258,18 @@ public class ConsentActivity extends AppCompatActivity {
                         editor.putBoolean("consent", true);
                         editor.commit();
 
-                        // Open MainActivity when all conditions are ok
-                        Intent main = new Intent(ConsentActivity.this, MainActivity.class);
-                        startActivity(main);
-                        finish();
+                        // Join AWARE study if not joined yed
+                        joinObserver = new JoinObserver();
+                        Aware.joinStudy(ConsentActivity.this, SplashActivity.STUDY_URL);
+                        IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
+                        registerReceiver(joinObserver, joinFilter);
+
+                        // Progress dialog while joining the study
+                        progressDialog = new ProgressDialog(ConsentActivity.this);
+                        progressDialog.setMessage(getString(R.string.consent_loading));
+                        progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.show();
 
                     } else {
                         Toast.makeText(getApplicationContext(), R.string.consent_specify_age, Toast.LENGTH_SHORT).show();
@@ -255,7 +279,6 @@ public class ConsentActivity extends AppCompatActivity {
             }
         });
     }
-
 
     // custom ListView adapted for Symptoms
     private class SymptomAdapter extends ArrayAdapter<Symptom> {
@@ -301,6 +324,36 @@ public class ConsentActivity extends AppCompatActivity {
             rate4.setText(currentSymptom.getRate4());
 
             return listItem;
+        }
+    }
+
+
+    // Reciever waiting for study joined state
+    private JoinObserver joinObserver;
+    private class JoinObserver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(Aware.ACTION_JOINED_STUDY)) {
+
+                Account aware_account = Aware.getAWAREAccount(getApplicationContext());
+                String authority = Provider.getAuthority(getApplicationContext());
+                long frequency = Long.parseLong(Aware.getSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_WEBSERVICE)) * 60;
+                ContentResolver.setIsSyncable(aware_account, authority, 1);
+                ContentResolver.setSyncAutomatically(aware_account, authority, true);
+                SyncRequest request = new SyncRequest.Builder()
+                        .syncPeriodic(frequency, frequency / 3)
+                        .setSyncAdapter(aware_account, authority)
+                        .setExtras(new Bundle()).build();
+                ContentResolver.requestSync(request);
+
+                // Open MainActivity when all conditions are ok
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(main);
+                unregisterReceiver(joinObserver);
+                progressDialog.dismiss();
+                Toast.makeText(context, getString(R.string.consent_thank_you), Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
     }
 

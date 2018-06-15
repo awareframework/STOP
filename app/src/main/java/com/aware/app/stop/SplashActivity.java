@@ -7,7 +7,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1836/5IuLyJjLQQNK";
+    public static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1836/5IuLyJjLQQNK";
     private boolean consent = false;
 
     @Override
@@ -48,13 +47,17 @@ public class SplashActivity extends AppCompatActivity {
 
         consent = getSharedPreferences("consentPref", MODE_PRIVATE).getBoolean("consent", false);
 
+        // 1st: Check for permissions
         if (permissions_ok) {
+
             Intent aware = new Intent(getApplicationContext(), Aware.class);
             startService(aware);
 
-            if (Aware.isStudy(this)) {
+            // 2nd: Check for consent approval
+            if (consent) {
 
-                if (consent) {
+                // 3rd: Check if study is connected
+                if (Aware.isStudy(this)) {
 
                     // Open MainActivity when all conditions are ok
                     Intent main = new Intent(this, MainActivity.class);
@@ -63,21 +66,24 @@ public class SplashActivity extends AppCompatActivity {
 
                 } else {
 
-                    // Open ConsentActivity if Consent Form is not accepted yet
-                    Intent consentIntent = new Intent(this, ConsentActivity.class);
-                    startActivity(consentIntent);
-                    finish();
-
+                    // Join study if not joined yed
+                    joinObserver = new JoinObserver();
+                    Aware.joinStudy(this, STUDY_URL);
+                    IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
+                    registerReceiver(joinObserver, joinFilter);
                 }
 
             } else {
-                Aware.joinStudy(this, STUDY_URL);
-                IntentFilter joinFilter = new IntentFilter(Aware.ACTION_JOINED_STUDY);
-                registerReceiver(joinObserver, joinFilter);
+
+                // Open ConsentActivity if consent is not accepted yet
+                Intent consentIntent = new Intent(this, ConsentActivity.class);
+                startActivity(consentIntent);
+                finish();
             }
 
         } else {
 
+            // Request permissions if not granted yet
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
             permissions.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -86,7 +92,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     // Reciever waiting for study joined state
-    private JoinObserver joinObserver = new JoinObserver();
+    private JoinObserver joinObserver;
     private class JoinObserver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -103,23 +109,11 @@ public class SplashActivity extends AppCompatActivity {
                         .setExtras(new Bundle()).build();
                 ContentResolver.requestSync(request);
 
-                if (consent) {
-
-                    // Open MainActivity when all conditions are ok
-                    Intent main = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(main);
-                    unregisterReceiver(joinObserver);
-                    finish();
-
-                } else {
-
-                    // Open ConsentActivity if Consent Form is not accepted yet
-                    Intent consentIntent = new Intent(getApplicationContext(), ConsentActivity.class);
-                    startActivity(consentIntent);
-                    unregisterReceiver(joinObserver);
-                    finish();
-
-                }
+                // Open MainActivity when all conditions are ok
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(main);
+                unregisterReceiver(joinObserver);
+                finish();
             }
         }
     }

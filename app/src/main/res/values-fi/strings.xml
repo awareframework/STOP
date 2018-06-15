@@ -100,8 +100,10 @@
     <string name="consent_accept">Hyväksy</string>
     <string name="consent_decline">Kieltäydy</string>
     <string name="consent_cannot_use">Et voi käyttää sovellusta hyväksymättä suostumuslomaketta</string>
-    <string name="consent_empty_entries">Täytä puuttuvat tiedot</string>
-    <string name="consent_specify_age">Kerro ikäsi</string>
+    <string name="consent_empty_entries">Vastaa kaikkiin kysymyksiin ja arvioi kaikki oireet</string>
+    <string name="consent_specify_age">Anna käyttäjätunnus ja ikäsi</string>
+    <string name="consent_thank_you">Kiitos suostumuksesta tutkimukseen. Nyt voit käyttää sovellusta</string>
+    <string name="consent_loading">Ladataan, odota hetki…</string>
     <string name="consent_app_consent_details">Tämä sovellus on kehitetty STOP: Sentient Tracking of Parkinson’s tutkimusta varten.\n\nSovellus kerää seuravia tietoja tutkimusta varten:\n* Tietoja käyttäjästä: Asennuksen jälkeen sovellus kysyy osallistujan ikää ja Parkinsonin taudin diagnosointiaikaa ja pyytää arvioimaan oireita UPDRS asteikon osan II mukaisesti.\n* Mobiililaitteen sisäisistä antureista kerättävä tieto: Sovellus pyytää osallistujaa pelaamaan yksinkertaista pallopeliä kymmenen sekunnin ajan. Pelin aikana kerätään dataa laitteen liikkeentunnistusanturista eli gyroskoopista, kiihtyvyysanturista ja lineaarisesta kiihtyvyysanturista.\n* Lääkepäiväkirja: Sovellus pyytää osallistujaa kirjaamaan ylös lääkkeenottoajankohdat.\n* Tieto muistutuksista: Sovellus lähettää muistutuksen neljä kertaa päivässä, pyytäen osallistujaa pelaamaan peliä ja täyttämään lääkepäiväkirjaa. Muistutuksen aika ja avaamisaika tallennetaan.\n* Palaute: Osallistuja voi antaa palautetta sovelluksesta.\n\nHyväksymällä tämän suostumuslomakkeen, annat suostumuksen tietojen keräämiseen ja käyttämiseen osana Oulun ja Manchesterin yliopistojen tutkimuksessa ja julkaisuissa. Voit keskeyttää tutkimuksen halutessasi milloin vain. Sovelluksen kautta voi poistaa sinusta kerätyt tiedot ennen sovelluksen poistamista. Jos poistat sovelluksen ilman kerättyjen tietojen poistamista, tietojen keräys keskeytyy ja aiemmin kerättyä tietoa voidaan käyttää tutkimuksessa.</string>
 
     <!-- Notifications strings-->
