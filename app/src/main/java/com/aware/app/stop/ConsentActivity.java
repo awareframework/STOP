@@ -53,7 +53,7 @@ public class ConsentActivity extends AppCompatActivity {
     private NonScrollListView symptomsList;
     private RelativeLayout detailsPD;
     private EditText etUsername, etAge, etWhen, etMedication;
-    private AlertDialog consentDialog;
+    private AlertDialog consentDialog, declineDialog;
     private ProgressDialog progressDialog;
 
     private SymptomAdapter symptomAdapter;
@@ -73,7 +73,8 @@ public class ConsentActivity extends AppCompatActivity {
         etWhen = findViewById(R.id.etWhen);
         etMedication = findViewById(R.id.etMedication);
 
-        // Consent form dialog. Has to be accepted for further app use
+        // Consent form dialog: - join aware study if accepted
+        //                      - keep working in demo mode without data collection if declined
         consentDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.consent_app_consent)
                 .setMessage(R.string.consent_app_consent_details)
@@ -97,14 +98,57 @@ public class ConsentActivity extends AppCompatActivity {
                 decline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ConsentActivity.this.finishAffinity();
-                        //Toast.makeText(getApplicationContext(), R.string.consent_cannot_use, Toast.LENGTH_LONG).show();
+                        consentDialog.dismiss();
+                        declineDialog.show();
                     }
                 });
 
             }
         });
         consentDialog.show();
+
+
+        // Decline dialog: informs about the applications limited use in case of consent rejection
+        declineDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.consent_app_consent)
+                .setMessage(R.string.consent_declining)
+                .setPositiveButton(R.string.consent_yes, null)
+                .setNegativeButton(R.string.consent_no, null)
+                .setCancelable(false)
+                .create();
+
+        declineDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button accept = declineDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        declineDialog.dismiss();
+                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = consent.edit();
+                        editor.putBoolean("consentRead", true);
+                        editor.putBoolean("consentAccepted", false);
+                        editor.commit();
+
+                        // Open MainActivity
+                        Intent main = new Intent(ConsentActivity.this, MainActivity.class);
+                        startActivity(main);
+                        finish();
+                    }
+                });
+
+                Button decline = declineDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                decline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        declineDialog.dismiss();
+                        consentDialog.show();
+                    }
+                });
+
+            }
+        });
 
 
         // "Do you have PD" checkbox, dismiss PD details entries for non-PD user
@@ -211,7 +255,8 @@ public class ConsentActivity extends AppCompatActivity {
                         // save consent state as true
                         SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = consent.edit();
-                        editor.putBoolean("consent", true);
+                        editor.putBoolean("consentRead", true);
+                        editor.putBoolean("consentAccepted", true);
                         editor.commit();
 
                         // Join AWARE study if not joined yed
@@ -255,7 +300,8 @@ public class ConsentActivity extends AppCompatActivity {
                         // save consent state as true
                         SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = consent.edit();
-                        editor.putBoolean("consent", true);
+                        editor.putBoolean("consentRead", true);
+                        editor.putBoolean("consentAccepted", true);
                         editor.commit();
 
                         // Join AWARE study if not joined yed

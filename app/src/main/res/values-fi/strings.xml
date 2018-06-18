@@ -13,6 +13,7 @@
     <string name="edit">Muokkaa</string>
     <string name="delete">Poista</string>
     <string name="cancel">Peruuta</string>
+    <string name="ok">OK</string>
     <string name="specify_with_voice">Määritä puhuen</string>
     <string name="voice_when_taken">Milloin otit lääkkeet?</string>
     <string name="voice_what_think">Mitä mieltä olet STOP sovelluksesta?</string>
