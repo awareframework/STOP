@@ -397,7 +397,6 @@ public class ConsentActivity extends AppCompatActivity {
                 startActivity(main);
                 unregisterReceiver(joinObserver);
                 progressDialog.dismiss();
-                Toast.makeText(context, getString(R.string.consent_thank_you), Toast.LENGTH_LONG).show();
                 finish();
             }
         }

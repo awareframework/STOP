@@ -1,14 +1,17 @@
 package com.aware.app.stop;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -17,18 +20,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
+import com.aware.providers.Aware_Provider;
 import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
 
-import java.util.Calendar;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -124,6 +129,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        // Applying visibility to menu items accordingly to JoinStudy state (consent accepted = study joined; not = not)
+        boolean consentAccepted = getSharedPreferences("consentPref", MODE_PRIVATE).getBoolean("consentAccepted", false);
+        if (consentAccepted) {
+            menu.findItem(R.id.main_demo).setVisible(false);
+            menu.findItem(R.id.main_join_study).setVisible(false);
+        } else {
+            menu.findItem(R.id.main_quit_study).setVisible(false);
+        }
+
         return true;
     }
 
@@ -131,18 +146,192 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        // demo button, shown only if consent was declined; shows a dialog that offers to join the study
+        if (id == R.id.main_demo) {
+
+            // JoinStudy dialog: informs about the applications limited use and offers to join the study
+            final AlertDialog demoDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.main_demo_mode)
+                    .setMessage(R.string.main_demo_details)
+                    .setPositiveButton(R.string.main_join_study, null)
+                    .setNegativeButton(R.string.cancel, null)
+                    .create();
+
+            demoDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button join = demoDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    join.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            demoDialog.dismiss();
+
+                            // erase user session state (consent acceptance) if the user agrees to join the study
+                            SharedPreferences consent = MainActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = consent.edit();
+                            editor.putBoolean("consentRead", false);
+                            editor.commit();
+
+                            // Open MainActivity
+                            Intent consentIntent = new Intent(MainActivity.this, ConsentActivity.class);
+                            startActivity(consentIntent);
+                            finish();
+                        }
+                    });
+
+                    Button cancel = demoDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            demoDialog.dismiss();
+                        }
+                    });
+
+                }
+            });
+            demoDialog.show();
+
+            return true;
+        }
+
         if (id == R.id.main_health) {
             startActivity(new Intent(this, HealthActivity.class));
             return true;
         }
+
         if (id == R.id.main_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+
         if (id == R.id.main_feedback) {
             startActivity(new Intent(this, FeedbackActivity.class));
             return true;
         }
+
+        // join study option, shown only if consent was declined; shows a dialog that offers to join the study
+        if (id == R.id.main_join_study) {
+
+            // JoinStudy dialog: informs about the applications limited use and offers to join the study
+            final AlertDialog demoDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.main_demo_mode)
+                    .setMessage(R.string.main_demo_details)
+                    .setPositiveButton(R.string.main_join_study, null)
+                    .setNegativeButton(R.string.cancel, null)
+                    .create();
+
+            demoDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button join = demoDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    join.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            demoDialog.dismiss();
+
+                            // erase user session state (consent acceptance) if the user agrees to join the study
+                            SharedPreferences consent = MainActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = consent.edit();
+                            editor.putBoolean("consentRead", false);
+                            editor.commit();
+
+                            // Open MainActivity
+                            Intent consentIntent = new Intent(MainActivity.this, ConsentActivity.class);
+                            startActivity(consentIntent);
+                            finish();
+                        }
+                    });
+
+                    Button cancel = demoDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            demoDialog.dismiss();
+                        }
+                    });
+
+                }
+            });
+            demoDialog.show();
+
+            return true;
+        }
+
+        // quit study option, shown only if consent was accepted; shows a dialog that offers to cancel the study
+        if (id == R.id.main_quit_study) {
+
+            // QuitStudy dialog: informs about the applications limited use and offers to join the study
+            final AlertDialog quitDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.main_quit_study)
+                    .setMessage(R.string.main_quit_details)
+                    .setPositiveButton(R.string.confirm, null)
+                    .setNegativeButton(R.string.cancel, null)
+                    .create();
+
+            quitDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button confirm = quitDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            quitDialog.dismiss();
+
+                            // erase user session state (consent acceptance) if the user agrees to join the study
+                            SharedPreferences consent = MainActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = consent.edit();
+                            editor.putBoolean("consentRead", false);
+                            editor.putBoolean("consentAccepted", false);
+                            editor.commit();
+
+                            // logging that the user want to quit
+                            Aware.debug(MainActivity.this, "USER HAS QUIT STUDY");
+
+                            // quitting the study
+                            Cursor dbStudy = Aware.getStudy(getApplicationContext(), Aware.getSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SERVER));
+                            if (dbStudy != null && dbStudy.moveToFirst()) {
+                                ContentValues complianceEntry = new ContentValues();
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_TIMESTAMP, System.currentTimeMillis());
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_KEY, dbStudy.getInt(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_KEY)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_API, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_API)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_URL, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_URL)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_PI, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_PI)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_CONFIG, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_CONFIG)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_JOINED, dbStudy.getLong(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_JOINED)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_EXIT, System.currentTimeMillis());
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_TITLE, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_TITLE)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_DESCRIPTION, dbStudy.getString(dbStudy.getColumnIndex(Aware_Provider.Aware_Studies.STUDY_DESCRIPTION)));
+                                complianceEntry.put(Aware_Provider.Aware_Studies.STUDY_COMPLIANCE, "quit study");
+
+                                getContentResolver().insert(Aware_Provider.Aware_Studies.CONTENT_URI, complianceEntry);
+                            }
+                            if (dbStudy != null && !dbStudy.isClosed()) dbStudy.close();
+
+                            // syncing the data before the quitting
+                            sendBroadcast(new Intent(Aware.ACTION_AWARE_SYNC_DATA));
+
+                            // Close the app
+                            Toast.makeText(getApplicationContext(), R.string.main_quit_done, Toast.LENGTH_LONG).show();
+                            MainActivity.this.finishAffinity();
+                        }
+                    });
+
+                    Button cancel = quitDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            quitDialog.dismiss();
+                        }
+                    });
+
+                }
+            });
+            quitDialog.show();
+
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

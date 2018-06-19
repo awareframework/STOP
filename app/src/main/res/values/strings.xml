@@ -4,8 +4,15 @@
     <string name="app_name">STOP</string>
     <string name="nav_medication">Medication</string>
     <string name="nav_game">Game</string>
-    <string name="main_settings">Settings</string>
-    <string name="main_feedback">Feedback</string>
+    <string name="main_experiment">Experiment</string>
+    <string name="main_demo">Demo</string>
+    <string name="main_demo_mode">Demo mode</string>
+    <string name="main_demo_details">You are using STOP in demo mode: all the application functionalities are available but no data is collected and shared with the research study. You can join the study and contribute to the research</string>
+    <string name="main_quit_details">You will unenroll from the study: the application will stop sharing your data and all the already collected data will be deleted from the server. You can keep using the application will all the available functionalities in demo mode</string>
+    <string name="main_participant_info">Participant info</string>
+    <string name="main_join_study">Join study</string>
+    <string name="main_quit_study">Quit study</string>
+    <string name="main_quit_done">You have quit the study. The application will no longer collect your data</string>
     <string name="main_daily_survey">Daily survey</string>
     <string name="provider_game_label">STOP App data</string>
     <string name="submit">Submit</string>
@@ -103,8 +110,8 @@
     <string name="consent_specify_age">Please select a username and specify your age</string>
     <string name="consent_declining">By declining the Research Consent, you may still use the application with all its functionalities. No data will be collected or shared with our study. Do you wish to proceed?</string>
     <string name="consent_thank_you">Thank you for accepting consent form! Now you can use the application</string>
-    <string name="consent_loading">Loading. Please wait…</string>
-    <string name="consent_app_consent_details">The University of Oulu (Finland) and the University of Manchester (UK) are using this application to better understand Parkinson’s medication adherence and effectiveness via gamification and medication logs. By installing and agreeing to this consent, you effectively become a participant to our joint research effort. If you disagree, you may still use the application without any data sharing.\n\n<b>Data Collection</b>\n- Your answers to the initial Parkinson’s patient profile questions\n- Accelerometer, gyroscope, orientation data from the phone ONLY during game sessions of our STOP game\n- Your medication taking times\n- Application stability data collected via Google Analytics (crashes)\n\n<b>Security and Privacy</b>\nHIPAA and GDPR compliant: the data is securely sent to our server for further analysis on a regular basis over WiFi. No personal identifiers are collected. Personalisable name for a randomly assigned UUID. If withdrawn from data collection, the server data is erased.</string>
+    <string name="consent_loading">Thank you for joining our study! Loading resources…</string>
+    <string name="consent_app_consent_details">The University of Oulu (Finland) and the University of Manchester (UK) are using this application to better understand Parkinson’s medication adherence and effectiveness via gamification and medication logs. By installing and agreeing to this consent, you effectively become a participant to our joint research effort. If you disagree, you may still use the application without any data sharing.\n\n<b>Data Collection</b>\n- Your answers to the initial Parkinson’s patient profile questions\n- Accelerometer, gyroscope, orientation data from the phone ONLY during game sessions of our STOP game\n- Your medication taking times\n- Application stability data collected via Google Analytics (crashes)\n\n<b>Security and Privacy</b>\nHIPAA and GDPR compliant: the encrypted data is securely sent to our server in Oulu for further analysis on a regular basis over WiFi. No personal identifiers are collected. Personalisable name for a randomly assigned UUID. If withdrawn from data collection, the server data is erased.</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Morning</string>

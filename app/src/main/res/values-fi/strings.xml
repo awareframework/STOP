@@ -4,8 +4,15 @@
     <string name="app_name">STOP</string>
     <string name="nav_medication">Lääkepäiväkirja</string>
     <string name="nav_game">Peli</string>
-    <string name="main_settings">Asetukset</string>
-    <string name="main_feedback">Palaute</string>
+    <string name="main_experiment">Tutkimus</string>
+    <string name="main_demo">Demo</string>
+    <string name="main_demo_mode">Demo tila</string>
+    <string name="main_demo_details">Käytät STOP sovellusta demo tilassa: kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. Voit halutessasi liittyä tutkimukseen, jolloin annat luvan tietojesi keräämiseen tutkimuksen käyttöön. </string>
+    <string name="main_quit_details">Poistut tutkimuksesta: sovellus ei enää lähetä tietojasi palvelimelle, ja kaikki sinusta kerätty tieto poistetaan palvelimelta. Voit jatkaa sovelluksen käyttämista demo tilassa, jolloin kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. </string>
+    <string name="main_participant_info">Osallistujan tiedot</string>
+    <string name="main_join_study">Liity tutkimukseen</string>
+    <string name="main_quit_study">Poistu tutkimuksesta</string>
+    <string name="main_quit_done">Et ole enää mukana tutkimuksessa. Sovellus ei tallenna enää tietojasi. </string>
     <string name="main_daily_survey">Päivittäinen oireiden arviointi</string>
     <string name="provider_game_label">STOP sovelluksen tiedot</string>
     <string name="submit">Lähetä</string>
@@ -13,7 +20,6 @@
     <string name="edit">Muokkaa</string>
     <string name="delete">Poista</string>
     <string name="cancel">Peruuta</string>
-    <string name="ok">OK</string>
     <string name="specify_with_voice">Määritä puhuen</string>
     <string name="voice_when_taken">Milloin otit lääkkeet?</string>
     <string name="voice_what_think">Mitä mieltä olet STOP sovelluksesta?</string>
@@ -97,15 +103,14 @@
     <string name="consent_when_was_pd_diagnosed">Park. diagnosoitu</string>
     <string name="consent_define_your_symptoms">Mitä oireita sinulla on?</string>
     <string name="consent_define_medications_you_take">Mitä lääkkeitä käytät Park. tautiin?</string>
-    <string name="consent_app_consent">Suostumus sovelluksen käyttöön</string>
+    <string name="consent_app_consent">Suostumus tutkimukseen</string>
     <string name="consent_accept">Hyväksy</string>
     <string name="consent_decline">Kieltäydy</string>
-    <string name="consent_cannot_use">Et voi käyttää sovellusta hyväksymättä suostumuslomaketta</string>
     <string name="consent_empty_entries">Vastaa kaikkiin kysymyksiin ja arvioi kaikki oireet</string>
     <string name="consent_specify_age">Anna käyttäjätunnus ja ikäsi</string>
-    <string name="consent_thank_you">Kiitos suostumuksesta tutkimukseen. Nyt voit käyttää sovellusta</string>
-    <string name="consent_loading">Ladataan, odota hetki…</string>
-    <string name="consent_app_consent_details">Tämä sovellus on kehitetty STOP: Sentient Tracking of Parkinson’s tutkimusta varten.\n\nSovellus kerää seuravia tietoja tutkimusta varten:\n* Tietoja käyttäjästä: Asennuksen jälkeen sovellus kysyy osallistujan ikää ja Parkinsonin taudin diagnosointiaikaa ja pyytää arvioimaan oireita UPDRS asteikon osan II mukaisesti.\n* Mobiililaitteen sisäisistä antureista kerättävä tieto: Sovellus pyytää osallistujaa pelaamaan yksinkertaista pallopeliä kymmenen sekunnin ajan. Pelin aikana kerätään dataa laitteen liikkeentunnistusanturista eli gyroskoopista, kiihtyvyysanturista ja lineaarisesta kiihtyvyysanturista.\n* Lääkepäiväkirja: Sovellus pyytää osallistujaa kirjaamaan ylös lääkkeenottoajankohdat.\n* Tieto muistutuksista: Sovellus lähettää muistutuksen neljä kertaa päivässä, pyytäen osallistujaa pelaamaan peliä ja täyttämään lääkepäiväkirjaa. Muistutuksen aika ja avaamisaika tallennetaan.\n* Palaute: Osallistuja voi antaa palautetta sovelluksesta.\n\nHyväksymällä tämän suostumuslomakkeen, annat suostumuksen tietojen keräämiseen ja käyttämiseen osana Oulun ja Manchesterin yliopistojen tutkimuksessa ja julkaisuissa. Voit keskeyttää tutkimuksen halutessasi milloin vain. Sovelluksen kautta voi poistaa sinusta kerätyt tiedot ennen sovelluksen poistamista. Jos poistat sovelluksen ilman kerättyjen tietojen poistamista, tietojen keräys keskeytyy ja aiemmin kerättyä tietoa voidaan käyttää tutkimuksessa.</string>
+    <string name="consent_declining">Voit käyttää sovellusta vaikka kieltäytyisit tutkimuksesta. Tietojasi ei kerätä eikä käytetä tutkimuksessa.  Haluatko jatkaa? </string>
+    <string name="consent_loading">Kiitos kun osallistut tutkimukseen! Sovellusta ladataan…</string>
+    <string name="consent_app_consent_details">Oulun yliopisto (Suomi) ja Manchesterin yliopisto (UK) käyttävät tätä sovellusta Parkinsonin taudin lääkitykseen sitoutumisen ja lääkityksen vaikutuksen tutkimiseen pelillistämisen ja lääkepäiväkirjan avulla. Hyväksymällä tämän suostumuksen tutkimukseen tulet osaksi tutkimusta. Jos et anna suostumusta, voit käyttää sovellusta ja mitään tietojasi ei tallenneta.\n\n<b>Kerättävät tiedot</b>\n- Vastaukset potilasprofiilikyselyyn\n- Kiihtyvyystanturin ja gyroskoopin data puhelimen sensoreista VAIN STOP-pelin pelaamisen aikana\n- Lääkepäiväkirjan tiedot\n- Sovelluksen stabiilisuusdata joka kerätään Google Analytics analysointityökalulla\n\n<b>Tietoturva ja yksityisyys</b>\nSovellus noudattaa GDPR ja HIPAA tietosuoja-asetuksia: kerätyt tiedot lähetetään salattuna Oulussa sijaitsevalle palvelimelle säännöllisesti tutkimusta varten WiFiä käyttäen. Henkilöä ei voi tunnistaa kerätyistä tiedoista. Käyttäjä voi luoda käyttäjätunnuksen UUID tunnukselle. Käyttäjä voi halutessaan peruuttaa suostumuksensa, jolloin kaikki hänestä kerätty tieto tuhotaan.</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Aamu</string>

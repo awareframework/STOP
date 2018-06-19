@@ -1,20 +1,12 @@
 package com.aware.app.stop;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SyncRequest;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 
 import com.aware.Aware;
-import com.aware.Aware_Preferences;
-import com.aware.app.stop.database.Provider;
 import com.aware.ui.PermissionsHandler;
 
 import java.util.ArrayList;
@@ -22,7 +14,6 @@ import java.util.ArrayList;
 public class SplashActivity extends AppCompatActivity {
 
     public static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1836/5IuLyJjLQQNK";
-    private boolean consentRead = false;
 
     @Override
     protected void onResume() {
@@ -37,6 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_SYNC_SETTINGS);
         REQUIRED_PERMISSIONS.add(Manifest.permission.READ_SYNC_SETTINGS);
 
+        // flag to check permissions
         boolean permissions_ok = true;
         for (String p : REQUIRED_PERMISSIONS) {
             if (PermissionChecker.checkSelfPermission(this, p) != PermissionChecker.PERMISSION_GRANTED) {
@@ -45,7 +37,8 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
 
-        consentRead = getSharedPreferences("consentPref", MODE_PRIVATE).getBoolean("consentRead", false);
+        // flag to check if the consent has been read by the user
+        boolean consentRead = getSharedPreferences("consentPref", MODE_PRIVATE).getBoolean("consentRead", false);
 
         // 1st: Check for permissions
         if (permissions_ok) {
@@ -63,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
 
             } else {
 
-                // Open ConsentActivity if consent was not shown yet
+                // Open ConsentActivity if consent was not accepted yet
                 Intent consentIntent = new Intent(this, ConsentActivity.class);
                 startActivity(consentIntent);
                 finish();
