@@ -111,6 +111,10 @@
     <string name="consent_declining">Voit käyttää sovellusta vaikka kieltäytyisit tutkimuksesta. Tietojasi ei kerätä eikä käytetä tutkimuksessa.  Haluatko jatkaa? </string>
     <string name="consent_loading">Kiitos kun osallistut tutkimukseen! Sovellusta ladataan…</string>
     <string name="consent_app_consent_details">Oulun yliopisto (Suomi) ja Manchesterin yliopisto (UK) käyttävät tätä sovellusta Parkinsonin taudin lääkitykseen sitoutumisen ja lääkityksen vaikutuksen tutkimiseen pelillistämisen ja lääkepäiväkirjan avulla. Hyväksymällä tämän suostumuksen tutkimukseen tulet osaksi tutkimusta. Jos et anna suostumusta, voit käyttää sovellusta ja mitään tietojasi ei tallenneta.\n\n<b>Kerättävät tiedot</b>\n- Vastaukset potilasprofiilikyselyyn\n- Kiihtyvyystanturin ja gyroskoopin data puhelimen sensoreista VAIN STOP-pelin pelaamisen aikana\n- Lääkepäiväkirjan tiedot\n- Sovelluksen stabiilisuusdata joka kerätään Google Analytics analysointityökalulla\n\n<b>Tietoturva ja yksityisyys</b>\nSovellus noudattaa GDPR ja HIPAA tietosuoja-asetuksia: kerätyt tiedot lähetetään salattuna Oulussa sijaitsevalle palvelimelle säännöllisesti tutkimusta varten WiFiä käyttäen. Henkilöä ei voi tunnistaa kerätyistä tiedoista. Käyttäjä voi luoda käyttäjätunnuksen UUID tunnukselle. Käyttäjä voi halutessaan peruuttaa suostumuksensa, jolloin kaikki hänestä kerätty tieto tuhotaan.</string>
+    <string name="consent_add_medication">Add a medication</string>
+    <string name="consent_button_add">Add</string>
+    <string name="consent_fill_entries">Please fill all the entries</string>
+    <string name="consent_no_medications_were_defined_yet">No medications were defined yet</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Aamu</string>
@@ -125,6 +129,6 @@
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Lääkityksen seuranta on aktiivinen</string>
     <string name="aware_activate_battery_optimize_ignore_title">STOP</string>
-    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akun käytön optimointilistaan\' list.</string>
+    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akun käytön optimointilistaan\'</string>
 
 </resources>

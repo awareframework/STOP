@@ -33,11 +33,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:text="@string/consent_do_you_have_pd"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"/>
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/consent_do_you_have_pd"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
                 <CheckBox
                     android:id="@+id/checkboxPD"
@@ -45,7 +45,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:checked="true"
-                    android:text="@string/consent_yes"/>
+                    android:text="@string/consent_yes" />
 
             </LinearLayout>
 
@@ -119,26 +119,63 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/etMedicationLayout"
+            <RelativeLayout
+                android:id="@+id/medicationsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etWhenLayout">
+                android:layout_below="@id/etWhenLayout"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="3dp">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/etMedication"
+                <LinearLayout
+                    android:id="@+id/medicationsLine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="@string/consent_define_medications_you_take"/>
+                    android:orientation="horizontal">
 
-            </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:id="@+id/consentMedications"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/consent_define_medications_you_take" />
+
+                    <Button
+                        android:id="@+id/btnAddMedication"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_style"
+                        android:text="@string/consent_button_add"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/noMedicationsAdded"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/medicationsLine"
+                    android:layout_marginStart="20dp"
+                    android:textStyle="italic"
+                    android:text="@string/consent_no_medications_were_defined_yet" />
+
+                <com.aware.app.stop.NonScrollListView
+                    android:id="@+id/consentMedicationsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/medicationsLine"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="3dp"
+                    android:visibility="invisible">
+                </com.aware.app.stop.NonScrollListView>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/consentSymptoms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etMedicationLayout"
+                android:layout_below="@+id/medicationsLayout"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="3dp"
                 android:gravity="center_vertical"

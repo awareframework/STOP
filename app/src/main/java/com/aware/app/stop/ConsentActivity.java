@@ -37,6 +37,7 @@ import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,14 +50,18 @@ public class ConsentActivity extends AppCompatActivity {
     // UI elements
     private CheckBox checkBox;
     private Spinner spinnerWhen;
-    private Button consentSubmit;
-    private NonScrollListView symptomsList;
+    private Button consentSubmit, btnAddMedication;
+    private NonScrollListView symptomsList, consentMedicationsList;
     private RelativeLayout detailsPD;
-    private EditText etUsername, etAge, etWhen, etMedication;
+    private EditText etUsername, etAge, etWhen;
+    private TextView noMedicationsAdded;
     private AlertDialog consentDialog, declineDialog;
     private ProgressDialog progressDialog;
+    private MedicationDialog dialog;
 
     private SymptomAdapter symptomAdapter;
+    private ArrayList<String> medicationsArray;
+    private JSONArray medicationJSONArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,12 @@ public class ConsentActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etAge = findViewById(R.id.etAge);
         etWhen = findViewById(R.id.etWhen);
-        etMedication = findViewById(R.id.etMedication);
+        noMedicationsAdded = findViewById(R.id.noMedicationsAdded);
+        consentMedicationsList = findViewById(R.id.consentMedicationsList);
+
+        medicationsArray = new ArrayList<String>();
+        medicationJSONArray = new JSONArray();
+
 
         // Consent form dialog: - join aware study if accepted
         //                      - keep working in demo mode without data collection if declined
@@ -165,6 +175,18 @@ public class ConsentActivity extends AppCompatActivity {
             }
         });
 
+
+        // "Add medication" button, inflates MedicationDialog
+        btnAddMedication = findViewById(R.id.btnAddMedication);
+        btnAddMedication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog = new MedicationDialog();
+                dialog.show(getFragmentManager(), null);
+            }
+        });
+
+
         // retrieve symptoms data from arrays.xml and parse it to Symptom.class array
         TypedArray arrayOfArrays = getResources().obtainTypedArray(R.array.symptomsList);
         ArrayList<Symptom> symptomList = new ArrayList<>();
@@ -184,6 +206,7 @@ public class ConsentActivity extends AppCompatActivity {
         symptomAdapter = new SymptomAdapter(this, symptomList);
         symptomsList.setAdapter(symptomAdapter);
 
+
         // "Submit" button
         consentSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +220,6 @@ public class ConsentActivity extends AppCompatActivity {
 
                     // retrieve data from entries
                     String whenPdStr = etWhen.getText().toString();
-                    String medications = etMedication.getText().toString();
 
                     // retrieve symptoms values from the list
                     boolean allChecked = true;
@@ -220,7 +242,7 @@ public class ConsentActivity extends AppCompatActivity {
                     }
 
                     // insert data to db
-                    if (!username.equals("") && !age.equals("") && !whenPdStr.equals("") && !medications.equals("") && allChecked) {
+                    if (!username.equals("") && !age.equals("") && !whenPdStr.equals("") && allChecked) {
 
                         int whenPD = Integer.valueOf(whenPdStr);
                         long time = System.currentTimeMillis();
@@ -239,11 +261,13 @@ public class ConsentActivity extends AppCompatActivity {
                             userdata.put("age", Integer.valueOf(age));
                             userdata.put("diagnosed_pd", checkBox.isChecked());
                             userdata.put("diagnosed_time", time);
-                            userdata.put("medications", medications);
+                            userdata.put("medications", medicationJSONArray);
                             userdata.put("symptoms", symptoms);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        Log.d("STOP_TAG", userdata.toString());
 
                         // insert
                         ContentValues values = new ContentValues();
@@ -326,6 +350,21 @@ public class ConsentActivity extends AppCompatActivity {
         });
     }
 
+    // Add medication method: update UI, add medication to arrays
+    public void addMedication(JSONObject jsonMedication, String medication) {
+
+        if (consentMedicationsList.getVisibility()==View.INVISIBLE) {
+            noMedicationsAdded.setVisibility(View.GONE);
+            consentMedicationsList.setVisibility(View.VISIBLE);
+        }
+
+        medicationJSONArray.put(jsonMedication);
+        medicationsArray.add(medication);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, medicationsArray);
+        consentMedicationsList.setAdapter(adapter);
+    }
+
     // custom ListView adapted for Symptoms
     private class SymptomAdapter extends ArrayAdapter<Symptom> {
 
@@ -350,7 +389,7 @@ public class ConsentActivity extends AppCompatActivity {
 
             View listItem = convertView;
             if (listItem == null) {
-                listItem = LayoutInflater.from(mContext).inflate(R.layout.symptom_list_item, parent, false);
+                listItem = LayoutInflater.from(mContext).inflate(R.layout.view_list_item_symptom, parent, false);
             }
 
             Symptom currentSymptom = symptomList.get(position);

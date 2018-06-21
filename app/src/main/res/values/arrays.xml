@@ -6,6 +6,11 @@
         <item>years ago</item>
     </string-array>
 
+    <string-array name="dialogHowOftenItems">
+        <item>hours</item>
+        <item>minutes</item>
+    </string-array>
+
     <array name="symptomsList">
         <item>@array/symptomSpeech</item>
         <item>@array/symptomSalivation</item>
