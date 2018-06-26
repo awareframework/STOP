@@ -7,8 +7,8 @@
     </string-array>
 
     <string-array name="dialogHowOftenItems">
-        <item>hours</item>
-        <item>minutes</item>
+        <item>tuntia</item>
+        <item>minuuttia</item>
     </string-array>
 
     <array name="symptomsList">

@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -60,6 +61,7 @@ public class ConsentActivity extends AppCompatActivity {
     private MedicationDialog dialog;
 
     private SymptomAdapter symptomAdapter;
+    private MedicationAdapter medicationAdapter;
     private ArrayList<String> medicationsArray;
     private JSONArray medicationJSONArray;
 
@@ -202,9 +204,13 @@ public class ConsentActivity extends AppCompatActivity {
                     symptomArray[2], symptomArray[3], symptomArray[4], symptomArray[5]));
         }
 
-        //initialize custom adapter and apply it to ListView
+        //initialize custom Symptom adapter and apply it to ListView
         symptomAdapter = new SymptomAdapter(this, symptomList);
         symptomsList.setAdapter(symptomAdapter);
+
+        //initialize custom Medication adapter and apply it to ListView
+        medicationAdapter = new MedicationAdapter(this, medicationsArray);
+        consentMedicationsList.setAdapter(medicationAdapter);
 
 
         // "Submit" button
@@ -360,9 +366,10 @@ public class ConsentActivity extends AppCompatActivity {
 
         medicationJSONArray.put(jsonMedication);
         medicationsArray.add(medication);
+        medicationAdapter.notifyDataSetChanged();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, medicationsArray);
-        consentMedicationsList.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, medicationsArray);
+//        consentMedicationsList.setAdapter(adapter);
     }
 
     // custom ListView adapted for Symptoms
@@ -407,6 +414,54 @@ public class ConsentActivity extends AppCompatActivity {
             rate2.setText(currentSymptom.getRate2());
             rate3.setText(currentSymptom.getRate3());
             rate4.setText(currentSymptom.getRate4());
+
+            return listItem;
+        }
+    }
+
+
+    // custom ListView adapter for medications list
+    private class MedicationAdapter extends ArrayAdapter<String> {
+
+        private Context medContext;
+        private ArrayList<String> arrayList;
+
+        private MedicationAdapter(@NonNull Context context, ArrayList<String> list) {
+            super(context,0, list);
+            medContext = context;
+            arrayList = list;
+        }
+
+        @Nullable
+        @Override
+        public String getItem(int position) {
+            return super.getItem(position);
+        }
+
+        @NonNull
+        @Override
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+            View listItem = convertView;
+            if (listItem == null) {
+                listItem = LayoutInflater.from(medContext).inflate(R.layout.view_list_item_consent_medication, parent, false);
+            }
+
+            TextView name = listItem.findViewById(R.id.consentMedicationName);
+            name.setText(medicationsArray.get(position));
+
+            ImageView remove = listItem.findViewById(R.id.consentMedicationRemove);
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    medicationsArray.remove(position);
+                    medicationJSONArray.remove(position);
+                    notifyDataSetChanged();
+
+                    Log.d("STOP_TAG", "array: "+ medicationsArray.toString());
+                    Log.d("STOP_TAG", "JSON: "+medicationJSONArray.toString());
+                }
+            });
 
             return listItem;
         }

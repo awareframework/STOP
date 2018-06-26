@@ -411,7 +411,7 @@ public class MedicationFragment extends Fragment{
 
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return LayoutInflater.from(context).inflate(R.layout.view_list_item_medication, parent, false);
+            return LayoutInflater.from(context).inflate(R.layout.view_list_item_journal_medication, parent, false);
         }
 
         @Override

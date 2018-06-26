@@ -3,11 +3,13 @@ package com.aware.app.stop;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,13 +19,16 @@ import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.app.stop.database.Provider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class FeedbackActivity extends AppCompatActivity {
 
-    private TextInputEditText feedback, deviceName, deviceId;
-    private String strName, strId, voiceText = "";
+    private TextInputEditText username, feedback, deviceName, deviceId;
+    private String strUsername, strName, strId, voiceText = "";
 
     private final static int RC_SPEECH_INPUT = 1;
 
@@ -33,6 +38,7 @@ public class FeedbackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_feedback);
 
         // UI elements
+        username = findViewById(R.id.username);
         deviceName = findViewById(R.id.deviceName);
         deviceId = findViewById(R.id.deviceId);
         feedback = findViewById(R.id.feedback);
@@ -40,9 +46,30 @@ public class FeedbackActivity extends AppCompatActivity {
         ImageButton feedbackMic = findViewById(R.id.feedbackMic);
         Button feedbackSubmit = findViewById(R.id.feedbackSubmit);
 
-        // receiving device id and name
+        // receiving username, device id and name
+        Cursor cursor = getApplicationContext().getContentResolver().query(Provider.Consent_Data.CONTENT_URI,
+                new String[]{Provider.Consent_Data.USER_DATA}, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.getCount() >0) {
+                cursor.moveToFirst();
+
+                try {
+                    JSONObject object = new JSONObject(cursor.getString(cursor.getColumnIndexOrThrow("user_data")));
+                    strUsername = object.getString("username");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                strUsername = "Demo user";
+            }
+        }
+        cursor.close();
+
         strName = Build.MANUFACTURER + " " + Build.MODEL;
         strId = Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID);
+        username.setText(strUsername);
         deviceName.setText(strName);
         deviceId.setText(strId);
 
