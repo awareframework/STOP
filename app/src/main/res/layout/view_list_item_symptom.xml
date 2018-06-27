@@ -27,35 +27,35 @@
         <RadioButton
             android:id="@+id/rate0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:text="rate0"/>
 
         <RadioButton
             android:id="@+id/rate1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:text="rate1"/>
 
         <RadioButton
             android:id="@+id/rate2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:text="rate2"/>
 
         <RadioButton
             android:id="@+id/rate3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:text="rate3"/>
 
         <RadioButton
             android:id="@+id/rate4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:text="rate4"/>
 

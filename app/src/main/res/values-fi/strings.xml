@@ -68,9 +68,11 @@
     <string name="health_question">Minkä verran sinulla oli eilen Parkinsonin oireita?</string>
     <string name="health_survey_saved">Vastaus tallennettu, kiitos vastauksesta!</string>
     <string name="health_empty_response">Valitse oireiden taso</string>
-    <string name="survey_response_some">Jonkin verran</string>
-    <string name="survey_response_none">Ei yhtään</string>
-    <string name="survey_response_severe">Paljon</string>
+    <string name="survey_response_zero">Ei oireita, mahtava päivä</string>
+    <string name="survey_response_one">Vain vähän oireita, oireet eivät vaikuttaneet juurikaan päivittäisiin toimiini</string>
+    <string name="survey_response_two">Jonkin verran oireita, oireet vaikuttivat päivittäisiin toimiini vain vähän</string>
+    <string name="survey_response_three">Kohtalaisen paljon oireita, oireet vaikeuttivat päivittäisiä toimiani, mutta eivät estäneet suoriutumista</string>
+    <string name="survey_response_four">Voimakkaita oireita, oireet estivät minua suoriutumasta yhdestä tai useammasta päivittäisestä toimestani</string>
 
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Asetukset</string>
@@ -113,8 +115,14 @@
     <string name="consent_app_consent_details">Oulun yliopisto (Suomi) ja Manchesterin yliopisto (UK) käyttävät tätä sovellusta Parkinsonin taudin lääkitykseen sitoutumisen ja lääkityksen vaikutuksen tutkimiseen pelillistämisen ja lääkepäiväkirjan avulla. Hyväksymällä tämän suostumuksen tutkimukseen tulet osaksi tutkimusta. Jos et anna suostumusta, voit käyttää sovellusta ja mitään tietojasi ei tallenneta.\n\n<b>Kerättävät tiedot</b>\n- Vastaukset potilasprofiilikyselyyn\n- Kiihtyvyystanturin ja gyroskoopin data puhelimen sensoreista VAIN STOP-pelin pelaamisen aikana\n- Lääkepäiväkirjan tiedot\n- Sovelluksen stabiilisuusdata joka kerätään Google Analytics analysointityökalulla\n\n<b>Tietoturva ja yksityisyys</b>\nSovellus noudattaa GDPR ja HIPAA tietosuoja-asetuksia: kerätyt tiedot lähetetään salattuna Oulussa sijaitsevalle palvelimelle säännöllisesti tutkimusta varten WiFiä käyttäen. Henkilöä ei voi tunnistaa kerätyistä tiedoista. Käyttäjä voi luoda käyttäjätunnuksen UUID tunnukselle. Käyttäjä voi halutessaan peruuttaa suostumuksensa, jolloin kaikki hänestä kerätty tieto tuhotaan.</string>
     <string name="consent_add_medication">Lisää lääkitys</string>
     <string name="consent_button_add">Lisää</string>
-    <string name="consent_fill_entries">Täytä kaikki kohdat, kiitos.</string>
+    <string name="consent_fill_entries">Täytä kaikki kentät (lisätiedot voi olla tyhjä)</string>
     <string name="consent_no_medications_were_defined_yet">Ei merkittyjä lääkkeitä</string>
+    <string name="consent_medication_name">Lääkkeen nimi</string>
+    <string name="consent_times_per_day">Montako kertaa päivässä?</string>
+    <string name="consent_pills_each_time">Montako tablettia kerrallaan?</string>
+    <string name="consent_how_often_every">Lääkkeenoton väli</string>
+    <string name="consent_the_first_one_i_have_is_at">Mihin aikaan otat ensimmäisen lääkkeen?</string>
+    <string name="consent_comments">Lisätietoja</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Aamu</string>

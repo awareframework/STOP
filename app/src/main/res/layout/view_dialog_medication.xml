@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:hint="Medication name"/>
+                android:hint="@string/consent_medication_name"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:nextFocusDown="@id/dialogPillsEachTime"
-                    android:hint="Times per day"/>
+                    android:hint="@string/consent_times_per_day"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="Pills each time"/>
+                    android:hint="@string/consent_pills_each_time"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -77,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="How often: every "/>
+                    android:hint="@string/consent_how_often_every"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -100,7 +100,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="time"
-                android:hint="Time medication taken first time daily"/>
+                android:hint="@string/consent_the_first_one_i_have_is_at"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/dialogComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/consent_comments"/>
 
         </android.support.design.widget.TextInputLayout>
 

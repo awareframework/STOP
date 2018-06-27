@@ -81,10 +81,11 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/detailsPD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="10dp">
 
             <LinearLayout
@@ -123,7 +124,6 @@
                 android:id="@+id/medicationsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etWhenLayout"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="3dp">
 
@@ -175,7 +175,6 @@
                 android:id="@+id/consentSymptoms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/medicationsLayout"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="3dp"
                 android:gravity="center_vertical"
@@ -185,11 +184,10 @@
                 android:id="@+id/symptomsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/consentSymptoms"
                 android:layout_marginTop="5dp">
             </com.aware.app.stop.NonScrollListView>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/consentSubmit"

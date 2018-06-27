@@ -27,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -53,7 +54,7 @@ public class ConsentActivity extends AppCompatActivity {
     private Spinner spinnerWhen;
     private Button consentSubmit, btnAddMedication;
     private NonScrollListView symptomsList, consentMedicationsList;
-    private RelativeLayout detailsPD;
+    private LinearLayout detailsPD;
     private EditText etUsername, etAge, etWhen;
     private TextView noMedicationsAdded;
     private AlertDialog consentDialog, declineDialog;

@@ -7,46 +7,67 @@
 
     <TextView
         android:id="@+id/howFeel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_above="@+id/radioGroup"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="@string/health_question" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/howFeel"
+        android:layout_above="@id/healthSubmit"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp">
+
+        <RadioButton
+            android:id="@+id/pd_value_zero"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/survey_response_zero"/>
 
         <RadioButton
             android:id="@+id/pd_value_one"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="@string/survey_response_none"/>
+            android:text="@string/survey_response_one"/>
 
         <RadioButton
             android:id="@+id/pd_value_two"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="@string/survey_response_some"/>
+            android:text="@string/survey_response_two"/>
 
         <RadioButton
             android:id="@+id/pd_value_three"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="@string/survey_response_severe"/>
+            android:text="@string/survey_response_three"/>
+
+        <RadioButton
+            android:id="@+id/pd_value_four"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/survey_response_four"/>
 
     </RadioGroup>
 

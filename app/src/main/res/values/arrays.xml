@@ -52,7 +52,7 @@
         <item>Rare choking</item>
         <item>Occasional choking</item>
         <item>Requires soft food</item>
-        <item>Requires ng tube or gastrotomy feeding</item>
+        <item>Requires NG tube or gastrotomy feeding</item>
     </string-array>
 
     <string-array name="symptomHandwriting">

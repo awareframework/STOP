@@ -28,6 +28,7 @@ public class MedicationDialog extends DialogFragment {
         final TextInputEditText dialogPillsEachTime = view.findViewById(R.id.dialogPillsEachTime);
         final TextInputEditText dialogHowOften = view.findViewById(R.id.dialogHowOften);
         final TextInputEditText dialogFirstMedication = view.findViewById(R.id.dialogFirstMedication);
+        final TextInputEditText dialogComments = view.findViewById(R.id.dialogComments);
 
         final AlertDialog medicationDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.consent_add_medication)
@@ -51,6 +52,7 @@ public class MedicationDialog extends DialogFragment {
                         String pillsEachTime = dialogPillsEachTime.getText().toString();
                         String howOften = dialogHowOften.getText().toString();
                         String firstMedication = dialogFirstMedication.getText().toString();
+                        String comments = dialogComments.getText().toString();
 
                         if (!medication.equals("") && !times.equals("") && !pillsEachTime.equals("")
                                 && !howOften.equals("") && !firstMedication.equals("")) {
@@ -62,6 +64,7 @@ public class MedicationDialog extends DialogFragment {
                                 jsonMedication.put("pills_per_time", pillsEachTime);
                                 jsonMedication.put("how_often", howOften);
                                 jsonMedication.put("first_med_daily", firstMedication);
+                                jsonMedication.put("comments", comments);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

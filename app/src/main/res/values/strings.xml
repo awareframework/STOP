@@ -65,12 +65,14 @@
     <string name="feedback_enter">Please enter your feedback</string>
 
     <!-- Health activity strings -->
-    <string name="health_question">How was your PD yesterday?</string>
+    <string name="health_question">Overall, how were your Parkinson\'s disease symptoms yesterday?</string>
     <string name="health_survey_saved">Survey recorded. Thank you!</string>
     <string name="health_empty_response">Please select PD level</string>
-    <string name="survey_response_some">Some</string>
-    <string name="survey_response_none">None</string>
-    <string name="survey_response_severe">Severe</string>
+    <string name="survey_response_zero">No symptoms, excellent day</string>
+    <string name="survey_response_one">Minimal symptoms with no concrete interference with my daily activities</string>
+    <string name="survey_response_two">Mild symptoms that slightly interfered with my daily activities</string>
+    <string name="survey_response_three">Moderate symptoms but they did not stop me from carrying out my daily activities</string>
+    <string name="survey_response_four">Severe symptoms that prevented me from carrying out one or more of my daily activities</string>
 
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Settings</string>
@@ -97,12 +99,12 @@
     <!-- Consent activity strings-->
     <string name="consent_username">Your username</string>
     <string name="consent_age">Your age</string>
-    <string name="consent_do_you_have_pd">Do you have diagnosed PD?</string>
+    <string name="consent_do_you_have_pd">Do you have a diagnosis of Parkinson\'s disease (PD)?</string>
     <string name="consent_yes">Yes</string>
     <string name="consent_no">No</string>
     <string name="consent_when_was_pd_diagnosed">PD was diagnosed</string>
     <string name="consent_define_your_symptoms">Define your symptoms:</string>
-    <string name="consent_define_medications_you_take">Define medications you take:</string>
+    <string name="consent_define_medications_you_take">Define the medications you take:</string>
     <string name="consent_app_consent">Research consent</string>
     <string name="consent_accept">Accept</string>
     <string name="consent_decline">Decline</string>
@@ -113,8 +115,14 @@
     <string name="consent_app_consent_details">The University of Oulu (Finland) and the University of Manchester (UK) are using this application to better understand Parkinson’s medication adherence and effectiveness via gamification and medication logs. By installing and agreeing to this consent, you effectively become a participant to our joint research effort. If you disagree, you may still use the application without any data sharing.\n\n<b>Data Collection</b>\n- Your answers to the initial Parkinson’s patient profile questions\n- Accelerometer, gyroscope, orientation data from the phone ONLY during game sessions of our STOP game\n- Your medication taking times\n- Application stability data collected via Google Analytics (crashes)\n\n<b>Security and Privacy</b>\nHIPAA and GDPR compliant: the encrypted data is securely sent to our server in Oulu for further analysis on a regular basis over WiFi. No personal identifiers are collected. Personalisable name for a randomly assigned UUID. If withdrawn from data collection, the server data is erased.</string>
     <string name="consent_add_medication">Add a medication</string>
     <string name="consent_button_add">Add</string>
-    <string name="consent_fill_entries">Please fill all the entries</string>
+    <string name="consent_fill_entries">Please fill all the entries (comments are optional)</string>
     <string name="consent_no_medications_were_defined_yet">No medications were defined yet</string>
+    <string name="consent_medication_name">Medication name</string>
+    <string name="consent_times_per_day">Times per day</string>
+    <string name="consent_pills_each_time">Pills each time</string>
+    <string name="consent_how_often_every">How often: every</string>
+    <string name="consent_the_first_one_i_have_is_at">The first one I have is at</string>
+    <string name="consent_comments">Comments</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Morning</string>
