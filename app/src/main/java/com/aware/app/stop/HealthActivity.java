@@ -60,7 +60,7 @@ public class HealthActivity extends AppCompatActivity {
 
                 } else {
                     RadioButton radioButton = findViewById(selected);
-                    String pd_value = radioButton.getText().toString().toLowerCase();
+                    String pd_value = String.valueOf(radioGroup.indexOfChild(radioButton));
 
                     ContentValues values = new ContentValues();
                     values.put(Provider.Health_Data.TIMESTAMP, System.currentTimeMillis());
