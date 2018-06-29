@@ -18,7 +18,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1836/5IuLyJjLQQNK";
+    public static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1868/g5Jxp2f9IJwb";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
