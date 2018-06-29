@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.aware.Aware;
 import com.aware.utils.DatabaseHelper;
@@ -485,8 +484,6 @@ public class Provider extends ContentProvider {
             c.setNotificationUri(getContext().getContentResolver(), uri);
             return c;
         } catch (IllegalStateException e) {
-            if (Aware.DEBUG)
-                Log.e(Aware.TAG, e.getMessage());
             return null;
         }
     }

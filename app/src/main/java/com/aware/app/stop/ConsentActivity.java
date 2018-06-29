@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -278,8 +277,6 @@ public class ConsentActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        Log.d("STOP_TAG", userdata.toString());
-
                         // insert
                         ContentValues values = new ContentValues();
                         values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
@@ -453,9 +450,6 @@ public class ConsentActivity extends AppCompatActivity {
                     medicationsArray.remove(position);
                     medicationJSONArray.remove(position);
                     notifyDataSetChanged();
-
-                    Log.d("STOP_TAG", "array: "+ medicationsArray.toString());
-                    Log.d("STOP_TAG", "JSON: "+medicationJSONArray.toString());
                 }
             });
 
