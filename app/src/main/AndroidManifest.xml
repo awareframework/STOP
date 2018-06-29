@@ -19,7 +19,8 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +30,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/main_experiment"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
@@ -37,7 +39,8 @@
         <activity
             android:name=".FeedbackActivity"
             android:label="@string/main_participant_info"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
@@ -45,13 +48,15 @@
         <activity
             android:name=".HealthActivity"
             android:label="@string/main_daily_survey"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aware.app.stop.MainActivity" />
         </activity>
         <activity
-            android:name=".ConsentActivity">
+            android:name=".ConsentActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <provider

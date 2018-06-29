@@ -61,10 +61,15 @@ public class ConsentActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private MedicationDialog dialog;
 
+    // Medication and Symptom lists variables
     private SymptomAdapter symptomAdapter;
     private MedicationAdapter medicationAdapter;
     private ArrayList<String> medicationsArray;
     private JSONArray medicationJSONArray;
+
+    // SPref for boolean flags
+    private SharedPreferences consent;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class ConsentActivity extends AppCompatActivity {
         medicationsArray = new ArrayList<String>();
         medicationJSONArray = new JSONArray();
 
+        consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
+        editor = consent.edit();
 
         // Consent form dialog: - join aware study if accepted
         //                      - keep working in demo mode without data collection if declined
@@ -138,11 +145,8 @@ public class ConsentActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         declineDialog.dismiss();
-                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = consent.edit();
                         editor.putBoolean("consentRead", true);
                         editor.putBoolean("consentAccepted", false);
-                        editor.commit();
 
                         // Open MainActivity
                         Intent main = new Intent(ConsentActivity.this, MainActivity.class);
@@ -283,12 +287,9 @@ public class ConsentActivity extends AppCompatActivity {
                         values.put(Provider.Consent_Data.USER_DATA, userdata.toString());
                         getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
-                        // save consent state as true
-                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = consent.edit();
+                        // save consent state as true;
                         editor.putBoolean("consentRead", true);
                         editor.putBoolean("consentAccepted", true);
-                        editor.commit();
 
                         // Join AWARE study if not joined yed
                         joinObserver = new JoinObserver();
@@ -329,11 +330,8 @@ public class ConsentActivity extends AppCompatActivity {
                         getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
                         // save consent state as true
-                        SharedPreferences consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = consent.edit();
                         editor.putBoolean("consentRead", true);
                         editor.putBoolean("consentAccepted", true);
-                        editor.commit();
 
                         // Join AWARE study if not joined yed
                         joinObserver = new JoinObserver();
@@ -368,9 +366,6 @@ public class ConsentActivity extends AppCompatActivity {
         medicationJSONArray.put(jsonMedication);
         medicationsArray.add(medication);
         medicationAdapter.notifyDataSetChanged();
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, medicationsArray);
-//        consentMedicationsList.setAdapter(adapter);
     }
 
     // custom ListView adapted for Symptoms
@@ -487,7 +482,8 @@ public class ConsentActivity extends AppCompatActivity {
                         .setExtras(new Bundle()).build();
                 ContentResolver.requestSync(request);
 
-                // Open MainActivity when all conditions are ok
+                // Update boolean flags for consent; Open MainActivity when all conditions are ok
+                editor.commit();
                 Intent main = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(main);
                 unregisterReceiver(joinObserver);

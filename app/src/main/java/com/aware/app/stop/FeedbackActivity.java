@@ -52,7 +52,8 @@ public class FeedbackActivity extends AppCompatActivity {
 
         if (cursor != null) {
             if (cursor.getCount() >0) {
-                cursor.moveToFirst();
+                //cursor.moveToFirst();
+                cursor.moveToLast();
 
                 try {
                     JSONObject object = new JSONObject(cursor.getString(cursor.getColumnIndexOrThrow("user_data")));

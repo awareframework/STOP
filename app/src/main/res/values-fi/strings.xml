@@ -4,12 +4,12 @@
     <string name="app_name">STOP</string>
     <string name="nav_medication">Lääkepäiväkirja</string>
     <string name="nav_game">Peli</string>
-    <string name="main_experiment">Tutkimus</string>
+    <string name="main_experiment">Asetukset</string>
     <string name="main_demo">Demo</string>
     <string name="main_demo_mode">Demo tila</string>
     <string name="main_demo_details">Käytät STOP sovellusta demo tilassa: kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. Voit halutessasi liittyä tutkimukseen, jolloin annat luvan tietojesi keräämiseen tutkimuksen käyttöön. </string>
     <string name="main_quit_details">Poistut tutkimuksesta: sovellus ei enää lähetä tietojasi palvelimelle, ja kaikki sinusta kerätty tieto poistetaan palvelimelta. Voit jatkaa sovelluksen käyttämista demo tilassa, jolloin kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. </string>
-    <string name="main_participant_info">Osallistujan tiedot</string>
+    <string name="main_participant_info">Osallistujan tiedot ja palaute</string>
     <string name="main_join_study">Liity tutkimukseen</string>
     <string name="main_quit_study">Poistu tutkimuksesta</string>
     <string name="main_quit_done">Et ole enää mukana tutkimuksessa. Sovellus ei tallenna enää tietojasi. </string>
@@ -29,7 +29,7 @@
     <string name="game_start">Peli alkaa</string>
     <string name="game_get_ready">Peli alkaa pian</string>
     <string name="game_play">Pelaa</string>
-    <string name="game_done">Peli loppui! Haluatko pelata uudelleen?\nTulos:\u0020</string>
+    <string name="game_done">Peli loppui!\n Haluatko pelata uudelleen?\nTulos:\u0020</string>
     <string name="game_invalid_settings">Mikään asetuksista ei voi olla 0, ole hyvä ja päivitä</string>
 
     <!-- Medication fragment strings-->
@@ -62,7 +62,7 @@
     <string name="feedback_device_id">Laitteen ID</string>
     <string name="feedback_clear">Tyhjennä</string>
     <string name="feedback_saved">Palaute tallennettu, kiitos palautteesta!</string>
-    <string name="feedback_enter">Palaute:</string>
+    <string name="feedback_enter">Palaute ei voi olla tyhjä</string>
 
     <!-- Health activity strings -->
     <string name="health_question">Minkä verran sinulla oli eilen Parkinsonin oireita?</string>
@@ -77,7 +77,7 @@
     <!-- Settings activity strings -->
     <string name="title_activity_settings">Asetukset</string>
     <string name="pref_header_ball_game">Peli</string>
-    <string name="pref_header_medication">Lääkitys</string>
+    <string name="pref_header_medication">Lääkepäiväkirja</string>
     <string name="key_ball_size_title">Pallon koko</string>
     <string name="key_ball_size">key_ball_size</string>
     <string name="key_ball_size_value">150</string>
@@ -118,10 +118,10 @@
     <string name="consent_fill_entries">Täytä kaikki kentät (lisätiedot voi olla tyhjä)</string>
     <string name="consent_no_medications_were_defined_yet">Ei merkittyjä lääkkeitä</string>
     <string name="consent_medication_name">Lääkkeen nimi</string>
-    <string name="consent_times_per_day">Montako kertaa päivässä?</string>
-    <string name="consent_pills_each_time">Montako tablettia kerrallaan?</string>
-    <string name="consent_how_often_every">Lääkkeenoton väli</string>
-    <string name="consent_the_first_one_i_have_is_at">Mihin aikaan otat ensimmäisen lääkkeen?</string>
+    <string name="consent_times_per_day">Kertaa päivässä</string>
+    <string name="consent_pills_each_time">Tablettia kerrallaan</string>
+    <string name="consent_how_often_every">Ottoväli</string>
+    <string name="consent_the_first_one_i_have_is_at">Ensimmäinen lääke kellos</string>
     <string name="consent_comments">Lisätietoja</string>
 
     <!-- Notifications strings-->
