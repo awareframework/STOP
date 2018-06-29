@@ -118,10 +118,10 @@
     <string name="consent_fill_entries">Täytä kaikki kentät (lisätiedot voi olla tyhjä)</string>
     <string name="consent_no_medications_were_defined_yet">Ei merkittyjä lääkkeitä</string>
     <string name="consent_medication_name">Lääkkeen nimi</string>
-    <string name="consent_times_per_day">Kertaa päivässä</string>
-    <string name="consent_pills_each_time">Tablettia kerrallaan</string>
+    <string name="consent_times_per_day">Krt/päivä</string>
+    <string name="consent_pills_each_time">Tablettia/kerta</string>
     <string name="consent_how_often_every">Ottoväli</string>
-    <string name="consent_the_first_one_i_have_is_at">Ensimmäinen lääke kellos</string>
+    <string name="consent_the_first_one_i_have_is_at">Ensimmäinen lääke kello</string>
     <string name="consent_comments">Lisätietoja</string>
 
     <!-- Notifications strings-->
@@ -137,6 +137,6 @@
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Lääkityksen seuranta on aktiivinen</string>
     <string name="aware_activate_battery_optimize_ignore_title">STOP</string>
-    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akun käytön optimointilistaan\'</string>
+    <string name="aware_activate_battery_optimize_ignore">Klikkaa ja lisää akun käytön optimointilistaan</string>
 
 </resources>
