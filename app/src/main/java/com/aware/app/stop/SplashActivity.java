@@ -2,18 +2,29 @@ package com.aware.app.stop;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.aware.Aware;
 import com.aware.ui.PermissionsHandler;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
+
+import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
 
     public static final String STUDY_URL = "https://api.awareframework.com/index.php/webservice/index/1836/5IuLyJjLQQNK";
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+    }
 
     @Override
     protected void onResume() {
