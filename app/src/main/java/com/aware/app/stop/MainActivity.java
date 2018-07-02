@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -63,18 +64,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Setting up application preferences
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_ball_game, true);
         Aware.isBatteryOptimizationIgnored(getApplicationContext(), PACKAGE_NAME);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
+        Aware.setSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SILENT, true);
 
         // Get an instance of the NotificationManager service
-        // Cancel GameNotification when MainActivity opens
         manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        if (manager != null) manager.cancel(GAME_NOTIFICATION_ID);
 
         // Tracking notification opening state
         Intent intent  = getIntent();
@@ -116,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cancel GameNotification when MainActivity opens
+        if (manager != null) manager.cancel(GAME_NOTIFICATION_ID);
     }
 
     // Replacing fragments method
@@ -439,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set icon depending on notification type
         if (notifyId == GAME_NOTIFICATION_ID) builder.setSmallIcon(R.drawable.ic_medication);
-        if (notifyId == SURVEY_NOTIFICATION_ID) builder.setSmallIcon(R.drawable.ic_question_light);
+        if (notifyId == SURVEY_NOTIFICATION_ID) builder.setSmallIcon(R.drawable.ic_survey);
 
         // Build the notification and show it.
         if (manager == null) manager = (NotificationManager) c.getApplicationContext().getSystemService(NOTIFICATION_SERVICE);

@@ -29,7 +29,11 @@
     <string name="game_start">Start</string>
     <string name="game_get_ready">Get ready</string>
     <string name="game_play">Play</string>
-    <string name="game_done">Done! Play again?\nScore:\u0020</string>
+    <string name="game_done_1">Done! Play again?\nScore:\u0020</string>
+    <string name="game_done_2">, Last score:\u0020</string>
+    <string name="game_done_3">\nNow record your medications</string>
+    <string name="game_again">Play again</string>
+    <string name="game_go_journal">Go to medication journal</string>
     <string name="game_invalid_settings">None of the game settings can be 0. Please update first</string>
 
     <!-- Medication fragment strings-->
@@ -54,6 +58,7 @@
     <string name="medication_no_internet">Internet connection is disabled. Please enable it or use \"Specify time\" option </string>
     <string name="medication_cannot_recognize">Cannot recognize date, please try again</string>
     <string name="medication_recorded">Medication recorded</string>
+    <string name="medication_future">You cannot input records for future, please try again</string>
     <string name="medication_parser_dialog">Please wait…</string>
 
     <!-- Feedback activity strings-->

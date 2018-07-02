@@ -11,7 +11,7 @@
     <item
         android:id="@+id/main_health"
         android:orderInCategory="2"
-        android:icon="@drawable/ic_question_light"
+        android:icon="@drawable/ic_survey"
         android:title="@string/main_daily_survey"
         app:showAsAction="always" />
 
@@ -20,6 +20,7 @@
         android:orderInCategory="3"
         android:icon="@drawable/ic_settings_light"
         android:title="@string/main_experiment"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item

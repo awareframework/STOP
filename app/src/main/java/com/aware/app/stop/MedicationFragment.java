@@ -125,15 +125,22 @@ public class MedicationFragment extends Fragment{
                                 Calendar specified = Calendar.getInstance();
                                 specified.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
 
-                                // Date is specified, write it to db
-                                ContentValues values = new ContentValues();
-                                values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
-                                values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, specified.getTimeInMillis());
-                                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
-                                getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
-                                Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
+                                // check if the entry is not in the future
+                                if (specified.getTimeInMillis() <= System.currentTimeMillis()) {
 
-                                updateList();
+                                    // Date is specified, write it to db
+                                    ContentValues values = new ContentValues();
+                                    values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                                    values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, specified.getTimeInMillis());
+                                    values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                                    getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                                    Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
+
+                                    updateList();
+
+                                } else {
+                                    Toast.makeText(getContext(), R.string.medication_future, Toast.LENGTH_SHORT).show();
+                                }
 
                             }
                         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DATE));
@@ -224,15 +231,22 @@ public class MedicationFragment extends Fragment{
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            // Date is OK, write it to db
-                            ContentValues values = new ContentValues();
-                            values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
-                            values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, time);
-                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
-                            getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                            // check if the entry is not in the future
+                            if (time <= System.currentTimeMillis()) {
 
-                            Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
-                            updateList();
+                                // Date is OK, write it to db
+                                ContentValues values = new ContentValues();
+                                values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                                values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, time);
+                                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                                getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+
+                                Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
+                                updateList();
+
+                            } else {
+                                Toast.makeText(getContext(), R.string.medication_future, Toast.LENGTH_SHORT).show();
+                            }
 
                         }
 
@@ -259,15 +273,22 @@ public class MedicationFragment extends Fragment{
 
                                             calendar.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
 
-                                            // Date is fixed, write it to db
-                                            ContentValues values = new ContentValues();
-                                            values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
-                                            values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
-                                            values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
-                                            getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+                                            // check if the entry is not in the future
+                                            if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
 
-                                            Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
-                                            updateList();
+                                                // Date is fixed, write it to db
+                                                ContentValues values = new ContentValues();
+                                                values.put(Provider.Medication_Data.TIMESTAMP, System.currentTimeMillis());
+                                                values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
+                                                values.put(Provider.Medication_Data.DEVICE_ID, Aware.getSetting(getContext(), Aware_Preferences.DEVICE_ID));
+                                                getContext().getContentResolver().insert(Provider.Medication_Data.CONTENT_URI, values);
+
+                                                Toast.makeText(getContext(), R.string.medication_recorded, Toast.LENGTH_SHORT).show();
+                                                updateList();
+
+                                            } else {
+                                                Toast.makeText(getContext(), R.string.medication_future, Toast.LENGTH_SHORT).show();
+                                            }
 
                                         }
                                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));

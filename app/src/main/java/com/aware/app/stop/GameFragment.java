@@ -10,11 +10,15 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,6 +33,10 @@ import com.aware.Rotation;
 import com.aware.app.stop.database.Provider;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class GameFragment extends Fragment {
 
     // UI elements
@@ -36,6 +44,7 @@ public class GameFragment extends Fragment {
     private TextView timer;
     private ImageButton playBtn;
     private BallView ballView;
+    private Button playAgain, openMedications;
 
     // Sensors variables
     private Accelerometer.AWARESensorObserver observerAccelerometer;
@@ -56,6 +65,7 @@ public class GameFragment extends Fragment {
     private Bitmap ball;
     private Bitmap circleBig;
     private Bitmap circleSmall;
+    private String lastScore;
 
     // Ball game settings variables
     private int ballSize;
@@ -96,6 +106,8 @@ public class GameFragment extends Fragment {
         timer = view.findViewById(R.id.timer);
         containerLayout = view.findViewById(R.id.container);
         playBtn = view.findViewById(R.id.playBtn);
+        playAgain = view.findViewById(R.id.playAgain);
+        openMedications = view.findViewById(R.id.openMedications);
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +117,29 @@ public class GameFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), R.string.game_invalid_settings, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        playAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ballSize>0 && gameTime>0 && sensitivity>0) {
+                    startGame();
+                } else {
+                    Toast.makeText(getContext(), R.string.game_invalid_settings, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        openMedications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomNavigationView nav = getActivity().findViewById(R.id.main_nav);
+                nav.setSelectedItemId(R.id.nav_medication);
+
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.main_frame, new MedicationFragment());
+                fragmentTransaction.commit();
             }
         });
 
@@ -263,7 +298,11 @@ public class GameFragment extends Fragment {
         containerLayout.removeAllViews();
         ballView = null;
         playBtn.setVisibility(View.VISIBLE);
+        playAgain.setVisibility(View.INVISIBLE);
+        openMedications.setVisibility(View.INVISIBLE);
         playBtn.setEnabled(true);
+        playAgain.setEnabled(false);
+        openMedications.setEnabled(false);
         timer.setText(R.string.game_press_button_to_play);
 
         // sampling to false to prevent unnecessary data recording
@@ -295,7 +334,11 @@ public class GameFragment extends Fragment {
     private void startGame() {
 
         playBtn.setVisibility(View.INVISIBLE);
+        playAgain.setVisibility(View.INVISIBLE);
+        openMedications.setVisibility(View.INVISIBLE);
         playBtn.setEnabled(false);
+        playAgain.setEnabled(false);
+        openMedications.setEnabled(false);
         timer.setText(R.string.game_get_ready);
 
         // adding custom BallView to the fragment
@@ -319,6 +362,9 @@ public class GameFragment extends Fragment {
         gameData += "\"device_x_res\":" + deviceXres + ",";
         gameData += "\"device_y_res\":" + deviceYres + "," + "\"samples\":[";
 
+        // Retrieve last game score value
+        lastScore = getActivity().getSharedPreferences("scorePref", MODE_PRIVATE).getString("lastScore", "0");
+
         // making sample values empty (for second and following games)
         accelSamples.setLength(0);
         linaccelSamples.setLength(0);
@@ -337,13 +383,16 @@ public class GameFragment extends Fragment {
 
         // calculating game score
         double finalScore = 100 - ((scoreRaw/scoreCounter)/ ballMaxDistance)*100;
-        String gameDone = getString(R.string.game_done) + String.format("%.1f", finalScore);
+        String gameDone = getString(R.string.game_done_1) + String.format("%.1f", finalScore) +
+                getString(R.string.game_done_2) + lastScore + getString(R.string.game_done_3);
 
         // updating UI
         containerLayout.removeAllViews();
         ballView = null;
-        playBtn.setVisibility(View.VISIBLE);
-        playBtn.setEnabled(true);
+        playAgain.setVisibility(View.VISIBLE);
+        openMedications.setVisibility(View.VISIBLE);
+        playAgain.setEnabled(true);
+        openMedications.setEnabled(true);
         timer.setText(gameDone);
 
         // set ball coordinates to center for playinig again
@@ -374,6 +423,12 @@ public class GameFragment extends Fragment {
         String gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
         String rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
         String result = gamedata + accel + linaccel + gyro + rotation;
+
+        // Record game score to SharedPref as the last one
+        SharedPreferences score = getActivity().getSharedPreferences("scorePref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = score.edit();
+        editor.putString("lastScore", String.format("%.1f", finalScore));
+        editor.commit();
 
         // Inserting data to database
         ContentValues values = new ContentValues();

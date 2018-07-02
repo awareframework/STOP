@@ -33,4 +33,29 @@
         android:contentDescription="@string/game_play"
         app:srcCompat="@drawable/ic_play_circle"/>
 
+    <Button
+        android:id="@+id/playAgain"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_style"
+        android:text="@string/game_again"
+        android:visibility="invisible"
+        android:enabled="false"/>
+
+    <Button
+        android:id="@+id/openMedications"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/playAgain"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_style"
+        android:text="@string/game_go_journal"
+        android:visibility="invisible"
+        android:enabled="false"/>
+
 </RelativeLayout>

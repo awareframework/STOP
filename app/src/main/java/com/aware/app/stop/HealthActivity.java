@@ -20,15 +20,16 @@ public class HealthActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private Button healthSubmit;
 
+    // Notification variables
+    private static NotificationManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health);
 
         // Get an instance of the NotificationManager service
-        // Cancel SurveyNotification when HealthActivity opens
-        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        if (manager != null) manager.cancel(MainActivity.SURVEY_NOTIFICATION_ID);
+        manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
         // Tracking notification opening state
         Intent intent  = getIntent();
@@ -74,5 +75,13 @@ public class HealthActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cancel SurveyNotification when HealthActivity opens
+        if (manager != null) manager.cancel(MainActivity.SURVEY_NOTIFICATION_ID);
     }
 }

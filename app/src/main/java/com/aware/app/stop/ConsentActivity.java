@@ -70,6 +70,9 @@ public class ConsentActivity extends AppCompatActivity {
     private SharedPreferences consent;
     private SharedPreferences.Editor editor;
 
+    // ContentValues variable to save data to database
+    private ContentValues values;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +149,7 @@ public class ConsentActivity extends AppCompatActivity {
                         declineDialog.dismiss();
                         editor.putBoolean("consentRead", true);
                         editor.putBoolean("consentAccepted", false);
+                        editor.commit();
 
                         // Open MainActivity
                         Intent main = new Intent(ConsentActivity.this, MainActivity.class);
@@ -278,11 +282,9 @@ public class ConsentActivity extends AppCompatActivity {
                         }
 
                         // insert
-                        ContentValues values = new ContentValues();
-                        values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
+                        values = new ContentValues();
                         values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
                         values.put(Provider.Consent_Data.USER_DATA, userdata.toString());
-                        getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
                         // save consent state as true;
                         editor.putBoolean("consentRead", true);
@@ -320,11 +322,9 @@ public class ConsentActivity extends AppCompatActivity {
                         }
 
                         // insert
-                        ContentValues values = new ContentValues();
-                        values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
+                        values = new ContentValues();
                         values.put(Provider.Consent_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
                         values.put(Provider.Consent_Data.USER_DATA, userdata.toString());
-                        getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
 
                         // save consent state as true
                         editor.putBoolean("consentRead", true);
@@ -470,6 +470,11 @@ public class ConsentActivity extends AppCompatActivity {
                 long frequency = Long.parseLong(Aware.getSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_WEBSERVICE)) * 60;
                 ContentResolver.setIsSyncable(aware_account, authority, 1);
                 ContentResolver.setSyncAutomatically(aware_account, authority, true);
+
+                // insert consent data only after joined study; in order to have proper timestamp
+                values.put(Provider.Consent_Data.TIMESTAMP, System.currentTimeMillis());
+                getContentResolver().insert(Provider.Consent_Data.CONTENT_URI, values);
+
                 SyncRequest request = new SyncRequest.Builder()
                         .syncPeriodic(frequency, frequency / 3)
                         .setSyncAdapter(aware_account, authority)
