@@ -30,10 +30,10 @@
     <string name="game_get_ready">Peli alkaa pian</string>
     <string name="game_play">Pelaa</string>
     <string name="game_done_1">Peli loppui!\n Haluatko pelata uudelleen?\nTulos:\u0020</string>
-    <string name="game_done_2">, Viimeinen pisteet:\u0020</string>
-    <string name="game_done_3">\nRekisteröi nyt lääkkeesi</string>
-    <string name="game_again">Haluatko pelata uudelleen?</string>
-    <string name="game_go_journal">Siirry lääkekirjaan</string>
+    <string name="game_done_2">, Edellinen tulos:\u0020</string>
+    <string name="game_done_3">\nMerkitse nyt lääkkeenotto</string>
+    <string name="game_again">Pelaa uudelleen</string>
+    <string name="game_go_journal">Avaa lääkepäiväkirja</string>
     <string name="game_invalid_settings">Mikään asetuksista ei voi olla 0, ole hyvä ja päivitä</string>
 
     <!-- Medication fragment strings-->
@@ -58,7 +58,7 @@
     <string name="medication_no_internet">Ei internet yhteyttä. Takista yhteys tai valitse \"Määritä aika\" </string>
     <string name="medication_cannot_recognize">Päivämäärää ei tunnistettu, yritä uudelleen</string>
     <string name="medication_recorded">Merkintä tallennettu</string>
-    <string name="medication_future">Et voi syöttää tietoja tulevaisuutta varten, yritä uudelleen</string>
+    <string name="medication_future">Merkintöjä ei voi tehdä tulevaisuuteen, yritä uudellen</string>
     <string name="medication_parser_dialog">Odota…</string>
 
     <!-- Feedback activity strings-->

@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -72,6 +71,30 @@ public class MainActivity extends AppCompatActivity {
         Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_ACCELEROMETER, 20000);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SILENT, true);
+
+
+        // Double checking if the consent data is synced
+        Cursor cursorJoined = getApplicationContext().getContentResolver().query(Aware_Provider.Aware_Studies.CONTENT_URI,
+                new String[]{Aware_Provider.Aware_Studies.STUDY_JOINED}, null, null, null);
+
+        Cursor cursorConsent = getApplicationContext().getContentResolver().query(Provider.Consent_Data.CONTENT_URI,
+                new String[]{Provider.Consent_Data.TIMESTAMP}, null, null, null);
+
+        if (cursorJoined!=null && cursorJoined.getCount()>0 && cursorConsent!=null && cursorConsent.getCount()>0) {
+            cursorJoined.moveToFirst();
+            cursorConsent.moveToFirst();
+            double joined = cursorJoined.getDouble(cursorJoined.getColumnIndexOrThrow("double_join"));
+            double consent = cursorConsent.getDouble(cursorConsent.getColumnIndexOrThrow("timestamp"));
+
+            if (consent<joined) {
+                ContentValues values = new ContentValues();
+                values.put(Provider.Consent_Data.TIMESTAMP, joined);
+                getContentResolver().update(Provider.Consent_Data.CONTENT_URI, values,null, null);
+
+                cursorJoined.close();
+                cursorConsent.close();
+            }
+        }
 
         // Get an instance of the NotificationManager service
         manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
