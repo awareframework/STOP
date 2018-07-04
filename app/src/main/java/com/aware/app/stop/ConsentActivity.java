@@ -56,7 +56,7 @@ public class ConsentActivity extends AppCompatActivity {
     private LinearLayout detailsPD;
     private EditText etUsername, etAge, etWhen;
     private TextView noMedicationsAdded;
-    private AlertDialog consentDialog, declineDialog;
+    private AlertDialog consentDialog, declineDialog, welcomeDialog;
     private ProgressDialog progressDialog;
     private MedicationDialog dialog;
 
@@ -95,6 +95,21 @@ public class ConsentActivity extends AppCompatActivity {
         consent = ConsentActivity.this.getSharedPreferences("consentPref", MODE_PRIVATE);
         editor = consent.edit();
 
+        // Welcome dialog: informs the user about the main app functionalities
+        welcomeDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.consent_welcome_title)
+                .setMessage(R.string.consent_welcome)
+                .setPositiveButton(R.string.consent_welcome_gotit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        welcomeDialog.dismiss();
+                        consentDialog.show();
+                    }
+                })
+                .setCancelable(false)
+                .create();
+        welcomeDialog.show();
+
         // Consent form dialog: - join aware study if accepted
         //                      - keep working in demo mode without data collection if declined
         consentDialog = new AlertDialog.Builder(this)
@@ -127,7 +142,6 @@ public class ConsentActivity extends AppCompatActivity {
 
             }
         });
-        consentDialog.show();
 
 
         // Decline dialog: informs about the applications limited use in case of consent rejection

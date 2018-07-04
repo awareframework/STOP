@@ -30,7 +30,7 @@
     <string name="game_get_ready">Peli alkaa pian</string>
     <string name="game_play">Pelaa</string>
     <string name="game_done_1">Peli loppui!\n Haluatko pelata uudelleen?\nTulos:\u0020</string>
-    <string name="game_done_2">, Edellinen tulos:\u0020</string>
+    <string name="game_done_2">, edellinen tulos:\u0020</string>
     <string name="game_done_3">\nMerkitse nyt lääkkeenotto</string>
     <string name="game_again">Pelaa uudelleen</string>
     <string name="game_go_journal">Avaa lääkepäiväkirja</string>
@@ -128,6 +128,9 @@
     <string name="consent_how_often_every">Ottoväli</string>
     <string name="consent_the_first_one_i_have_is_at">Ensimmäinen lääke kello</string>
     <string name="consent_comments">Lisätietoja</string>
+    <string name="consent_welcome">STOP on kehitetty Parkinsonin potilaille motoriikan ja lääkityksen seuraamiseen.\n\nMotorista toiminnallisuutta arvioidaan pallopelin avulla. Pelin tarkoitus on pitää punainen pallo liikkumatta sisemmän mustan ympyrän keskellä tasapainottelemalla laitetta kämmenen päällä. Pelin onnistumista arvioidaan asteikolla 0 (pienin) - 100 (suurin). Lisäksi käyttäjää pyydetään kirjaamaan lääkkeenoton ajat lääkepäiväkirjaan. Tutkimuksessa etsitään kerätyistä tiedoista korrelaatiota motoriikan tason ja lääkkeiden vaikutuksen välillä.\n\nSTOP sovellus lähettää muistutuksia pelistä ja lääkepäiväkirjasta neljä kertaa päivässä. Kerran päivässä käyttäjää pyydetään arvioimaan oireiden tasoa. </string>
+    <string name="consent_welcome_title">Tervetuloa STOP sovellukseen</string>
+    <string name="consent_welcome_gotit">Ymmärsin</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Aamu</string>

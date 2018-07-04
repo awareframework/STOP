@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -27,6 +28,7 @@ public class MedicationDialog extends DialogFragment {
         final TextInputEditText dialogHowOften = view.findViewById(R.id.dialogHowOften);
         final TextInputEditText dialogFirstMedication = view.findViewById(R.id.dialogFirstMedication);
         final TextInputEditText dialogComments = view.findViewById(R.id.dialogComments);
+        final Spinner spinnerWhen = view.findViewById(R.id.spinnerWhen);
 
         final AlertDialog medicationDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.consent_add_medication)
@@ -48,7 +50,7 @@ public class MedicationDialog extends DialogFragment {
                         String medication = dialogMedication.getText().toString();
                         String times = dialogTimes.getText().toString();
                         String pillsEachTime = dialogPillsEachTime.getText().toString();
-                        String howOften = dialogHowOften.getText().toString();
+                        String howOften = dialogHowOften.getText().toString() + " " + spinnerWhen.getSelectedItem().toString();
                         String firstMedication = dialogFirstMedication.getText().toString();
                         String comments = dialogComments.getText().toString();
 

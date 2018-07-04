@@ -30,7 +30,7 @@
     <string name="game_get_ready">Get ready</string>
     <string name="game_play">Play</string>
     <string name="game_done_1">Done! Play again?\nScore:\u0020</string>
-    <string name="game_done_2">, Last score:\u0020</string>
+    <string name="game_done_2">, last score:\u0020</string>
     <string name="game_done_3">\nNow record your medications</string>
     <string name="game_again">Play again</string>
     <string name="game_go_journal">Go to medication journal</string>
@@ -128,6 +128,9 @@
     <string name="consent_how_often_every">How often: every</string>
     <string name="consent_the_first_one_i_have_is_at">The first one I have is at</string>
     <string name="consent_comments">Comments</string>
+    <string name="consent_welcome">STOP is designed for Parkinson\'s patients for tracking motor abilities and increasing medication adherence.\n\nThe motor functionalities are estimated with a ball game. The goal of the game is to keep the red ball motionless in the center of the inner black circle by balancing the device horizontally on the palm of the hand. The game success is evaluated using 0 (min) - 100 (max) scale. In addition the user is asked to record the medication taking time to the journal. The research will use the collected information for searching correlation between motor functionalities and medication effectiveness.\n\nSTOP application sends notifications about the game and medication recording four times per day. Once per day user is asked to evaluate the level of symptoms.</string>
+    <string name="consent_welcome_title">Welcome to STOP</string>
+    <string name="consent_welcome_gotit">Got it</string>
 
     <!-- Notifications strings-->
     <string name="notification_game_morning">Morning</string>
