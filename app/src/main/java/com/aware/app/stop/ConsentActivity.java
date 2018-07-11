@@ -272,6 +272,9 @@ public class ConsentActivity extends AppCompatActivity {
                     // insert data to db
                     if (!username.equals("") && !age.equals("") && !whenPdStr.equals("") && allChecked) {
 
+                        // disable button to avoid several inputs
+                        consentSubmit.setEnabled(false);
+
                         int whenPD = Integer.valueOf(whenPdStr);
                         long time = System.currentTimeMillis();
                         long monthMillis = 2952000000L;
@@ -324,6 +327,9 @@ public class ConsentActivity extends AppCompatActivity {
                 } else {
 
                     if (!username.equals("") && !age.equals("")) {
+
+                        // disable button to avoid several inputs
+                        consentSubmit.setEnabled(false);
 
                         // Transfer entries to JSON object
                         JSONObject userdata = new JSONObject();
