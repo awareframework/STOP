@@ -416,13 +416,38 @@ public class GameFragment extends Fragment {
         Aware.stopRotation(getContext());
         Aware.setSetting(getContext(), Aware_Preferences.STATUS_ROTATION, false);
 
+
         // Adjusting data to final JSON format
         String gamedata = gameData.substring(0, gameData.length()-1) + "],\"score\":"+ finalScore +"}],";
-        String accel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
-        String linaccel = "\"linearaccelerometer\":[" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
-        String gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
-        String rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
+        String accel, linaccel, gyro, rotation;
+
+        try {
+            accel = "\"accelerometer\":[" + accelSamples.substring(0, accelSamples.length()-1) + "],";
+        } catch (Exception e) {
+            accel = "\"accelerometer\":[\"not_activated\"],";
+            Toast.makeText(getContext(), R.string.game_collection_error, Toast.LENGTH_LONG).show();
+        }
+
+        try {
+            linaccel = "\"linearaccelerometer\":[" + linaccelSamples.substring(0, linaccelSamples.length()-1) + "],";
+        } catch (Exception e) {
+            linaccel = "\"linearaccelerometer\":[\"not_activated\"],";
+        }
+
+        try {
+            gyro = "\"gyroscope\":[" + gyroSamples.substring(0, gyroSamples.length()-1) + "],";
+        } catch (Exception e) {
+            gyro = "\"gyroscope\":[\"not_activated\"],";
+        }
+
+        try {
+            rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
+        } catch (Exception e) {
+            rotation = "\"rotation\":[\"not_activated\"],";
+        }
+
         String result = gamedata + accel + linaccel + gyro + rotation;
+
 
         // Record game score to SharedPref as the last one
         SharedPreferences score = getActivity().getSharedPreferences("scorePref", MODE_PRIVATE);

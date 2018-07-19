@@ -35,6 +35,7 @@
     <string name="game_again">Play again</string>
     <string name="game_go_journal">Go to medication journal</string>
     <string name="game_invalid_settings">None of the game settings can be 0. Please update first</string>
+    <string name="game_collection_error">Data collection error. Please restart the application</string>
 
     <!-- Medication fragment strings-->
     <string name="medication_list_heading">List of medication records</string>

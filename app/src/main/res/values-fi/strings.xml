@@ -35,6 +35,7 @@
     <string name="game_again">Pelaa uudelleen</string>
     <string name="game_go_journal">Avaa lääkepäiväkirja</string>
     <string name="game_invalid_settings">Mikään asetuksista ei voi olla 0, ole hyvä ja päivitä</string>
+    <string name="game_collection_error">Vika tiedonkeruussa. Sulje ja käynnistä sovellus uudelleen.</string>
 
     <!-- Medication fragment strings-->
     <string name="medication_list_heading">Lääkepäiväkirja</string>
