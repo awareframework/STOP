@@ -29,7 +29,6 @@
             android:id="@+id/pd_value_zero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_zero"/>
 
         <RadioButton
@@ -37,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_one"/>
 
         <RadioButton
@@ -45,7 +43,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_two"/>
 
         <RadioButton
@@ -53,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_three"/>
 
         <RadioButton
@@ -61,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/survey_response_four"/>
 
     </RadioGroup>

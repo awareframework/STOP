@@ -226,9 +226,6 @@ public class GameFragment extends Fragment {
 
         // reading settings values from SettingsActivity
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        ballSize = Integer.parseInt(sPref.getString(getString(R.string.key_ball_size), String.valueOf(R.string.key_ball_size_value)));
-        smallCircleSize = ballSize*3;
-        bigCircleSize = ballSize*5;
         sensitivity = Float.parseFloat(sPref.getString(getString(R.string.key_sensitivity), String.valueOf(R.string.key_sensitivity_value)));
         gameTime = Integer.parseInt(sPref.getString(getString(R.string.key_game_time), String.valueOf(R.string.key_game_time_value)))*1000;
 
@@ -239,9 +236,15 @@ public class GameFragment extends Fragment {
         deviceXres = size.x;
         deviceYres = size.y;
 
+        // Relative size of game elements
+        // TEST for "Doro" smartphone
+        ballSize = deviceXres/7;
+        smallCircleSize = ballSize*3;
+        bigCircleSize = ballSize*5;
+
         // setting up the maximum allowed X and Y values
         ballXmax = (float) size.x - ballSize;
-        ballYmax = (float) size.y - ballSize - 235 - 175; // toolbar = 235, bottom nav bar = 175
+        ballYmax = (float) size.y*0.77f - ballSize; // Relative size test for "Doro"
 
         // put ball to the center
         ballXpos = ballXmax /2;
