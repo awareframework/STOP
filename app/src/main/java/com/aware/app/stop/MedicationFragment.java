@@ -376,13 +376,20 @@ public class MedicationFragment extends Fragment{
 
                                         calendar.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
 
-                                        // Date is fixed, write it to db
-                                        ContentValues update_values = new ContentValues();
-                                        update_values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
-                                        getContext().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
+                                        // check if the entry is not in the future
+                                        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
 
-                                        Toast.makeText(getContext(), R.string.medication_edited, Toast.LENGTH_SHORT).show();
-                                        updateList();
+                                            // Date is fixed, write it to db
+                                            ContentValues update_values = new ContentValues();
+                                            update_values.put(Provider.Medication_Data.MEDICATION_TIMESTAMP, calendar.getTimeInMillis());
+                                            getContext().getContentResolver().update(Provider.Medication_Data.CONTENT_URI, update_values, Provider.Medication_Data._ID + "=" + id, null);
+
+                                            Toast.makeText(getContext(), R.string.medication_edited, Toast.LENGTH_SHORT).show();
+                                            updateList();
+
+                                        } else {
+                                            Toast.makeText(getContext(), R.string.medication_future, Toast.LENGTH_SHORT).show();
+                                        }
 
                                     }
                                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
