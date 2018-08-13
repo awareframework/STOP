@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +36,9 @@ import com.aware.utils.Scheduler;
 
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
         Aware.setSetting(getApplicationContext(), Aware_Preferences.DEBUG_DB_SLOW, true);
         Aware.setSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SILENT, true);
 
+
+        // Updating application certificate once per week
+        String path = Environment.getExternalStorageDirectory().toString() + "/Android/data/com.aware.app.stop/files/AWARE/credentials/api.awareframework.com/server.crt";
+        File certificate = new File(path);
+        if (certificate.exists()) {
+            long lastModified = new Date(certificate.lastModified()).getTime();
+            long now = System.currentTimeMillis();
+            if (now > lastModified + 31536000000L) certificate.delete();
+        }
 
         // Double checking if the consent data is synced
         Cursor cursorJoined = getApplicationContext().getContentResolver().query(Aware_Provider.Aware_Studies.CONTENT_URI,

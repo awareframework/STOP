@@ -53,7 +53,7 @@ public class GameFragment extends Fragment {
     private Rotation.AWARESensorObserver observerRotation;
 
     // Timer component
-    private CountDownTimer countDownTimer;
+    private static volatile CountDownTimer countDownTimer;
 
     // ball game variables
     private float ballXpos, ballXmax, ballXaccel, ballXvel = 0.0f;
