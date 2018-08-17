@@ -443,7 +443,7 @@ public class GameFragment extends Fragment {
         try {
             rotation = "\"rotation\":[" + rotationSamples.substring(0, rotationSamples.length()-1) + "]}";
         } catch (Exception e) {
-            rotation = "\"rotation\":[\"not_activated\"],";
+            rotation = "\"rotation\":[\"not_activated\"]}";
         }
 
         String result = gamedata + accel + linaccel + gyro + rotation;

@@ -7,7 +7,7 @@ android {
         applicationId "com.aware.app.stop"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 11
+        versionCode 12
         versionName "1.04"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

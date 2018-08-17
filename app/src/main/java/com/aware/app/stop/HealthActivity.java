@@ -37,7 +37,7 @@ public class HealthActivity extends AppCompatActivity {
 
         if (time!=null && time.equalsIgnoreCase(getString(R.string.notification_survey))) {
             //Insert notification opened event to db
-            String event = time + MainActivity.NOTIFICATION_EVENT_OPENED;
+            String event = time.toLowerCase().replace(" ", "_") + MainActivity.NOTIFICATION_EVENT_OPENED;
 
             ContentValues values = new ContentValues();
             values.put(Provider.Notification_Data.TIMESTAMP, System.currentTimeMillis());
