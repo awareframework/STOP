@@ -142,6 +142,17 @@
     <string name="notification_survey">Päivittäinen kysely</string>
     <string name="notification_survey_text">: Miten eilinen meni?</string>
 
+    <!-- Manual sync strings-->
+    <string name="main_sync_data">Synkronoi</string>
+    <string name="manual_dialog_title">Varoitus</string>
+    <string name="manual_dialog_message">Tämä toiminto on tarkoitettu VAIN Suomessa oleville STOP tutkimukseen osallistuville käyttäjille. Älä suorita tätä, jos et ole mukana tutkimuksessa.</string>
+    <string name="manual_dialog_positive">Jatka</string>
+    <string name="manual_dialog_negative">Peruuta</string>
+    <string name="manual_dialog_syncing">Synkronointi käynnissä</string>
+    <string name="manual_dialog_please_wait">Odota…</string>
+    <string name="manual_dialog_sync_done">Tiedot synkronoitu onnistuneesti. Kiitos osallistumisesta!</string>
+    <string name="manual_dialog_sync_error">Virhe synkroinoinnissa. Yritä uudelleen.</string>
+
     <!-- AWARE notifications strings-->
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Lääkityksen seuranta on aktiivinen</string>

@@ -20,7 +20,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,7 @@ import android.widget.Toast;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
+import com.aware.app.stop.database.Manual_Sync;
 import com.aware.app.stop.database.Provider;
 import com.aware.providers.Aware_Provider;
 import com.aware.utils.Scheduler;
@@ -37,7 +37,6 @@ import com.aware.utils.Scheduler;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 
@@ -251,6 +250,30 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.main_feedback) {
             startActivity(new Intent(this, FeedbackActivity.class));
+            return true;
+        }
+
+        if (id == R.id.main_sync_data) {
+            AlertDialog warning = new AlertDialog.Builder(this)
+                    .setTitle(R.string.manual_dialog_title)
+                    .setMessage(R.string.manual_dialog_message)
+                    .setPositiveButton(R.string.manual_dialog_positive, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Manual_Sync sync = new Manual_Sync(MainActivity.this);
+                            sync.execute();
+                        }
+                    })
+                    .setNegativeButton(R.string.manual_dialog_negative, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(true)
+                    .create();
+
+            warning.show();
             return true;
         }
 

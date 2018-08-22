@@ -142,6 +142,17 @@
     <string name="notification_survey">Daily survey</string>
     <string name="notification_survey_text">: how was yesterday?</string>
 
+    <!-- Manual sync strings-->
+    <string name="main_sync_data">Sync data</string>
+    <string name="manual_dialog_title">Warning</string>
+    <string name="manual_dialog_message">This is an experimental function designed ONLY for STOP participants located in Finland. Please do not use it if you are not a part of research study.</string>
+    <string name="manual_dialog_positive">Continue</string>
+    <string name="manual_dialog_negative">Cancel</string>
+    <string name="manual_dialog_syncing">Data syncing</string>
+    <string name="manual_dialog_please_wait">Please wait…</string>
+    <string name="manual_dialog_sync_done">Data synced successfully. Thank you for participation!</string>
+    <string name="manual_dialog_sync_error">Sync error. Please try again.</string>
+
     <!-- AWARE notifications strings-->
     <string name="foreground_notification_title">STOP</string>
     <string name="foreground_notification_text">Medication tracking is active</string>
