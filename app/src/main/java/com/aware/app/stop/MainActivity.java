@@ -78,15 +78,6 @@ public class MainActivity extends AppCompatActivity {
         Aware.setSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SILENT, true);
 
 
-        // Updating application certificate once per week
-        String path = Environment.getExternalStorageDirectory().toString() + "/Android/data/com.aware.app.stop/files/AWARE/credentials/api.awareframework.com/server.crt";
-        File certificate = new File(path);
-        if (certificate.exists()) {
-            long lastModified = new Date(certificate.lastModified()).getTime();
-            long now = System.currentTimeMillis();
-            if (now > lastModified + 31536000000L) certificate.delete();
-        }
-
         // Double checking if the consent data is synced
         Cursor cursorJoined = getApplicationContext().getContentResolver().query(Aware_Provider.Aware_Studies.CONTENT_URI,
                 new String[]{Aware_Provider.Aware_Studies.STUDY_JOINED}, null, null, null);

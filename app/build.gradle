@@ -7,8 +7,8 @@ android {
         applicationId "com.aware.app.stop"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.04"
+        versionCode 15
+        versionName "1.06"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //AWARE core sensors provider authority overrides
