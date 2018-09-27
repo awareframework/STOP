@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 15
-        versionName "1.06"
+        versionName "1.06-acp1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //AWARE core sensors provider authority overrides
