@@ -10,14 +10,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String STOP_TAG = "STOP_TAG";
     public static final String ACTION_STOP_FINGERPRINT = "ACTION_STOP_FINGERPRINT";
     public static final String ACTION_STOP_SURVEY = "ACTION_STOP_SURVEY";
+    public static final int CAMERA_REQUEST_CODE = 100;
     private static final String PACKAGE_NAME = "com.aware.app.stop";
 
     // Notification variables
@@ -230,6 +234,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.main_qr) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this,android.Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+            } else {
+                startActivity(new Intent(this, QrScannerActivity.class));
+            }
+
+            return true;
+        }
+
         if (id == R.id.main_health) {
             startActivity(new Intent(this, HealthActivity.class));
             return true;
@@ -369,6 +385,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivity(new Intent(this, QrScannerActivity.class));
+            } else {
+                Toast.makeText(this, "You need to give permission to use camera", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     // Notification scheduler: four times per day

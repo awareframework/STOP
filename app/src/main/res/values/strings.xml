@@ -7,6 +7,7 @@
     <string name="main_experiment">Experiment</string>
     <string name="main_demo">Demo</string>
     <string name="main_demo_mode">Demo mode</string>
+    <string name="main_qr_scanner">QR scanner</string>
     <string name="main_demo_details">You are using STOP in demo mode: all the application functionalities are available but no data is collected and shared with the research study. You can join the study and contribute to the research</string>
     <string name="main_quit_details">You will unenroll from the study: the application will stop sharing your data and all the already collected data will be deleted from the server. You can keep using the application will all the available functionalities in demo mode</string>
     <string name="main_participant_info">Participant info</string>
