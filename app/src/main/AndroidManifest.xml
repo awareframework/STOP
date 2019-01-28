@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <permission
         android:name="com.aware.READ_CONTEXT_DATA"
         android:description="@string/read_permission"
@@ -29,13 +31,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:label">
+        <activity android:name=".QrScannerActivity"></activity>
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,8 +74,7 @@
         </activity>
         <activity
             android:name=".ConsentActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <provider
             android:name=".database.Provider"
@@ -105,7 +107,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="282791abb8531501722947a26e4c69a3c6763a94" />
-
     </application>
 
 </manifest>

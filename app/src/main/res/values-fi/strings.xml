@@ -7,6 +7,7 @@
     <string name="main_experiment">Asetukset</string>
     <string name="main_demo">Demo</string>
     <string name="main_demo_mode">Demo tila</string>
+    <string name="main_qr_scanner">QR-skanneri</string>
     <string name="main_demo_details">Käytät STOP sovellusta demo tilassa: kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. Voit halutessasi liittyä tutkimukseen, jolloin annat luvan tietojesi keräämiseen tutkimuksen käyttöön. </string>
     <string name="main_quit_details">Poistut tutkimuksesta: sovellus ei enää lähetä tietojasi palvelimelle, ja kaikki sinusta kerätty tieto poistetaan palvelimelta. Voit jatkaa sovelluksen käyttämista demo tilassa, jolloin kaikki sovelluksen toiminnot ovat käytössäsi, mutta tietojasi ei kerätä tutkimusta varten. </string>
     <string name="main_participant_info">Osallistujan tiedot ja palaute</string>
