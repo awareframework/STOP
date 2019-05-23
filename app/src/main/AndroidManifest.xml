@@ -75,6 +75,16 @@
         </activity>
 
         <provider
+            tools:replace="android:authorities"
+            android:name="com.aware.plugin.contacts_list.Provider"
+            android:authorities="${applicationId}.provider.contacts_list"
+            android:exported="true"
+            android:label="@string/plugin_contacts_list"
+            android:readPermission="com.aware.READ_CONTEXT_DATA"
+            android:syncable="true"
+            android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
+
+        <provider
             android:name=".database.Provider"
             android:authorities="${applicationId}.database.provider.stop_project"
             android:exported="true"
