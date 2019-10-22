@@ -10,11 +10,12 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.core.app.NavUtils;
 import android.widget.Toast;
 
 import com.aware.app.stop.database.Provider;

@@ -10,10 +10,9 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +30,8 @@ import com.aware.Gyroscope;
 import com.aware.LinearAccelerometer;
 import com.aware.Rotation;
 import com.aware.app.stop.database.Provider;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
-
-import java.text.DecimalFormat;
 
 import static android.content.Context.MODE_PRIVATE;
 

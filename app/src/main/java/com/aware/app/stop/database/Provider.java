@@ -12,9 +12,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.support.annotation.Nullable;
 
-import com.aware.Aware;
+import androidx.annotation.Nullable;
+
 import com.aware.utils.DatabaseHelper;
 
 import java.util.HashMap;
